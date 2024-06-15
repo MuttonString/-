@@ -7,3 +7,5 @@ const GoodsList: React.FC = () => {
     </>
   )
 }
+
+export default GoodsList
