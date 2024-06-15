@@ -1,4 +1,5 @@
 import { Layout } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
@@ -15,7 +16,9 @@ const LayoutPage: React.FC = () => {
             <Header style={headerStyle}>
                 <h1>商品管理系统</h1>
             </Header>
-            <Content></Content>
+            <Content>
+                <Outlet />
+            </Content>
         </Layout>
     );
 };
