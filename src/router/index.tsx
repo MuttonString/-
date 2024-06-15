@@ -5,6 +5,7 @@ import GoodsDetail from '@/pages/GoodsDetail'
 import LayoutPage from '@/layout'
 import GoodsList from '@/components/GoodsList'
 import GoodsPlatter from '@/components/GoodsPlatter'
+import GoodsEdit from '@/pages/GoodsEdit'
 
 //路由配置
 const routes: RouteObject[] = [
@@ -17,11 +18,12 @@ const routes: RouteObject[] = [
     element: <LayoutPage />,
     children: [
       {
-        path: '/list',
+        index: true,
+        path: 'list',
         element: <GoodsList></GoodsList>
       },
       {
-        path: '/platter',
+        path: 'platter',
         element: <GoodsPlatter></GoodsPlatter>
       }
     ],
@@ -29,6 +31,14 @@ const routes: RouteObject[] = [
   {
     path: '/detail/:id',
     element: <GoodsDetail></GoodsDetail>
+  },
+  {
+    path: '/edit/:id',
+    element: <GoodsEdit></GoodsEdit>
+  },
+  {
+    path: '/edit',
+    element: <GoodsEdit></GoodsEdit>
   },
   {
     path: '*',

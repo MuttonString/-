@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GoodsDetail: React.FC = () => {
+const GoodsEdit: React.FC = () => {
   return (
     <>
       <div>商品编辑</div>
@@ -8,4 +8,4 @@ const GoodsDetail: React.FC = () => {
   )
 }
 
-export default GoodsDetail
+export default GoodsEdit
