@@ -1,9 +1,9 @@
 # 商品管理系统
 
-从GitHub克隆项目：
+Fork此仓库到自己的账号，然后git clone：
 
 ```shell
-git clone https://github.com/MuttonString/GoodsManageSystem
+git clone https://github.com/自己的用户名/GoodsManageSystem
 ```
 
 克隆项目后，切换到项目文件夹下，安装所需node module：
