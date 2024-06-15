@@ -4,9 +4,14 @@ import NotFoundPage from '@/components/404'
 import GoodsDetail from '@/pages/GoodsDetail'
 import LayoutPage from '@/layout'
 import GoodsList from '@/components/GoodsList'
+import GoodsPlatter from '@/components/GoodsPlatter'
 
 //路由配置
 const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <Navigate to="/admin"></Navigate>
+  },
   {
     path: '/admin',
     element: <LayoutPage />,
@@ -16,18 +21,14 @@ const routes: RouteObject[] = [
         element: <GoodsList></GoodsList>
       },
       {
-        path: '/',
-        element: <Navigate to="/admin/list"></Navigate>
+        path: '/platter',
+        element: <GoodsPlatter></GoodsPlatter>
       }
     ],
   },
   {
     path: '/detail/:id',
     element: <GoodsDetail></GoodsDetail>
-  },
-  {
-    path: '*',
-    
   },
   {
     path: '*',
