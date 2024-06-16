@@ -1,10 +1,14 @@
 import React from 'react'
+import { Button } from 'antd'
+import styles from './index.module.less'
 /* 页面未找到 显示404page */
 
 const NotFoundPage: React.FC = () => {
   return (
     <>
-      <p>404 NOT FOUND PAGE</p>
+      <div className={styles.main}>
+        <Button>返回首页</Button>
+      </div>
     </>
   )
 }
