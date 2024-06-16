@@ -1,12 +1,22 @@
-import React from 'react'
-/* 页面未找到 显示404page */
+import React from 'react';
+import { Button, Result } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => {
-  return (
-    <>
-      <p>404 NOT FOUND PAGE</p>
-    </>
-  )
-}
+    const navigate = useNavigate();
 
-export default NotFoundPage
+    return (
+        <Result
+            status='404'
+            title='404'
+            subTitle='此页面不存在'
+            extra={
+                <Button type='primary' onClick={() => navigate('/')}>
+                    返回
+                </Button>
+            }
+        />
+    );
+};
+
+export default NotFoundPage;
