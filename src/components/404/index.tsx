@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => {
     const navigate = useNavigate();
-
     return (
         <Result
             status='404'
