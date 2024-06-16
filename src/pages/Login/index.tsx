@@ -1,7 +1,10 @@
 import "./index.less"
-import logo from "../../assets/images/logoImage.png"
+import logoImage from "../../assets/images/logoImage.png"
+import logo from "../../assets/images/logo.png"
 import LoginContent from "./LoginContent";
 import RegisterContent from "./registerContent";
+import TextContent from "./textContent";
+
 import { useEffect, useState } from "react";
 function Login() {
     const [state, setState] = useState(0)
@@ -18,14 +21,17 @@ function Login() {
                     <img className="img" src={logo} alt="" />
                 </div>
                 <div className="Left_content">
-                    {state==0 ? <LoginContent changeState={(stateValue: number)=>changeState(stateValue)}></LoginContent> : <></>}
+                    <LoginContent changeState={(stateValue: number)=>changeState(stateValue)}/>
                 </div>
             </div>
         </div>
         <div className="Right_backgrand">
             <div className="Right_content_background">
                 <div className="Right_content">
-                    {state==1 ? <RegisterContent changeState={(stateValue: number)=>changeState(stateValue)}></RegisterContent> : <></>}
+                    {state==1 ? <RegisterContent changeState={(stateValue: number)=>changeState(stateValue)}/> : <TextContent/>}
+                </div>
+                <div className="logo">
+                    <img className="img" src={logoImage} alt="" />
                 </div>
             </div>
         </div>
