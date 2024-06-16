@@ -2,7 +2,7 @@ import { createBrowserRouter, RouteObject } from "react-router-dom"
 import NotFoundPage from "@/components/404"
 import LayoutPage from '@/layout';
 import Login from "@/pages/Login"
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 import GoodsDetail from '@/pages/GoodsDetail'
 import GoodsList from '@/components/GoodsList'
 import GoodsPlatter from '@/components/GoodsPlatter'
@@ -16,11 +16,8 @@ const routes: RouteObject[] = [
     children: []
   },
   {
-    path: "/Login",
+    path: "/login",
     element: <Login></Login>
-  },
-  {
-    element: <Navigate to="/admin"></Navigate>
   },
   {
     path: '/admin',
