@@ -1,10 +1,15 @@
 import React from 'react'
-import GoodsTop from '../GoodsTop'
+import GoodsTop from './GoodsTop'
+import GoodsMain from './GoodsMain'
+import styles from './index.module.less'
 
 const GoodsList: React.FC = () => {
   return (
     <>
-      <GoodsTop></GoodsTop>
+      <div className={styles.main}>
+        <GoodsTop></GoodsTop>
+        <GoodsMain></GoodsMain>
+      </div>
     </>
   )
 }

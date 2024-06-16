@@ -1,0 +1,26 @@
+.main {
+  align-items: center;
+  height: 8rem;
+  padding-left: 2rem;
+  &-col {
+    display: flex;
+    align-items: center;
+    margin-left: 1.25rem;
+    .top-input {
+      min-width: 12.5rem;
+      flex-grow: 1;
+    }
+  }
+  &-btns {
+    justify-content: end;
+    gap: 1rem;
+    .top-hide {
+      color: #3787d6;
+    }
+    .top-hide:hover {
+      cursor: pointer;
+      color: #177ee5;
+      transition: all .3s;
+    }
+  }
+}
