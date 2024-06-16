@@ -24,13 +24,7 @@ const items: MenuItem[] = [
 const SiderMenu: React.FC = () => {
     navigate = useNavigate();
     const location = useLocation();
-    return (
-        <Menu
-            mode='vertical'
-            items={items}
-            selectedKeys={[location.pathname]}
-        />
-    );
+    return <Menu mode='vertical' items={items} selectedKeys={[location.pathname]} />;
 };
 
 export default SiderMenu;
