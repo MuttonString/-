@@ -1,13 +1,23 @@
 import { Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 
-const { Header, Content } = Layout;
+const { Header, Content, Sider } = Layout;
 
 const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'midnightblue',
-    color: 'white'
+    backgroundColor: 'gainsboro ',
+    color: 'black',
+    height: '64px'
+};
+
+const siderStyle: React.CSSProperties = {
+    width: '128px',
+    backgroundColor: 'silver'
+};
+
+const contentStyle: React.CSSProperties = {
+    height: 'calc(100vh - 64px)'
 };
 
 const LayoutPage: React.FC = () => {
@@ -16,9 +26,12 @@ const LayoutPage: React.FC = () => {
             <Header style={headerStyle}>
                 <h1>商品管理系统</h1>
             </Header>
-            <Content>
-                <Outlet />
-            </Content>
+            <Layout>
+                <Sider style={siderStyle}>侧边栏</Sider>
+                <Content style={contentStyle}>
+                    <Outlet />
+                </Content>
+            </Layout>
         </Layout>
     );
 };
