@@ -11,7 +11,7 @@ import GoodsEdit from '@/pages/GoodsEdit'
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to="/admin"></Navigate>
+    element: <LayoutPage />
   },
   {
     path: '/admin',
