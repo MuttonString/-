@@ -1,16 +1,21 @@
-import React from 'react'
-import { Button } from 'antd'
-import styles from './index.module.less'
-/* 页面未找到 显示404page */
+import React from 'react';
+import { Button, Result } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => {
-  return (
-    <>
-      <div className={styles.main}>
-        <Button>返回首页</Button>
-      </div>
-    </>
-  )
-}
+    const navigate = useNavigate();
+    return (
+        <Result
+            status='404'
+            title='404'
+            subTitle='此页面不存在'
+            extra={
+                <Button type='primary' onClick={() => navigate('/')}>
+                    返回
+                </Button>
+            }
+        />
+    );
+};
 
-export default NotFoundPage
+export default NotFoundPage;
