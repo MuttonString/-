@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom'
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 import NotFoundPage from '@/components/404'
 import GoodsDetail from '@/pages/GoodsDetail'
 import LayoutPage from '@/layout'
@@ -11,7 +11,8 @@ import GoodsEdit from '@/pages/GoodsEdit'
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to="/admin"></Navigate>
+    // element: <Navigate to="/admin"></Navigate>
+    element: <LayoutPage />
   },
   {
     path: '/admin',
