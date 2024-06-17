@@ -1,30 +1,33 @@
 import { Menu, MenuProps } from 'antd';
 import { OrderedListOutlined, PieChartOutlined } from '@ant-design/icons';
-import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
-
-let navigate: NavigateFunction;
 
 const items: MenuItem[] = [
     {
         key: '/admin/list',
         icon: <OrderedListOutlined />,
-        label: '商品管理',
-        onClick: e => navigate(e.key)
+        label: '商品管理'
     },
     {
         key: '/admin/platter',
         icon: <PieChartOutlined />,
-        label: '数据大盘',
-        onClick: e => navigate(e.key)
+        label: '数据大盘'
     }
 ];
 
 const SiderMenu: React.FC = () => {
-    navigate = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
-    return <Menu mode='vertical' items={items} selectedKeys={[location.pathname]} />;
+    return (
+        <Menu
+            mode='vertical'
+            items={items}
+            selectedKeys={[location.pathname]}
+            onClick={e => navigate(e.key)}
+        />
+    );
 };
 
 export default SiderMenu;

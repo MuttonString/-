@@ -21,6 +21,7 @@ const TextContent: React.FC<State> = ({ state }) => {
                 opacity: '0',
                 transition: 'opacity 1s ease-in-out'
             }}
+            className='loginTextContent'
         >
             {
                 state === 1 ?

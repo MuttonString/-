@@ -30,8 +30,7 @@ const siderStyle: React.CSSProperties = {
 
 const contentStyle: React.CSSProperties = {
     height: 'calc(100vh - 64px)',
-    overflowY: 'hidden',
-    padding: '24px'
+    padding: '24px',
 };
 
 const accountStyle: React.CSSProperties = {

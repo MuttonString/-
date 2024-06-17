@@ -1,28 +1,24 @@
 import { Menu, MenuProps } from 'antd';
 import { HomeOutlined, ProductOutlined } from '@ant-design/icons';
-import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
-
-let navigate: NavigateFunction;
 
 const items: MenuItem[] = [
     {
         key: '/',
         icon: <HomeOutlined />,
-        label: '首页',
-        onClick: e => navigate(e.key)
+        label: '首页'
     },
     {
         key: '/admin',
         icon: <ProductOutlined />,
-        label: '管理页面',
-        onClick: e => navigate(e.key)
+        label: '管理页面'
     }
 ];
 
 const HeaderMenu: React.FC = () => {
-    navigate = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
     return (
         <Menu
@@ -30,6 +26,7 @@ const HeaderMenu: React.FC = () => {
             mode='horizontal'
             items={items}
             selectedKeys={['/' + location.pathname.split('/')[1]]}
+            onClick={e => navigate(e.key)}
         />
     );
 };
