@@ -5,15 +5,32 @@ const divStyle: React.CSSProperties = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     margin: 0,
-    backgroundImage: 'url("/src/assets/homepage.png")',
+    backgroundImage: 'url("/src/assets/images/homepage.png")',
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'center'
+};
+
+const imgStyle: React.CSSProperties = {
+    top: '5vh',
+    position: 'relative'
+};
+
+const h1Style: React.CSSProperties = {
+    top: '20vh',
+    position: 'relative',
+    fontSize: '48px',
+    textShadow: 'ghostwhite 1px 0 10px'
 };
 
 const MainPage: React.FC = () => {
     return (
         <div style={divStyle}>
-            <h1>欢迎来到商品管理系统</h1>
+            <img
+                alt=''
+                src='/src/assets/images/logoImage.png'
+                style={imgStyle}
+            />
+            <h1 style={h1Style}>欢迎来到数字马力商品管理系统</h1>
         </div>
     );
 };
