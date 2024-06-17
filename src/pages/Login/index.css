@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.Left_backgrand {
+  background-color: #fff;
+  width: 50%;
+  height: 792px;
+  float: left;
+  display: flex;
+  /* 启用 Flexbox */
+  justify-content: flex-end;
+  /* 水平方向靠右 */
+  align-items: center;
+  /* 垂直方向居中 */
+}
+.Left_backgrand .Left_content_background {
+  width: 80%;
+  height: 80%;
+  background-image: url("../../assets/images//Login-Left-backgrand.png");
+  background-size: 100% 100%;
+  box-shadow: -10px 0 70px rgba(0, 0, 0, 0.7);
+  border-radius: 10px 0 0 10px;
+}
+.Left_backgrand .Left_content_background .logoImage {
+  text-align: center;
+  margin-top: 10%;
+  margin-bottom: 5%;
+}
+.Left_backgrand .Left_content_background .logoImage .img {
+  width: 50%;
+}
+.Left_backgrand .Left_content_background .Left_content {
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 auto;
+  padding: 2% 2% 0;
+  width: 70%;
+  height: 50%;
+  border-radius: 10px;
+}
+.Right_backgrand {
+  background-color: #183154;
+  width: 50%;
+  height: 792px;
+  float: right;
+  display: flex;
+  /* 启用 Flexbox */
+  justify-content: flex-start;
+  /* 水平方向靠右 */
+  align-items: center;
+  /* 垂直方向居中 */
+}
+.Right_backgrand .Right_content_background {
+  width: 80%;
+  height: 80%;
+  background-image: url("../../assets/images/Login-Right-backgrand.png");
+  background-size: 100% 100%;
+  box-shadow: 10px 0 70px rgba(0, 0, 0, 0.7);
+  border-radius: 0 10px 10px 0;
+}
+.Right_backgrand .Right_content_background .Right_content {
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: 0 auto;
+  margin-top: 10%;
+  padding: 2% 2% 0;
+  width: 70%;
+  height: 60%;
+  border-radius: 10px;
+}
+.Right_backgrand .Right_content_background .logo {
+  text-align: center;
+  margin-top: 5%;
+}
+.Right_backgrand .Right_content_background .logo .img {
+  width: 20%;
+}
