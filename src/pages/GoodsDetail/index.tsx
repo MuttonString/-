@@ -3,7 +3,7 @@ import React from 'react'
 const GoodsDetail: React.FC = () => {
   return (
     <>
-      <div>商品详情</div>
+      <div style={{color: 'red', height: '20000px', backgroundColor: 'pink'}}>商品详情</div>
     </>
   )
 }

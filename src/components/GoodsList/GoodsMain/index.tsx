@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import { ReloadOutlined, ColumnHeightOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import GoodsTable from './GoodsTable'
 import styles from './index.module.less'
 
@@ -22,13 +23,14 @@ const items: TabsProps['items'] = [
 ]
 
 const GoodsMain: React.FC = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className={styles.main}>
         <header className={styles.header}>
           <div style={{fontWeight: '500', fontSize: '1.125rem'}}>商品列表</div>
           <div className={styles['header-right']}>
-            <Button type='primary'>新建商品</Button>
+            <Button type='primary' onClick={() => navigate('/edit')}>新建商品</Button>
             <ReloadOutlined />
             <ColumnHeightOutlined />
           </div>

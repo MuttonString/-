@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 import type { TableColumnsType } from 'antd'
 import styles from './index.module.less'
 
+/* 对商品列表Table部分进行编写 */
 interface DataType {
   key: React.Key
   goodsId: string
