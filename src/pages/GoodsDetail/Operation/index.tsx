@@ -8,7 +8,8 @@ const columns = [
     { title: 'ID', dataIndex: 'opId', key: 'opId' },
     { title: '状态', dataIndex: 'opStatus', key: 'opStatus' },
     { title: '操作时间', dataIndex: 'opTime', key: 'opTime' },
-    { title: '操作人', dataIndex: 'userName', key: 'userName' }
+    { title: '操作人', dataIndex: 'userName', key: 'userName' },
+    { title: '备注', dataIndex: 'opDesc', key: 'opDesc' }
 ];
 
 const Operation: React.FC = () => {
@@ -20,7 +21,8 @@ const Operation: React.FC = () => {
         opId: item.opId,
         opStatus: GOODS_STATUS[item.opStatus],
         opTime: item.opTime,
-        userName: item.userName
+        userName: item.userName,
+        opDesc: item.opDesc
     }));
 
     console.log(id);

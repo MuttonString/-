@@ -15,7 +15,7 @@ export const BOUGHT_TYPE = ['现金', '积分 + 现金', '积分'];
 export interface GoodsDetail {
     goodsName: string; // 商品名称
     imgUrl?: string; // 商品图片url
-    goodsDescribe: string; // 商品描述
+    goodsDesc: string; // 商品描述
     goodsType: number; // 商品类型
     goodsDetail: string; // 商品详情
     categoryId: number; // 商品分类id
@@ -52,6 +52,7 @@ export interface OperationResponse {
     opStatus: number; // 操作状态
     opTime: string; // 操作时间字符串
     userName: string; // 操作人名字
+    opDesc?: string; // 操作备注
 }
 
 // 操作记录请求数据
@@ -60,4 +61,5 @@ export interface OperationRequest {
     opStatus: number; // 操作状态
     opTime: string; // 操作时间字符串
     userId: number; // 操作人id
+    opDesc?: string; // 操作备注
 }
