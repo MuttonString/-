@@ -5,12 +5,17 @@ import LoginContent from "./LoginContent";
 import RegisterContent from "./registerContent";
 import TextContent from "./textContent";
 
+import { Card } from "antd";
 import { useEffect, useState } from "react";
+
+
 function Login() {
-    const [state, setState] = useState(0)
+    const [state, setState] = useState(1)
+
     useEffect(() => {
         // console.log(state)
     }, [state])
+
     function changeState(stateValue: number) {
         setState(stateValue)
     }
@@ -20,16 +25,42 @@ function Login() {
                 <div className="logoImage">
                     <img className="img" src={logo} alt="" />
                 </div>
-                <div className="Left_content">
-                    <LoginContent changeState={(stateValue: number)=>changeState(stateValue)}/>
-                </div>
+                <Card
+                    className="Left_content"
+                    hoverable
+                >
+                    {state == 1 ?
+                        <div>
+                            <LoginContent
+                                changeState={(stateValue: number) => changeState(stateValue)}
+                            />
+                        </div>
+                        :
+                        <div>
+                            <TextContent state={state}></TextContent>
+                        </div>
+                    }
+                </Card>
             </div>
         </div>
         <div className="Right_backgrand">
             <div className="Right_content_background">
-                <div className="Right_content">
-                    {state==1 ? <RegisterContent changeState={(stateValue: number)=>changeState(stateValue)}/> : <TextContent/>}
-                </div>
+                <Card
+                    className="Right_content"
+                    hoverable
+                >
+                    {state == 0 ?
+                        <div style={{ opacity: `${state ? 0 : 1}` }}>
+                            <RegisterContent
+                                changeState={(stateValue: number) => changeState(stateValue)}
+                            />
+                        </div>
+                        :
+                        <div style={{ opacity: `${state}` }}>
+                            <TextContent state={state}></TextContent>
+                        </div>
+                    }
+                </Card>
                 <div className="logo">
                     <img className="img" src={logoImage} alt="" />
                 </div>
