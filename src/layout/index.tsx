@@ -21,7 +21,7 @@ const logoStyle: React.CSSProperties = {
     width: '200px',
     fontSize: '24px',
     position: 'relative',
-    left: '-20px'
+    left: '-48px'
 };
 
 const siderStyle: React.CSSProperties = {
@@ -44,9 +44,7 @@ const LayoutPage: React.FC = () => {
 
     let content: JSX.Element;
     if (location.pathname === '/') {
-        content = (
-                <MainPage />
-        );
+        content = <MainPage />;
     } else {
         content = (
             <>
@@ -63,7 +61,11 @@ const LayoutPage: React.FC = () => {
     return (
         <Layout>
             <Header style={headerStyle}>
-                <div style={logoStyle}>商品管理系统</div>
+                <img
+                    alt=''
+                    src='/src/assets/images/logo.png'
+                    style={logoStyle}
+                />
                 <HeaderMenu />
                 <Account style={accountStyle} />
             </Header>
