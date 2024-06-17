@@ -1,0 +1,50 @@
+{
+    "goodsName": "ATRI",
+    "imgUrl": "https://img.moegirl.org.cn/common/c/c9/ATRI_atri.png",
+    "goodsDescribe": "YHN-04B-009",
+    "goodsType": 0,
+    "goodsDetail": "有着少女外表的笨蛋高性能机器人，原为斑鸠夏生的祖母八千草乃音子博士所持有，在祖母被淹没的旧房子仓库里沉睡了8年。\n是山崎制造厂的第四代型号，虽然是有一定缺陷的被召回型号，但仍是当年人类科技顶峰时的技术结晶，价格不菲。同时与当时市面上的大多数型号设计理念不同，设计者致力于将其设计成与人类别无二致，拥有“心”的机器人。\n搭载了丰富的情感模块，有着自负还带点中二的性格，口癖是「我是高性能的嘛！」，有时会有着强烈的竞争意识。\n原本似乎是作为战斗家务机器人而被生产出来的，但实际上家务完全不行，做出来的饭被夏生称作“工业废料”，打扫也笨手笨脚的。后来经过水菜萌的教导总算做出了可口的菜肴。\n虽然无法通过进食来获取营养，但喜欢吃东西。「好吃就是高兴嘛！」",
+    "categoryId": 114514,
+    "categoryName": "机器人",
+    "goodsFactory": "山崎制造厂",
+    "goodsPhone": "11122223333",
+    "goodsPromise": "25年保修",
+    "goodsLimit": -1,
+    "goodsStock": 1,
+    "goodsOnline": "1996年8月28日",
+    "goodsOffline": "2021年8月31日",
+    "goodsStatus": 6,
+    "userId": 114514,
+    "userName": "斑鸠夏生",
+    "noShipping": [
+        {
+            "id": 1,
+            "name": "月球"
+        },
+        {
+            "id": 2,
+            "name": "火星"
+        }
+    ],
+    "shipping": [
+        {
+            "id": 1,
+            "name": "地球"
+        }
+    ],
+    "boughtTypes": [
+        {
+            "boughtType": 2,
+            "cash": 102400
+        },
+        {
+            "boughtType": 1,
+            "cash": 9999,
+            "score": 10000
+        },
+        {
+            "boughtType": 0,
+            "score": 50000
+        }
+    ]
+}
