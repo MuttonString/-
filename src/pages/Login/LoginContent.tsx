@@ -123,7 +123,10 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
               >
                 <Form.Item
                   name="phone"
-                  rules={[{ required: true, message: '请输入您的手机号!' }]}
+                  rules={[
+                    { required: true, message: '请输入您的手机号!' },
+                    { validator: validatePhone }
+                  ]}
                 >
                   <Input
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
@@ -133,9 +136,9 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 <Form.Item>
                   <Row gutter={20}>
                     <Col span={18}>
-                      <Input 
-                      prefix={<MailOutlined className="site-form-item-icon" />}
-                      placeholder="请输入你的邮箱" />
+                      <Input
+                        prefix={<MailOutlined className="site-form-item-icon" />}
+                        placeholder="请输入验证码" />
                     </Col>
                     <Col span={6}>
                       <Button type="primary">
