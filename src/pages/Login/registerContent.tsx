@@ -1,7 +1,7 @@
 import { UserOutlined, PhoneOutlined, LockOutlined, KeyOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import {
-    Button, Form, Input, Modal
+    Button, Form, Input, Modal, Typography
 } from 'antd';
 
 interface LoginContentProps {
@@ -9,6 +9,7 @@ interface LoginContentProps {
 }
 
 const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
+
     useEffect(() => {
         setTimeout(() => {
             if (animation.current !== null) {
@@ -16,6 +17,9 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
             }
         });
     }, [])
+
+    const { Title, Paragraph } = Typography;
+
     const animation = useRef<HTMLDivElement>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,13 +158,26 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                         <span style={{ fontSize: '12px' }}>登录即表示同意平台
                             <a href="" onClick={showModal}> 协议</a>
                             <Modal
-                                title="Basic Modal"
+                                title={<Title level={4}>商品管理系统使用协议</Title>}
                                 open={isModalOpen}
                                 onOk={handleOk}
-                                onCancel={handleCancel}>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
+                                onCancel={handleCancel}
+                            >
+                                <Paragraph>
+                                    一、协议双方<br />
+                                    甲方（提供方）：小二集团<br />
+                                    乙方（使用方）：用户
+                                </Paragraph>
+                                <Paragraph>
+                                    二、协议目的<br />
+                                    本协议旨在规范乙方使用甲方提供的商品管理系统（以下简称“系统”）的各项权利与义务，确保双方利益受到保护。
+                                </Paragraph>
+                                {/* ...省略其他协议条款... */}
+                                <Paragraph>
+                                    十、其他<br />
+                                    1. 本协议未尽事宜，双方可另行签订补充协议，补充协议与本协议具有同等法律效力。<br />
+                                    2. 甲方有权对本协议进行修订，修订内容将在系统公告中发布，乙方继续使用系统视为接受修订后的协议。
+                                </Paragraph>
                             </Modal>
                         </span>
                     </div>
