@@ -13,7 +13,7 @@ const Base: React.FC<{ goods: GoodsDetail }> = ({ goods }) => {
             <Row>
                 <Col span={8}>商品名称：{goods.goodsName}</Col>
                 <Col span={8}>权益类型：{GOODS_TYPE[goods.goodsType]}</Col>
-                <Col span={8}>描述：{goods.goodsDescribe}</Col>
+                <Col span={8}>描述：{goods.goodsDesc}</Col>
             </Row>
             <Row>
                 <Col span={8}>类目：{goods.categoryName}</Col>
