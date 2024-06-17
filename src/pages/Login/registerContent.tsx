@@ -150,7 +150,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <div style={{ textAlign: 'center', marginTop: '-4%', marginBottom: "5%" }}>
+                    <div style={{ textAlign: 'center', marginBottom: "5%" }}>
                         <span style={{ fontSize: '12px' }}>登录即表示同意平台
                             <a href="" onClick={showModal}> 协议</a>
                             <Modal

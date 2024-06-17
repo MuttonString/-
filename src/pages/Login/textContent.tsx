@@ -44,7 +44,6 @@ const TextContent: React.FC<State> = ({ state }) => {
                         <ul>
                             <li>一站式智能商品管理,高效运营</li>
                             <li>流畅用户界面,卓越体验</li>
-                            <li>深度数据统计,智能决策</li>
                             <li>安全登录,无忧管理</li>
                         </ul>
                         <p>无需技术知识,立即注册,开启您的成功之旅。</p>
