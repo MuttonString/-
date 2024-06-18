@@ -1,9 +1,9 @@
 import "./index.less"
 import logoImage from "../../assets/images/logoImage.png"
 import logo from "../../assets/images/logo.png"
-import LoginContent from "./LoginContent";
-import RegisterContent from "./registerContent";
-import TextContent from "./textContent";
+import LoginContent from "./LoginContent/LoginContent";
+import RegisterContent from "./registerContent/registerContent";
+import TextContent from "./textContent/textContent";
 
 import { Card } from "antd";
 import { useEffect, useState } from "react";
