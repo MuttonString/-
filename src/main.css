@@ -1,6 +1,8 @@
 * {
     margin: 0;
     padding: 0;
+    transition-property: background-color, color !important;
+    transition-duration: 1s, 100ms !important;
 }
 
 html {
