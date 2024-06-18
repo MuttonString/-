@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import SiderMenu from './sider';
 import HeaderMenu from './header';
 import Account from './account';
@@ -41,11 +41,13 @@ const accountStyle: React.CSSProperties = {
 
 const LayoutPage: React.FC = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     let content: JSX.Element;
     if (location.pathname === '/') {
         content = <MainPage />;
     } else {
+        if (location.pathname === '/admin') navigate('list', { replace: true });
         content = (
             <>
                 <Sider style={siderStyle}>
