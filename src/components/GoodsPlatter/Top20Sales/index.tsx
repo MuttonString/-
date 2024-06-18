@@ -50,10 +50,8 @@ function Top20Sales() {
                         position: 'top', // 在上方显示
                         distance: 15, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效
                         verticalAlign: 'middle',
-                        textStyle: {
-                            color: '#424656', // 顶部数据的颜色
-                            fontSize: 14     // 顶部数据的字体大小
-                        },
+                        color: '#424656', // 顶部数据的颜色
+                        fontSize: 14     // 顶部数据的字体大小
                     }
                 }
             ]
@@ -68,7 +66,7 @@ function Top20Sales() {
     }, [])
 
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '100%' }}>
+        <div ref={chartRef} style={{ width: '100%', height: '70vh' }}>
         </div>
     )
 }

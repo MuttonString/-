@@ -44,11 +44,9 @@ function ExchangeMethod() {
                 icon: 'circle',
                 itemWidth: 8,//图例宽度
                 itemHeight: 8,//图例高度
-                textStyle: {//图例字体样式
-                    color: "#000",
-                    fontSize: 14,
-                    fontFamily: "微软雅黑"
-                }
+                color: "#000",
+                fontSize: 14,
+                fontFamily: "微软雅黑"
             },
             series: [
                 {
@@ -66,7 +64,7 @@ function ExchangeMethod() {
     }, [])
 
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '100%' }}>
+        <div ref={chartRef} style={{ width: '100%', height: '70vh' }}>
         </div>
     )
 }
