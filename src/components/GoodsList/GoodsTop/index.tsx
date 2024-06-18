@@ -4,9 +4,9 @@ import { UpOutlined } from '@ant-design/icons'
 import styles from './index.module.less'
 
 const contentStyle: React.CSSProperties = {
-  backgroundColor: 'white',
-  height: '8rem'
-}
+    backgroundColor: 'var(--main-bg-color)',
+    height: '8rem'
+};
 
 const textStyle: React.CSSProperties = {
   minWidth: 'max-content',
