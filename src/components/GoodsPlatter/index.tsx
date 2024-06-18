@@ -37,6 +37,15 @@ const GoodsPlatter: React.FC = () => {
   const [dates, setDates] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
 
   useEffect(() => {
+    // 计算昨天和过去第八天的日期
+    const yesterday = dayjs().subtract(1, 'day');
+    const eighthDayAgo = dayjs().subtract(8, 'day');
+    
+    // 设置默认日期范围
+    setDates([eighthDayAgo, yesterday]);
+  }, []); // 注意这里没有依赖项数组，所以此effect只在组件挂载时执行一次
+
+  useEffect(() => {
     console.log(dates);
 
   }, [dates])
