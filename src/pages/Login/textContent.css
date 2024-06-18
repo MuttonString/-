@@ -50,3 +50,18 @@
     padding: 1rem;
   }
 }
+@media (prefers-color-scheme: dark) {
+  .loginTextContent .text-content {
+    background-color: #404040;
+  }
+  .loginTextContent .welcome-back,
+  .loginTextContent .welcome-to-join {
+    color: #ddd;
+  }
+  .loginTextContent h1 {
+    color: #c0c0c0;
+  }
+  .loginTextContent p {
+    color: white;
+  }
+}

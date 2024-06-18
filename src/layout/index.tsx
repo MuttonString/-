@@ -10,7 +10,7 @@ const { Header, Content, Sider } = Layout;
 const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'left',
-    backgroundColor: 'white',
+    backgroundColor: 'var(--main-bg-color)',
     color: 'black',
     height: '64px',
     borderBottom: '0.5px solid silver'
@@ -25,7 +25,7 @@ const logoStyle: React.CSSProperties = {
 };
 
 const siderStyle: React.CSSProperties = {
-    backgroundColor: 'white'
+    backgroundColor: 'var(--main-bg-color)'
 };
 
 const contentStyle: React.CSSProperties = {
