@@ -55,7 +55,7 @@ const GoodsEdit: React.FC = () => {
   const [form1] = Form.useForm()
   const [form2] = Form.useForm()
 
-  // 收集到数据之后准备发送请求
+  // 完成校验收集到数据之后准备发送请求
   useEffect(() => {
     console.log(totalCommit)
   }, [totalCommit])
@@ -257,10 +257,13 @@ const GoodsEdit: React.FC = () => {
     const { file } = form1.getFieldValue('goodsAvatar')
     if (!file?.type.includes('image')) {
       errorFormatAvatar()
+      return false
     }
     if (file?.size >= 5 * 1024 * 1024) {
       errorSizeAvatar(file?.size)
+      return false
     }
+    return true
   }
 
   // 对整个表单数据进行收集

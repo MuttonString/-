@@ -233,6 +233,16 @@ const GoodsTable: React.FC<GoodsTableData> = ({
       </div>
       <div className={styles.main}>
         <Table
+          pagination={{
+            current: 1,
+            total: 200,
+            onChange: (page: number, pageSize: number) => {
+              console.log('当前页码：',page)
+              console.log('每页数量：',pageSize)
+            },
+            pageSizeOptions: ['10','20','50','100'],
+            defaultPageSize: 20
+          }}
           rowSelection={{
             type: 'checkbox',
             onChange: handlerTableChange,
