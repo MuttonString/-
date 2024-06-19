@@ -16,7 +16,6 @@ import {
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
 import type { GoodsInfo, ExchangeWay } from './type'
-import timeToString from '@/utils/timeToString'
 import styles from './index.module.less'
 import type { VipInputType } from './VipInput/type'
 import VipInput from './VipInput'
@@ -289,8 +288,8 @@ const GoodsEdit: React.FC = () => {
       noCities: ['1', '2'],
       exchangeLimit: exchangeLimit || -1,
       stock: stock!,
-      startDate: timeToString(form2.getFieldValue('startDate')),
-      endDate: timeToString(form2.getFieldValue('endDate')),
+      startDate: form2.getFieldValue('startDate').toISOString(),
+      endDate: form2.getFieldValue('endDate').toISOString(),
       yesCities: ['1', '2'],
     }
     setTotalCommit(allData)
@@ -528,7 +527,7 @@ const GoodsEdit: React.FC = () => {
             layout="vertical"
             rules={[{ required: true, message: '上线时间不能为空' }]}
           >
-            <DatePicker placeholder="请选择"></DatePicker>
+            <DatePicker showTime placeholder="请选择"></DatePicker>
           </Form.Item>
           <Form.Item
             name="endDate"
@@ -536,7 +535,7 @@ const GoodsEdit: React.FC = () => {
             layout="vertical"
             rules={[{ required: true, message: '下线时间不能为空' }]}
           >
-            <DatePicker placeholder="请选择"></DatePicker>
+            <DatePicker showTime placeholder="请选择"></DatePicker>
           </Form.Item>
           <Form.Item name="allowCity" label="投放城市" layout="vertical">
             <Button type="primary" onClick={showDrawer}>
