@@ -34,7 +34,7 @@ const gapStyle: React.CSSProperties = {
 }
 
 const uploadButton = (
-  <button style={{ border: 0, background: 'none' }} type="button">
+  <button style={{ border: 0, background: 'none', color: 'var(--main-fg-color)' }} type="button">
     <PlusOutlined />
     <div style={{ marginTop: 8 }}>Upload</div>
   </button>
