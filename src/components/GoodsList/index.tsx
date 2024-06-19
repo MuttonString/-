@@ -41,9 +41,9 @@ const GoodsList: React.FC = () => {
           (queryItem.goodsStatus === undefined ||
             queryItem.goodsStatus === goodsItem.goodsStatus) &&
           (queryItem.startDate === undefined ||
-            queryItem.startDate === goodsItem.startDate) &&
+            queryItem.startDate.format('YYYY-MM-DD') === goodsItem.startDate) &&
           (queryItem.endDate === undefined ||
-            queryItem.endDate === goodsItem.endDate) &&
+            queryItem.endDate.format('YYYY-MM-DD') === goodsItem.endDate) &&
           (queryItem.goodsId === undefined ||
             queryItem.goodsId === goodsItem.goodsId) &&
           (queryItem.admin === undefined ||

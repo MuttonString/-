@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Col, Row } from 'antd';
-import axios from 'axios';
+// import axios from 'axios';
+
+import request from '../../../utils/request'
 
 interface LoginFormValues {
-  username: string;
+  phone: string;
   password: string;
   remember: boolean;
 }
@@ -71,19 +73,24 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
   };
 
   async function login(values: LoginFormValues) {
-    console.log("请求数据");
-    console.log(values);
 
-    const data = await axios({
-      method: 'post',
-      url: '/ api / user / login',
+    interface ApiResponse {
+      code: number;
+      msg: string;
       data: {
-        password: values.password,
-        phone: values.username
-      }
-    });
+        token: string;
+      };
+    }
 
-    console.log(data);
+    await request.post<ApiResponse, ApiResponse>('/user/login', {
+      password: values.password,
+      phone: values.phone
+    }).then((res) => {
+      console.log(res);
+      if (res.code === 200) {
+        localStorage.setItem('token', res.data.token);
+      }
+    })
   }
 
   return (
