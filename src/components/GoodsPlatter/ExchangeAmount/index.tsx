@@ -1,8 +1,7 @@
-import * as echarts from "echarts";
-import { useEffect, useRef } from "react";
+import * as echarts from 'echarts';
+import { useEffect, useRef } from 'react';
 
 function ExchangeAmount() {
-
     const chartRef = useRef(null);
 
     useEffect(() => {
@@ -26,13 +25,21 @@ function ExchangeAmount() {
             title: {
                 text: '兑换量',
                 x: 'center',
-                y: 'bottom'
+                y: 'bottom',
+                textStyle: { color: 'silver' }
             },
             tooltip: {},
             xAxis: {
                 data: count.map(item => item.name),
+                axisLine: {
+                    lineStyle: { color: 'silver' }
+                }
             },
-            yAxis: {},
+            yAxis: {
+                axisLine: {
+                    lineStyle: { color: 'silver' }
+                }
+            },
             series: [
                 {
                     type: 'line',
@@ -42,11 +49,17 @@ function ExchangeAmount() {
                         position: 'top', // 在上方显示
                         distance: 15, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效
                         verticalAlign: 'middle',
-                        color: '#424656', // 顶部数据的颜色
-                        fontSize: 14     // 顶部数据的字体大小
+                        color: 'silver', // 顶部数据的颜色
+                        fontSize: 14 // 顶部数据的字体大小
                     }
                 }
             ]
+        });
+
+        exchangeAmountEchart.resize();
+        addEventListener('resize', () => {
+            if (!exchangeAmountEchart.isDisposed())
+                exchangeAmountEchart.resize();
         });
 
         // 清理函数，确保图表实例在组件卸载时被销毁
@@ -57,8 +70,13 @@ function ExchangeAmount() {
         };
     }, []);
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '60vh' }}>
-        </div>
+        <div
+            ref={chartRef}
+            style={{
+                width: 'calc(100vw - 300px)',
+                height: 'calc(100vh - 300px)'
+            }}
+        ></div>
     );
 }
 

@@ -4,6 +4,7 @@ import SiderMenu from './sider';
 import HeaderMenu from './header';
 import Account from './account';
 import MainPage from '@/components/MainPage';
+import { useEffect } from 'react';
 
 const { Header, Content, Sider } = Layout;
 
@@ -41,13 +42,11 @@ const accountStyle: React.CSSProperties = {
 
 const LayoutPage: React.FC = () => {
     const location = useLocation();
-    const navigate = useNavigate();
 
     let content: JSX.Element;
     if (location.pathname === '/') {
         content = <MainPage />;
     } else {
-        if (location.pathname === '/admin') navigate('list', { replace: true });
         content = (
             <>
                 <Sider style={siderStyle}>
@@ -59,6 +58,11 @@ const LayoutPage: React.FC = () => {
             </>
         );
     }
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (location.pathname === '/admin') navigate('list');
+    });
 
     return (
         <Layout>
