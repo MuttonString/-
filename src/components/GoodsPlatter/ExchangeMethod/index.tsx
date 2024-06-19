@@ -26,7 +26,7 @@ function ExchangeMethod() {
                 text: '兑换方式',
                 x: 'center',
                 y: 'bottom',
-                textStyle: { color: 'silver' }
+                textStyle: { color: 'royalblue' }
             },
             //鼠标移入提示
             tooltip: {
@@ -43,7 +43,7 @@ function ExchangeMethod() {
                 icon: 'circle',
                 itemWidth: 8, //图例宽度
                 itemHeight: 8, //图例高度
-                textStyle: { color: 'silver' },
+                textStyle: { color: 'royalblue' },
                 fontSize: 14,
                 fontFamily: '微软雅黑'
             },

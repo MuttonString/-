@@ -28,7 +28,7 @@ function Top20Sales() {
                 text: '销量Top20',
                 x: 'center',
                 y: 'bottom',
-                textStyle: { color: 'silver' }
+                textStyle: { color: 'royalblue' }
             },
             //鼠标移入提示
             tooltip: {
@@ -39,12 +39,12 @@ function Top20Sales() {
             xAxis: {
                 data: count.map(item => item.name),
                 axisLine: {
-                    lineStyle: { color: 'silver' }
+                    lineStyle: { color: 'royalblue' }
                 }
             },
             yAxis: {
                 axisLine: {
-                    lineStyle: { color: 'silver' }
+                    lineStyle: { color: 'royalblue' }
                 }
             },
             series: [
@@ -56,7 +56,7 @@ function Top20Sales() {
                         position: 'top', // 在上方显示
                         distance: 15, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效
                         verticalAlign: 'middle',
-                        color: 'silver', // 顶部数据的颜色
+                        color: 'royalblue', // 顶部数据的颜色
                         fontSize: 14 // 顶部数据的字体大小
                     }
                 }
