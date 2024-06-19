@@ -9,7 +9,7 @@ const request = axios.create({
 
 request.interceptors.request.use(config => {
     // 将用户token放到header中
-    // config.headers.token = localStorage.getItem('token');
+    config.headers.token = localStorage.getItem('token');
     return config;
 });
 
