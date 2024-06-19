@@ -1,37 +1,38 @@
-import { Layout } from 'antd'
-import { Outlet, useLocation } from 'react-router-dom'
-import SiderMenu from './sider'
-import HeaderMenu from './header'
-import Account from './account'
-import MainPage from '@/components/MainPage'
+import { Layout } from 'antd';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import SiderMenu from './sider';
+import HeaderMenu from './header';
+import Account from './account';
+import MainPage from '@/components/MainPage';
 
 const { Header, Content, Sider } = Layout
 
 const headerStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'left',
-  backgroundColor: 'white',
-  color: 'black',
-  height: '64px',
-  borderBottom: '0.5px solid silver',
-}
+    display: 'flex',
+    alignItems: 'left',
+    backgroundColor: 'var(--main-bg-color)',
+    color: 'black',
+    height: '64px',
+    borderBottom: '0.5px solid silver'
+};
 
 const logoStyle: React.CSSProperties = {
-  display: 'inline-block',
-  width: '200px',
-  fontSize: '24px',
-  position: 'relative',
-  left: '-20px',
-}
+    display: 'inline-block',
+    width: '200px',
+    fontSize: '24px',
+    position: 'relative',
+    left: '-48px'
+};
 
 const siderStyle: React.CSSProperties = {
-  backgroundColor: 'white',
-}
+    backgroundColor: 'var(--main-bg-color)'
+};
 
 const contentStyle: React.CSSProperties = {
-  height: 'calc(100vh - 64px)',
-  overflow: 'hidden'
-}
+    height: 'calc(100vh - 64px)',
+    padding: '24px',
+    overflow: 'hidden'
+};
 
 const accountStyle: React.CSSProperties = {
   right: '24px',
@@ -39,34 +40,40 @@ const accountStyle: React.CSSProperties = {
 }
 
 const LayoutPage: React.FC = () => {
-  const location = useLocation()
+    const location = useLocation();
+    const navigate = useNavigate();
 
-  let content: JSX.Element
-  if (location.pathname === '/') {
-    content = <MainPage />
-  } else {
-    content = (
-      <>
-        <Sider style={siderStyle}>
-          <SiderMenu />
-        </Sider>
-        <Content style={contentStyle}>
-          <Outlet />
-        </Content>
-      </>
-    )
-  }
+    let content: JSX.Element;
+    if (location.pathname === '/') {
+        content = <MainPage />;
+    } else {
+        if (location.pathname === '/admin') navigate('list', { replace: true });
+        content = (
+            <>
+                <Sider style={siderStyle}>
+                    <SiderMenu />
+                </Sider>
+                <Content style={contentStyle}>
+                    <Outlet />
+                </Content>
+            </>
+        );
+    }
 
-  return (
-    <Layout>
-      <Header style={headerStyle}>
-        <div style={logoStyle}>商品管理系统</div>
-        <HeaderMenu />
-        <Account style={accountStyle} />
-      </Header>
-      <Layout>{content}</Layout>
-    </Layout>
-  )
-}
+    return (
+        <Layout>
+            <Header style={headerStyle}>
+                <img
+                    alt=''
+                    src='/src/assets/images/logo.png'
+                    style={logoStyle}
+                />
+                <HeaderMenu />
+                <Account style={accountStyle} />
+            </Header>
+            <Layout>{content}</Layout>
+        </Layout>
+    );
+};
 
 export default LayoutPage
