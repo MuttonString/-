@@ -12,6 +12,12 @@ export const GOODS_STATUS = [
 
 export const BOUGHT_TYPE = ['现金', '积分 + 现金', '积分'];
 
+interface Resopnse {
+    code: number;
+    data: object;
+    msg: string;
+}
+
 export interface GoodsDetail {
     goodsName: string; // 商品名称
     imgUrl?: string; // 商品图片url
