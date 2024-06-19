@@ -189,7 +189,7 @@ const VipInput: React.FC<propsType> = React.memo(
             <div>
               <Select
                 placeholder="请选择"
-                style={{ width: '22rem' }}
+                style={{ width: '9.375rem' }}
                 defaultValue={
                   typeNum == 0 ? '积分' : typeNum == 1 ? '积分+现金' : '现金'
                 }
