@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { Row, Col, Input, Select, Button } from 'antd'
 import { UpOutlined, DownOutlined } from '@ant-design/icons'
 import type { TopProps } from './type'

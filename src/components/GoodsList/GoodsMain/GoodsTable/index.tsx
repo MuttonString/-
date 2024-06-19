@@ -5,7 +5,6 @@ import { TableColumnsType, Popconfirm } from 'antd'
 import styles from './index.module.less'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
-import Item from 'antd/es/list/Item'
 
 const GoodsTable: React.FC<GoodsTableData> = ({
   data,
