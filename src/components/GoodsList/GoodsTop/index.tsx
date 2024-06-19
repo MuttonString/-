@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { Row, Col, Input, Select, Button } from 'antd'
+import { Row, Col, Input, Select, Button, DatePicker } from 'antd'
 import { UpOutlined, DownOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs'
 import type { TopProps } from './type'
 import type { GoodsQueryItem } from '../type'
 import styles from './index.module.less'
@@ -58,19 +59,19 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
         </Col>
         <Col className={styles['main-col']} span={5}>
           <p style={textStyle}>开始时间：</p>
-          <Input
-            type="date"
+          <DatePicker
             className={styles['top-input']}
+            showTime
             placeholder="请输入"
             value={queryItem.startDate}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.currentTarget.value && e.currentTarget.value !== '')
-                setQueryItem({ ...queryItem, startDate: e.currentTarget.value })
+            onChange={(value: dayjs.Dayjs) => {
+              if (value)
+                setQueryItem({ ...queryItem, startDate: value })
               else {
                 setQueryItem({ ...queryItem, startDate: undefined })
               }
             }}
-          ></Input>
+          ></DatePicker>
         </Col>
         <Col
           className={
@@ -79,19 +80,17 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
           span={5}
         >
           <p style={textStyle}>结束时间：</p>
-          <Input
-            type="date"
+          <DatePicker
             className={styles['top-input']}
             placeholder="请输入"
-            value={queryItem.endDate}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.currentTarget.value && e.currentTarget.value !== '')
-                setQueryItem({ ...queryItem, endDate: e.currentTarget.value })
+            onChange={(value: dayjs.Dayjs) => {
+              if (value)
+                setQueryItem({ ...queryItem, endDate: value })
               else {
                 setQueryItem({ ...queryItem, endDate: undefined })
               }
             }}
-          ></Input>
+          ></DatePicker>
         </Col>
         <Col
           className={
