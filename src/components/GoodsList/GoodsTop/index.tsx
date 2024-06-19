@@ -5,11 +5,6 @@ import dayjs from 'dayjs'
 import type { TopProps } from './type'
 import type { GoodsQueryItem } from '../type'
 import styles from './index.module.less'
-
-const contentStyle: React.CSSProperties = {
-    backgroundColor: 'var(--main-bg-color)',
-    height: '8rem'
-};
         
 const textStyle: React.CSSProperties = {
   minWidth: 'max-content',
