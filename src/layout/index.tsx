@@ -6,7 +6,7 @@ import Account from './account';
 import MainPage from '@/components/MainPage';
 import { useEffect } from 'react';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider } = Layout
 
 const headerStyle: React.CSSProperties = {
     display: 'flex',
@@ -36,9 +36,9 @@ const contentStyle: React.CSSProperties = {
 };
 
 const accountStyle: React.CSSProperties = {
-    right: '24px',
-    position: 'absolute'
-};
+  right: '24px',
+  position: 'absolute',
+}
 
 const LayoutPage: React.FC = () => {
     const location = useLocation();
@@ -80,4 +80,4 @@ const LayoutPage: React.FC = () => {
     );
 };
 
-export default LayoutPage;
+export default LayoutPage
