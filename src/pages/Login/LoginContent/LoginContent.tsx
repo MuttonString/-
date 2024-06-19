@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Modal, Col, Row } from 'antd';
-// import axios from 'axios';
+import { Button, Checkbox, Form, Input, Modal, Col, Row, message } from 'antd';
 
 import request from '../../../utils/request'
 
@@ -72,6 +71,14 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
     return Promise.resolve();
   };
 
+  let msg = ''
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const info = () => {
+    messageApi.info(`登录${msg}`);
+  };
+
   async function login(values: LoginFormValues) {
 
     interface ApiResponse {
@@ -88,12 +95,14 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       phone: values.phone
     }).then((res) => {
       console.log(res);
+      msg = res.msg;
       if (res.code === 200) {
         localStorage.setItem('token', res.data.token);
         if (res.data.refreshToken) {
           localStorage.setItem('refreshToken', res.data.refreshToken);
         }
       }
+      info();
     })
   }
 
@@ -230,6 +239,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
             display: 'flex',
             justifyContent: 'space-between'
           }}>
+            {contextHolder}
             <Button size='large' type="primary" htmlType="submit">
               登录
             </Button>
@@ -237,6 +247,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
             <Button size='large' type="primary" onClick={changeStateToRegister}>
               加入
             </Button>
+
           </div>
         </Form.Item>
       </Form>

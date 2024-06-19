@@ -1,8 +1,8 @@
-import { UserOutlined, PhoneOutlined, LockOutlined, KeyOutlined } from '@ant-design/icons';
+import { UserOutlined, PhoneOutlined, LockOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
-import {
-    Button, Form, Input, Modal, Typography
-} from 'antd';
+import { Button, Form, Input, Modal, Typography, Row, Col } from 'antd';
+
+import request from '../../../utils/request'
 
 interface LoginContentProps {
     changeState: (stateValue: number) => void;
@@ -23,6 +23,10 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
     const animation = useRef<HTMLDivElement>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isPhoneValid, setIsPhoneValid] = useState(false);
+
+    const [phone, setPhone] = useState('');
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -47,6 +51,23 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
         changeState(1);
     }
 
+    async function SendVerificationCode() {
+        if (isPhoneValid) {
+            //发送验证码
+            console.log("发送验证码");
+
+            await request.post('/user/code', {
+                phone: phone,
+                type: 1
+            }).then(res => {
+                console.log(res);
+            })
+
+        } else {
+            console.log("请输入正确的手机号");
+        }
+    }
+
 
     const onFinish = (values: RegisterFormValues) => {
         console.log('Received values of form: ', values);
@@ -69,7 +90,8 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 return Promise.reject(new Error('手机号必须是11位!'));
             }
         }
-
+        setPhone(value)
+        setIsPhoneValid(true);
         return Promise.resolve();
     };
 
@@ -96,6 +118,21 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                         prefix={<PhoneOutlined className="site-form-item-icon" />}
                         placeholder="手机号"
                     />
+                </Form.Item>
+
+                <Form.Item>
+                    <Row gutter={20}>
+                        <Col span={17}>
+                            <Input
+                                prefix={<MailOutlined className="site-form-item-icon" />}
+                                placeholder="请输入验证码" />
+                        </Col>
+                        <Col span={6}>
+                            <Button type="primary" onClick={SendVerificationCode}>
+                                发送验证码
+                            </Button>
+                        </Col>
+                    </Row>
                 </Form.Item>
 
                 <Form.Item
@@ -154,7 +191,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <div style={{ textAlign: 'center', marginBottom: "5%" }}>
+                    <div style={{ textAlign: 'center', marginTop: "-2%" }}>
                         <span style={{ fontSize: '12px' }}>登录即表示同意平台
                             <a href="" onClick={showModal}> 协议</a>
                             <Modal
