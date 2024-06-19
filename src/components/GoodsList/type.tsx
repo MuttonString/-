@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export interface GoodsInTable {
   key: React.Key
   goodsId: string
@@ -14,8 +16,8 @@ export interface GoodsInTable {
 export interface GoodsQueryItem {
   goodsId?: string
   goodsName?: string
-  startDate?: string
-  endDate?: string
+  startDate?: dayjs.Dayjs
+  endDate?: dayjs.Dayjs
   goodsStatus?: number
   admin?: string
   agent?: string
