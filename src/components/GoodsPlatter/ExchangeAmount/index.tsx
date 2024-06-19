@@ -20,7 +20,7 @@ function ExchangeAmount() {
             { value: 24, name: '乡村田园类' }
         ];
 
-        exchangeAmountEchart.setOption({
+        const option = {
             // 配置项
             title: {
                 text: '兑换量',
@@ -54,7 +54,9 @@ function ExchangeAmount() {
                     }
                 }
             ]
-        });
+        }
+
+        exchangeAmountEchart.setOption(option);
 
         exchangeAmountEchart.resize();
         addEventListener('resize', () => {

@@ -1,9 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Col, Row } from 'antd';
+// import axios from 'axios';
+
+import request from '../../../utils/request'
 
 interface LoginFormValues {
-  username: string;
+  phone: string;
   password: string;
   remember: boolean;
 }
@@ -45,7 +48,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
   }
 
   const onFinish = (values: LoginFormValues) => {
-    console.log('Received values of form: ', values);
+    login(values)
   };
 
   const validatePhone = (_rule: object, value: string) => {
@@ -68,6 +71,27 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     return Promise.resolve();
   };
+
+  async function login(values: LoginFormValues) {
+
+    interface ApiResponse {
+      code: number;
+      msg: string;
+      data: {
+        token: string;
+      };
+    }
+
+    await request.post<ApiResponse, ApiResponse>('/user/login', {
+      password: values.password,
+      phone: values.phone
+    }).then((res) => {
+      console.log(res);
+      if (res.code === 200) {
+        localStorage.setItem('token', res.data.token);
+      }
+    })
+  }
 
   return (
     <div ref={animation}

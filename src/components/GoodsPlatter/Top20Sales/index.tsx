@@ -20,9 +20,7 @@ function Top20Sales() {
             { value: 24, name: '乡村田园类' }
         ];
 
-        // 初始化实例
-        const Top20SalesEchart = echarts.init(chartRef.current);
-        Top20SalesEchart.setOption({
+        const option = {
             // 配置项
             title: {
                 text: '销量Top20',
@@ -61,7 +59,11 @@ function Top20Sales() {
                     }
                 }
             ]
-        });
+        };
+
+        // 初始化实例
+        const Top20SalesEchart = echarts.init(chartRef.current);
+        Top20SalesEchart.setOption(option);
 
         Top20SalesEchart.resize();
         addEventListener('resize', () => {
