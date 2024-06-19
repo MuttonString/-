@@ -78,17 +78,21 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       code: number;
       msg: string;
       data: {
+        refreshToken: string;
         token: string;
       };
     }
 
-    await request.post<ApiResponse, ApiResponse>('/user/login', {
+    await request.post<ApiResponse, ApiResponse>(values.remember ? '/user/autoLogin' : '/user/login', {
       password: values.password,
       phone: values.phone
     }).then((res) => {
       console.log(res);
       if (res.code === 200) {
         localStorage.setItem('token', res.data.token);
+        if (res.data.refreshToken) {
+          localStorage.setItem('refreshToken', res.data.refreshToken);
+        }
       }
     })
   }
