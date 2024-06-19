@@ -21,10 +21,7 @@ function Top20Sales() {
             { value: 24, name: '乡村田园类' }
         ]
 
-        // 初始化实例
-        const Top20SalesEchart =
-            echarts.init(chartRef.current)
-            Top20SalesEchart.setOption({
+        const option = {
             // 配置项
             title: {
                 text: '销量Top20',
@@ -55,7 +52,13 @@ function Top20Sales() {
                     }
                 }
             ]
-        })
+        }
+
+        // 初始化实例
+        const Top20SalesEchart =
+            echarts.init(chartRef.current)
+            
+        Top20SalesEchart.setOption(option)
 
         // 清理函数，确保图表实例在组件卸载时被销毁
         return () => {
@@ -66,7 +69,7 @@ function Top20Sales() {
     }, [])
 
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '70vh' }}>
+        <div ref={chartRef} style={{ width: '100%', height: '60vh' }}>
         </div>
     )
 }

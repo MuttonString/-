@@ -19,10 +19,8 @@ function ExchangeMethod() {
             { value: 26, name: '主题乐园类' },
             { value: 24, name: '乡村田园类' }
         ]
-        // 初始化实例
-        const exchangeMethodEchart =
-            echarts.init(chartRef.current)
-        exchangeMethodEchart.setOption({
+
+        const option = {
             // 配置项
             title: {
                 text: '兑换方式',
@@ -54,8 +52,14 @@ function ExchangeMethod() {
                     data: count
                 }
             ]
-        })
-        
+        }
+
+        // 初始化实例
+        const exchangeMethodEchart =
+            echarts.init(chartRef.current)
+
+        exchangeMethodEchart.setOption(option)
+
         return () => {
             if (exchangeMethodEchart) {
                 exchangeMethodEchart.dispose();
@@ -64,7 +68,7 @@ function ExchangeMethod() {
     }, [])
 
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '70vh' }}>
+        <div ref={chartRef} style={{ width: '100%', height: '60vh' }}>
         </div>
     )
 }
