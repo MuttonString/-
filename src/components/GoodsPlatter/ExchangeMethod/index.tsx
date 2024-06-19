@@ -1,12 +1,11 @@
-import * as echarts from "echarts";
-import { useEffect, useRef } from "react";
+import * as echarts from 'echarts';
+import { useEffect, useRef } from 'react';
 
 function ExchangeMethod() {
-
     const chartRef = useRef(null);
 
     useEffect(() => {
-        console.log("获取图表数据");
+        console.log('获取图表数据');
         const count = [
             { value: 160, name: '山林类' },
             { value: 140, name: '河湖湿地类' },
@@ -25,7 +24,8 @@ function ExchangeMethod() {
             title: {
                 text: '兑换方式',
                 x: 'center',
-                y: 'bottom'
+                y: 'bottom',
+                textStyle: { color: 'royalblue' }
             },
             //鼠标移入提示
             tooltip: {
@@ -34,17 +34,17 @@ function ExchangeMethod() {
                 formatter: '{b}:{c}占比({d}%)'
             },
             legend: {
-                orient: "vertical",//图例的布局，水平布局、垂直布局
+                orient: 'vertical', //图例的布局，水平布局、垂直布局
                 type: 'scroll',
                 data: count,
                 right: 15,
                 top: 'middle',
                 icon: 'circle',
-                itemWidth: 8,//图例宽度
-                itemHeight: 8,//图例高度
-                color: "#000",
+                itemWidth: 8, //图例宽度
+                itemHeight: 8, //图例高度
+                textStyle: { color: 'royalblue' },
                 fontSize: 14,
-                fontFamily: "微软雅黑"
+                fontFamily: '微软雅黑'
             },
             series: [
                 {
@@ -52,25 +52,34 @@ function ExchangeMethod() {
                     data: count
                 }
             ]
-        }
+        };
 
         // 初始化实例
-        const exchangeMethodEchart =
-            echarts.init(chartRef.current)
+        const exchangeMethodEchart = echarts.init(chartRef.current);
+        exchangeMethodEchart.setOption(option);
 
-        exchangeMethodEchart.setOption(option)
+        exchangeMethodEchart.resize();
+        addEventListener('resize', () => {
+            if (!exchangeMethodEchart.isDisposed())
+                exchangeMethodEchart.resize();
+        });
 
         return () => {
             if (exchangeMethodEchart) {
                 exchangeMethodEchart.dispose();
             }
         };
-    }, [])
+    }, []);
 
     return (
-        <div ref={chartRef} style={{ width: '100%', height: '60vh' }}>
-        </div>
-    )
+        <div
+            ref={chartRef}
+            style={{
+                width: 'calc(100vw - 300px)',
+                height: 'calc(100vh - 300px)'
+            }}
+        ></div>
+    );
 }
 
-export default ExchangeMethod
+export default ExchangeMethod;

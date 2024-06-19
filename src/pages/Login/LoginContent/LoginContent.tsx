@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Col, Row } from 'antd';
+import axios from 'axios';
 
 interface LoginFormValues {
   username: string;
@@ -45,7 +46,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
   }
 
   const onFinish = (values: LoginFormValues) => {
-    console.log('Received values of form: ', values);
+    login(values)
   };
 
   const validatePhone = (_rule: object, value: string) => {
@@ -68,6 +69,22 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     return Promise.resolve();
   };
+
+  async function login(values: LoginFormValues) {
+    console.log("请求数据");
+    console.log(values);
+
+    const data = await axios({
+      method: 'post',
+      url: '/ api / user / login',
+      data: {
+        password: values.password,
+        phone: values.username
+      }
+    });
+
+    console.log(data);
+  }
 
   return (
     <div ref={animation}

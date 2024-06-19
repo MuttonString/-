@@ -74,7 +74,7 @@ const GoodsPlatter: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ overflow: 'auto', backgroundColor: 'var(--main-bg-color)', padding: '16px' }}>
       <div className='DatePicker'
         style={{ display: 'flex', justifyContent: 'center', marginTop: '1%' }}
       >

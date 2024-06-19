@@ -1,15 +1,25 @@
 .main {
   align-items: center;
-  height: 8rem;
-  padding-left: 2rem;
+  background-color: var(--main-bg-color);
+  height: 10rem;
+  padding: 1.75rem;
+  gap: 1.5rem;
+  transition: height .5s ease-out;
   &-col {
     display: flex;
     align-items: center;
     margin-left: 1.25rem;
     .top-input {
-      min-width: 12.5rem;
+      width: calc(100% - 3.5rem);
       flex-grow: 1;
     }
+    &:nth-child(4+n) {
+      transition: opacity .5s ease-out;
+    }
+  }
+  .item-hide {
+    display: none;
+    opacity: 0;
   }
   &-btns {
     justify-content: end;
@@ -23,4 +33,7 @@
       transition: all .3s;
     }
   }
+}
+.main.shrink {
+  height: 5rem;
 }
