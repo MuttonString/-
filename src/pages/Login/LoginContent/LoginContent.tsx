@@ -137,7 +137,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
         <Form.Item>
           <div style={{ marginTop: '5%', display: 'flex', justifyContent: 'space-between' }}>
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>记住密码</Checkbox>
+              <Checkbox>自动登录</Checkbox>
             </Form.Item>
 
             <a className="login-form-forgot" href="" onClick={showModal}>
