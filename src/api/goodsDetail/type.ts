@@ -92,20 +92,12 @@ export interface AuditRequest {
     proId: string;
 }
 
-// 操作记录响应数据
-export interface OperationResponse {
-    opId: string; // 操作id
-    opStatus: number; // 操作状态
-    opTime: string; // 操作时间字符串
-    userName: string; // 操作人名字
-    opDesc?: string; // 操作备注
-}
-
-// 操作记录请求数据
-export interface OperationRequest {
-    goodsId: string; // 商品id
-    opStatus: number; // 操作状态
-    opTime: string; // 操作时间字符串
-    userId: string; // 操作人id
-    opDesc?: string; // 操作备注
+export interface OperationData {
+    createTime: string;
+    id: string;
+    operationEnum: string;
+    operationTypeString: string;
+    proId: string;
+    remark: string;
+    userId: string;
 }
