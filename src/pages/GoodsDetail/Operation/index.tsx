@@ -1,3 +1,4 @@
+import request from '@/utils/request';
 import { Table } from 'antd';
 import { useLocation } from 'react-router-dom';
 // import { GOODS_STATUS } from '@/api/goodsDetail/type';
@@ -24,8 +25,14 @@ const Operation: React.FC = () => {
     //     userName: item.userName,
     //     opDesc: item.opDesc
     // }));
-
-    console.log(id);
+    async function test() {
+        const res = await request.post('/product/list', {
+            page: 1,
+            pageSize: 10
+        });
+        console.log(res);
+    }
+    test();
 
     return (
         <div>

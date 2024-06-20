@@ -82,7 +82,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
   async function onResetPassword(values: ForgetPwdFormValues) {
 
-    await request.put<ApiType, ApiType>('/api/user/forgetPwd', {
+    await request.put<ApiType, ApiType>('/user/forgetPwd', {
       code: values.verificationCodeForgetPassword,
       phone: values.phone,
       password: values.password
@@ -144,7 +144,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     await request
         .post<ApiResponse, ApiResponse>(
-            values.remember ? '/api/user/autoLogin' : '/api/user/login',
+            values.remember ? '/user/autoLogin' : '/user/login',
             {
                 password: values.password,
                 phone: values.phone
@@ -169,7 +169,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       //发送验证码
 
       await request
-          .get<ApiResponse, ApiResponse>(`/api/user/code/${phone}/${2}`)
+          .get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`)
           .then(res => {
               const success = (
                   data: string | null = localStorage.getItem(
