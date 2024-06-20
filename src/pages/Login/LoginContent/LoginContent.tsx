@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Col, Row, message, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import request from '../../../utils/request'
 
@@ -40,6 +41,10 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       }
     });
   }, [])
+
+  const navigate = useNavigate();
+
+  const [form] = Form.useForm();
 
   const { Paragraph } = Typography;
 
@@ -87,6 +92,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       console.log(res);
       if (res.code === 200) {
         setIsModalOpen(false);
+        form.resetFields();
         messageApiResetPassword.success(`密码重置${res.msg}`);
       }
       if (res.code === 220) {
@@ -147,8 +153,10 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       msg = res.msg;
       if (res.code === 200) {
         localStorage.setItem('token', res.data.token);
+        navigate("/admin/list")
         if (res.data.refreshToken) {
           localStorage.setItem('refreshToken', res.data.refreshToken);
+          navigate("/admin/list")
         }
       }
       info();
@@ -158,7 +166,6 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
   async function SendVerificationCode() {
     if (isPhoneValid) {
       //发送验证码
-      console.log("发送忘记密码验证码");
 
       await request.get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`).then(res => {
         console.log(res);
@@ -283,6 +290,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 name="forgetPassword"
                 className="login-form"
                 onFinish={onResetPassword}
+                form={form}
               >
                 <Form.Item
                   name="phone"
@@ -305,6 +313,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
                   <Row gutter={20}>
                     <Col span={18}>
                       <Input
+                        autoComplete="off"
                         prefix={<MailOutlined className="site-form-item-icon" />}
                         placeholder="请输入验证码" />
                     </Col>
@@ -361,7 +370,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
                 </Form.Item>
 
                 <Form.Item>
-                  <div key="submit">
+                  <div key="submit" style={{ display: 'flex', justifyContent: 'center' }}>
                     {contextHolderResetPassword}
                     <Button size='large' type="primary" htmlType="submit">
                       重置密码

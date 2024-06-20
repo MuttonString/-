@@ -142,8 +142,6 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     async function onFinish(values: RegisterFormValues) {
 
-        console.log('Received values of form: ', values);
-
         request.post<ApiType, ApiType>(`/user/register`, {
             code: values.verificationCodeRegister,
             password: values.password,
@@ -219,8 +217,10 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                     <Row gutter={20}>
                         <Col span={17}>
                             <Input
+                                autoComplete="off"
                                 prefix={<MailOutlined className="site-form-item-icon" />}
-                                placeholder="请输入验证码" />
+                                placeholder="请输入验证码"
+                            />
                         </Col>
                         <Col span={6}>
                             {contextHolder}
@@ -236,7 +236,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                     rules={[{ required: true, message: '请输入你的用户名!' }]}
                 >
                     <Input
-                        autoComplete="current-password"
+                        autoComplete="current-username"
                         prefix={<UserOutlined
                             className="site-form-item-icon" />}
                         placeholder="用户名"
