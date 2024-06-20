@@ -1,7 +1,7 @@
 export interface VipInputType {
   id?: string,
-  typeNum: number,
-  score: number,
+  typeNum: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH',
+  score: string,
   cash: number,
   isAble?: boolean
   isInitial?: boolean
