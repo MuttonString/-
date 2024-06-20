@@ -39,7 +39,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
         <GoodsTable
           tabId={1}
           changeGoodsStatus={changeGoodsStatus}
-          changeGoods={setGoodsList}
+          setGoodsList={setGoodsList}
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
@@ -53,7 +53,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
         <GoodsTable
           tabId={2}
           changeGoodsStatus={changeGoodsStatus}
-          changeGoods={setGoodsList}
+          setGoodsList={setGoodsList}
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
@@ -67,7 +67,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
         <GoodsTable
           tabId={3}
           changeGoodsStatus={changeGoodsStatus}
-          changeGoods={setGoodsList}
+          setGoodsList={setGoodsList}
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
