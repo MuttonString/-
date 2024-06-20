@@ -73,7 +73,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
             //发送验证码
 
             await request
-                .get<ApiResponse, ApiResponse>(`/api/user/code/${phone}/${1}`)
+                .get<ApiResponse, ApiResponse>(`/user/code/${phone}/${1}`)
                 .then(res => {
                     const success = (
                         data: string | null = localStorage.getItem(
@@ -161,7 +161,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
     async function onFinish(values: RegisterFormValues) {
 
         request
-            .post<ApiType, ApiType>(`/api/user/register`, {
+            .post<ApiType, ApiType>(`/user/register`, {
                 code: values.verificationCodeRegister,
                 password: values.password,
                 phone: values.phone,

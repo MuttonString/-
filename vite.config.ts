@@ -26,11 +26,6 @@ export default defineConfig({
                 target: 'http://8.138.13.158:9088',
                 changeOrigin: true
                 // rewrite: path => path.replace(/^\/api/, '')
-            },
-            ['/query']: {
-                target: 'http://8.138.13.158:9088',
-                changeOrigin: true
-                // rewrite: path => path.replace(/^\/api/, '')
             }
         }
     }
