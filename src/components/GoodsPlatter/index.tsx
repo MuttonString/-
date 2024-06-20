@@ -8,13 +8,7 @@ import ExchangeAmount from "./ExchangeAmount"
 import Top20Sales from "./Top20Sales"
 import ExchangeMethod from './ExchangeMethod';
 
-
 dayjs.extend(customParseFormat);
-
-const onChange = (key: string) => {
-  console.log(key);
-};
-
 
 const GoodsPlatter: React.FC = () => {
   const [dates, setDates] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
@@ -28,12 +22,12 @@ const GoodsPlatter: React.FC = () => {
     {
       key: '2',
       label: '销售量top20',
-      children: <Top20Sales></Top20Sales>,
+      children: <Top20Sales dates={dates}></Top20Sales>,
     },
     {
       key: '3',
       label: '兑换方式',
-      children: <ExchangeMethod></ExchangeMethod>,
+      children: <ExchangeMethod dates={dates}></ExchangeMethod>,
     },
   ];
 
@@ -48,11 +42,6 @@ const GoodsPlatter: React.FC = () => {
     // 设置默认日期范围
     setDates([eighthDayAgoRef.current, yesterdayRef.current]);
   }, []); // 注意这里没有依赖项数组，所以此effect只在组件挂载时执行一次
-
-  useEffect(() => {
-    console.log(dates);
-
-  }, [dates])
 
   const { RangePicker } = DatePicker;
 
@@ -72,7 +61,6 @@ const GoodsPlatter: React.FC = () => {
       if (duration > 59) {
         alert('日期范围不能超过60天');
         // 重置选择器
-        console.log(eighthDayAgoRef.current);
 
         setDates([eighthDayAgoRef.current, yesterdayRef.current]);
       } else {
@@ -99,7 +87,6 @@ const GoodsPlatter: React.FC = () => {
         <Tabs
           defaultActiveKey="1"
           items={items}
-          onChange={onChange}
           size='large'
         />
       </div>
