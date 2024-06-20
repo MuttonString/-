@@ -13,7 +13,7 @@ const textStyle: React.CSSProperties = {
 
 const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
   const [isRetract, setIsRetract] = useState<boolean>(false) //是否收缩
-  const [queryItem, setQueryItem] = useState<GoodsQueryItem>({})
+  const [queryItem, setQueryItem] = useState<GoodsQueryItem>({}) //收集查询项
   const mainRef = useRef<HTMLDivElement>(null) // 动态添加类名
 
   const changeRetract = () => {
@@ -32,10 +32,11 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
           <Input
             className={styles['top-input']}
             placeholder="请输入"
+            type='number'
             value={queryItem.goodsId}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if (e.currentTarget.value && e.currentTarget.value !== '')
-                setQueryItem({ ...queryItem, goodsId: e.currentTarget.value })
+                setQueryItem({ ...queryItem, goodsId: +e.currentTarget.value })
               else {
                 setQueryItem({ ...queryItem, goodsId: undefined })
               }
