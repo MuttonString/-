@@ -6,6 +6,7 @@ export interface ExchangeWay {
   score: number
 }
 
+// 初始定义的GoodsInfo
 export interface GoodsInfo {
   goodsId?: number
   goodsName: string
@@ -25,4 +26,17 @@ export interface GoodsInfo {
   startDate: string
   endDate: string
   yesCities: string[]
+}
+
+// 城市在Tree里面的数据结构
+export interface CitiesInTree {
+  title: string
+  key: string
+  children?: CitiesInTree[]
+}
+
+
+//实际获取的城市列表数据结构
+export interface AreaData {
+  [key: string]: { [key: string]: string };
 }

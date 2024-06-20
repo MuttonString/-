@@ -4,7 +4,6 @@ import type { AxiosResponse, AxiosError } from 'axios';
 import { LoginResponse, ResponseObject } from './type';
 
 const request = axios.create({
-    // baseURL: '/api',
     timeout: 5000
 });
 
