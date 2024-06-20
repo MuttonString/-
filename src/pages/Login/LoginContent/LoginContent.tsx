@@ -91,8 +91,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
         setIsModalOpen(false);
         form.resetFields();
         messageApiResetPassword.success(`密码重置${res.msg}`);
-      }
-      if (res.code === 220) {
+      } else {
         messageApiResetPassword.warning(res.msg);
       }
     })
@@ -143,25 +142,28 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
     }
 
     await request
-        .post<ApiResponse, ApiResponse>(
-            values.remember ? '/user/autoLogin' : '/user/login',
-            {
-                password: values.password,
-                phone: values.phone
-            }
-        )
-        .then(res => {
-            msg = res.msg;
-            if (res.code === 200) {
-                localStorage.setItem('token', res.data.token);
-                navigate('/admin/list');
-                if (res.data.refreshToken) {
-                    localStorage.setItem('refreshToken', res.data.refreshToken);
-                    navigate('/admin/list');
-                }
-            }
-            info();
-        });
+      .post<ApiResponse, ApiResponse>(
+        values.remember ? '/user/autoLogin' : '/user/login',
+        {
+          password: values.password,
+          phone: values.phone
+        }
+      )
+      .then(res => {
+        if (!values.remember) {
+          localStorage.removeItem('refreshToken')
+        }
+        msg = res.msg;
+        if (res.code === 200) {
+          localStorage.setItem('token', res.data.token);
+          navigate('/admin/list');
+          if (res.data.refreshToken) {
+            localStorage.setItem('refreshToken', res.data.refreshToken);
+            navigate('/admin/list');
+          }
+        }
+        info();
+      });
   }
 
   async function SendVerificationCode() {
@@ -169,84 +171,84 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       //发送验证码
 
       await request
-          .get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`)
-          .then(res => {
-              const success = (
-                  data: string | null = localStorage.getItem(
-                      'verificationCodeForgetPassword'
-                  )
-              ) => {
-                  messageApi.open({
-                      type: 'success',
-                      content: (
-                          <div
-                              style={{
-                                  display: 'flex',
-                                  alignContent: 'center',
-                                  height: '24px'
-                              }}
-                          >
-                              <span style={{ fontSize: '20' }}>
-                                  您的验证码为:
-                              </span>
-                              &nbsp;
-                              <span
-                                  style={{
-                                      fontSize: '20px',
-                                      fontWeight: '700'
-                                  }}
-                              >
-                                  <Paragraph copyable>{data}</Paragraph>
-                              </span>
-                          </div>
-                      ),
-                      duration: 5
-                  });
-              };
+        .get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`)
+        .then(res => {
+          const success = (
+            data: string | null = localStorage.getItem(
+              'verificationCodeForgetPassword'
+            )
+          ) => {
+            messageApi.open({
+              type: 'success',
+              content: (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignContent: 'center',
+                    height: '24px'
+                  }}
+                >
+                  <span style={{ fontSize: '20' }}>
+                    您的验证码为:
+                  </span>
+                  &nbsp;
+                  <span
+                    style={{
+                      fontSize: '20px',
+                      fontWeight: '700'
+                    }}
+                  >
+                    <Paragraph copyable>{data}</Paragraph>
+                  </span>
+                </div>
+              ),
+              duration: 5
+            });
+          };
 
-              const info = () => {
-                  messageApi.open({
-                      type: 'warning',
-                      content: (
-                          <div>
-                              验证码五分钟内有效，请查看
-                              <a onClick={() => success()}>短信</a>
-                          </div>
-                      ),
-                      duration: 5
-                  });
-              };
+          const info = () => {
+            messageApi.open({
+              type: 'warning',
+              content: (
+                <div>
+                  验证码五分钟内有效，请查看
+                  <a onClick={() => success()}>短信</a>
+                </div>
+              ),
+              duration: 5
+            });
+          };
 
-              const warning = () => {
-                  messageApi.info('请重新发送验证码');
-              };
+          const warning = () => {
+            messageApi.info('请重新发送验证码');
+          };
 
-              if (res.code === 200) {
-                  success(res.data);
-                  localStorage.setItem(
-                      'verificationCodeForgetPassword',
-                      res.data
-                  );
-              } else if (res.code === 222) {
-                  if (
-                      localStorage.getItem('verificationCodeForgetPassword') ===
-                      null
-                  ) {
-                      warning();
-                  } else {
-                      info();
-                  }
-              } else {
-                  const error = () => {
-                      messageApi.open({
-                          type: 'error',
-                          content: res.msg,
-                          duration: 5
-                      });
-                  };
-                  error();
-              }
-          });
+          if (res.code === 200) {
+            success(res.data);
+            localStorage.setItem(
+              'verificationCodeForgetPassword',
+              res.data
+            );
+          } else if (res.code === 222) {
+            if (
+              localStorage.getItem('verificationCodeForgetPassword') ===
+              null
+            ) {
+              warning();
+            } else {
+              info();
+            }
+          } else {
+            const error = () => {
+              messageApi.open({
+                type: 'error',
+                content: res.msg,
+                duration: 5
+              });
+            };
+            error();
+          }
+        });
 
     } else {
       console.log("请输入正确的手机号");
