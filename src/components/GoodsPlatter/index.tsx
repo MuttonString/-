@@ -15,26 +15,27 @@ const onChange = (key: string) => {
   console.log(key);
 };
 
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: '兑换量',
-    children: <ExchangeAmount ></ExchangeAmount>,
-  },
-  {
-    key: '2',
-    label: '销售量top20',
-    children: <Top20Sales></Top20Sales>,
-  },
-  {
-    key: '3',
-    label: '兑换方式',
-    children: <ExchangeMethod></ExchangeMethod>,
-  },
-];
 
 const GoodsPlatter: React.FC = () => {
   const [dates, setDates] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
+
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: '兑换量',
+      children: <ExchangeAmount dates={dates}></ExchangeAmount>,
+    },
+    {
+      key: '2',
+      label: '销售量top20',
+      children: <Top20Sales></Top20Sales>,
+    },
+    {
+      key: '3',
+      label: '兑换方式',
+      children: <ExchangeMethod></ExchangeMethod>,
+    },
+  ];
 
   const yesterdayRef = useRef<dayjs.Dayjs | null>(null);
   const eighthDayAgoRef = useRef<dayjs.Dayjs | null>(null);

@@ -1,12 +1,34 @@
 import * as echarts from 'echarts';
 import { useEffect, useRef } from 'react';
 
-function ExchangeAmount() {
+import dayjs from 'dayjs';
+// import request from '@/utils/request';
+
+interface ExchangeAmountProps {
+    dates: [dayjs.Dayjs | null, dayjs.Dayjs | null];
+}
+
+async function getData(dates: [dayjs.Dayjs | null, dayjs.Dayjs | null]) {
+    dates
+    // await request.post('/querySales',
+    //     {
+    //         startTime: dates[0]?.format('YYYY-MM-DD'),
+    //         endTime: dates[1]?.format('YYYY-MM-DD')
+    //     }
+    // ).then((res) => {
+    //     console.log(res);
+    // })
+}
+
+
+function ExchangeAmount({ dates }: ExchangeAmountProps) {
     const chartRef = useRef(null);
 
     useEffect(() => {
         console.log('获取兑换量图表数据');
-        
+
+        getData(dates);
+
         const count = [
             { value: 160, name: '山林类' },
             { value: 140, name: '河湖湿地类' },
@@ -56,7 +78,7 @@ function ExchangeAmount() {
             ]
         }
 
-        
+
         // 初始化实例
         const exchangeAmountEchart = echarts.init(chartRef.current);
         exchangeAmountEchart.setOption(option);
@@ -75,13 +97,17 @@ function ExchangeAmount() {
         };
     }, []);
     return (
-        <div
-            ref={chartRef}
-            style={{
-                width: 'calc(100vw - 300px)',
-                height: 'calc(100vh - 300px)'
-            }}
-        ></div>
+        <>
+            {dates && dates[0] && dates[0].format('YYYY-MM-DD')} 至 {dates && dates[1] && dates[1].format('YYYY-MM-DD')}
+            <div
+                ref={chartRef}
+                style={{
+                    width: 'calc(100vw - 300px)',
+                    height: 'calc(100vh - 300px)'
+                }}
+            >
+            </div>
+        </>
     );
 }
 
