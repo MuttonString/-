@@ -71,10 +71,8 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
     async function SendVerificationCode() {
         if (isPhoneValid) {
             //发送验证码
-            console.log("发送验证码");
 
             await request.get<ApiResponse, ApiResponse>(`/user/code/${phone}/${1}`).then(res => {
-                console.log(res);
 
                 const success = (data: string | null = localStorage.getItem('verificationCodeRegister')) => {
                     messageApi.open({
@@ -148,7 +146,6 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
             phone: values.phone,
             userName: values.userName
         }).then(res => {
-            console.log(res);
             if (res.code === 200) {
                 changeStateToLogin()
                 alert("注册成功,欢迎加入");

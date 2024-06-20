@@ -82,14 +82,11 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
   async function onResetPassword(values: ForgetPwdFormValues) {
 
-    console.log(values);
-
     await request.put<ApiType, ApiType>('/user/forgetPwd', {
       code: values.verificationCodeForgetPassword,
       phone: values.phone,
       password: values.password
     }).then((res) => {
-      console.log(res);
       if (res.code === 200) {
         setIsModalOpen(false);
         form.resetFields();
@@ -149,7 +146,6 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       password: values.password,
       phone: values.phone
     }).then((res) => {
-      console.log(res);
       msg = res.msg;
       if (res.code === 200) {
         localStorage.setItem('token', res.data.token);
@@ -168,7 +164,6 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       //发送验证码
 
       await request.get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`).then(res => {
-        console.log(res);
 
         const success = (data: string | null = localStorage.getItem('verificationCodeForgetPassword')) => {
           messageApi.open({
