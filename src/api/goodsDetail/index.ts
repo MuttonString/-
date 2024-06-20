@@ -5,7 +5,7 @@ import { ResponseObject } from '@/utils/type';
 
 export async function reqGoodsDetail(id: number) {
     const result = await request.get<unknown, GoodsDetailResponse>(
-        `/product/proDetail/${id}`
+        `/api/product/proDetail/${id}`
     );
     if (result.code === 200) {
         return result.data;
@@ -15,7 +15,7 @@ export async function reqGoodsDetail(id: number) {
 
 export async function reqAuditPass(req: AuditRequest) {
     const result = await request.post<unknown, ResponseObject, AuditRequest>(
-        'product/auditPass',
+        '/api/product/auditPass',
         req
     );
     if (result.code === 200) {
@@ -26,7 +26,7 @@ export async function reqAuditPass(req: AuditRequest) {
 
 export async function reqAuditDown(req: AuditRequest) {
     const result = await request.post<unknown, ResponseObject, AuditRequest>(
-        'product/auditDown',
+        '/api/product/auditDown',
         req
     );
     if (result.code === 200) {
@@ -37,7 +37,7 @@ export async function reqAuditDown(req: AuditRequest) {
 
 export async function reqGoodsOnline(id: number) {
     const result = await request.get<unknown, GoodsDetailResponse>(
-        `/product/up/${id}`
+        `/api/product/up/${id}`
     );
     if (result.code === 200) {
         return;
@@ -47,7 +47,7 @@ export async function reqGoodsOnline(id: number) {
 
 export async function reqGoodsOffline(id: number) {
     const result = await request.get<unknown, GoodsDetailResponse>(
-        `/product/down/${id}`
+        `/api/product/down/${id}`
     );
     if (result.code === 200) {
         return;

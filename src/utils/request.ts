@@ -4,7 +4,7 @@ import type { AxiosResponse, AxiosError } from 'axios';
 import { LoginResponse, ResponseObject } from './type';
 
 const request = axios.create({
-    baseURL: '/api',
+    // baseURL: '/api',
     timeout: 5000
 });
 
@@ -19,7 +19,7 @@ request.interceptors.response.use(
         if ((response.data as ResponseObject).code === 207) {
             localStorage.removeItem('token');
             const resp = await request.post<string, LoginResponse>(
-                '/user/refreshToken',
+                '/api/user/refreshToken',
                 null,
                 {
                     headers: {
