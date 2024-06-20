@@ -5,7 +5,8 @@ function ExchangeMethod() {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        console.log('获取图表数据');
+        console.log('获取兑换方式图表数据');
+
         const count = [
             { value: 160, name: '山林类' },
             { value: 140, name: '河湖湿地类' },

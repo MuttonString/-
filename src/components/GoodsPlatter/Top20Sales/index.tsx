@@ -5,7 +5,7 @@ function Top20Sales() {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        console.log('获取图表数据');
+        console.log('获取销量前20图表数据');
 
         const count = [
             { value: 160, name: '山林类' },

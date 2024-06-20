@@ -5,8 +5,8 @@ function ExchangeAmount() {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        // 初始化实例
-        const exchangeAmountEchart = echarts.init(chartRef.current);
+        console.log('获取兑换量图表数据');
+        
         const count = [
             { value: 160, name: '山林类' },
             { value: 140, name: '河湖湿地类' },
@@ -56,6 +56,9 @@ function ExchangeAmount() {
             ]
         }
 
+        
+        // 初始化实例
+        const exchangeAmountEchart = echarts.init(chartRef.current);
         exchangeAmountEchart.setOption(option);
 
         exchangeAmountEchart.resize();
