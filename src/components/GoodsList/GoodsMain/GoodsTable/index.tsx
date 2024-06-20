@@ -6,10 +6,138 @@ import styles from './index.module.less'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
 
+/* const data: GoodsInTable[] = [
+  {
+    key: '1',
+    goodsId: '1',
+    goodsName: '巧乐兹',
+    goodsStock: 300,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 3,
+    admin: '丁真',
+    option: 3,
+  },
+  {
+    key: '2',
+    goodsId: '2',
+    goodsName: '雨伞',
+    goodsStock: 50,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 4,
+    admin: '马嘉祺',
+    option: 4,
+  },
+  {
+    key: '3',
+    goodsId: '3',
+    goodsName: '杠铃',
+    goodsStock: 3000,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 5,
+    admin: '马保国',
+    option: 5,
+  },
+  {
+    key: '4',
+    goodsId: '4',
+    goodsName: '大米',
+    goodsStock: 3200,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 5,
+    admin: '米老鼠',
+    option: 5,
+  },
+  {
+    key: '5',
+    goodsId: '5',
+    goodsName: '钢筋',
+    goodsStock: 3000,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 6,
+    admin: '小阳哥',
+    option: 6,
+  },
+  {
+    key: '6',
+    goodsId: '6',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 6,
+    admin: '大阳哥',
+    option: 6,
+  },
+  {
+    key: '7',
+    goodsId: '7',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 5,
+    admin: '大阳哥',
+    option: 5,
+  },
+  {
+    key: '8',
+    goodsId: '8',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 0,
+    admin: '大阳哥',
+    option: 0,
+  },
+  {
+    key: '9',
+    goodsId: '9',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 0,
+    admin: '大阳哥',
+    option: 0,
+  },
+  {
+    key: '10',
+    goodsId: '10',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 0,
+    admin: '大阳哥',
+    option: 0,
+  },
+  {
+    key: '11',
+    proId: '11',
+    goodsName: '船桨',
+    goodsStock: 320,
+    startDate: '2024-2-10',
+    endDate: '2024-3-10',
+    goodsStatus: 0,
+    admin: '大阳哥',
+    option: 0,
+  },
+] */
+
 const GoodsTable: React.FC<GoodsTableData> = ({
-  data,
+  // data,
   tabId,
   changeGoodsStatus,
+  changeGoods,
+  goodsList,
+  pagiNationInfo,
+  setPagiNationInfo
 }) => {
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
@@ -18,9 +146,9 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   // 监听data变化，看状态是否发生改变导致批量按钮需要变化,以完成在批量选择时，依旧可以动态单个上下线
   useEffect(() => {
     if(selectedGoods.length > 0) {
-      const filtedData: GoodsInTable[] = data.filter(item => {
+      const filtedData: GoodsInTable[] = goodsList.filter(item => {
         for(let i = 0; i < selectedGoods.length; i++) {
-          if(selectedGoods[i].goodsId === item.goodsId) {
+          if(selectedGoods[i].id === item.id) {
             return true
           }
         }
@@ -28,18 +156,18 @@ const GoodsTable: React.FC<GoodsTableData> = ({
       })
       handlerTableChange(filtedData.map(item => item.key), filtedData)
     }
-  },[data])
+  },[goodsList])
 
   const handlerTableChange = (_: React.Key[], selectedRows: GoodsInTable[]) => {
     setMultiCount(selectedRows.length)
     setSelectedGoods(selectedRows)
     if (tabId === 1 && selectedRows.length > 0) {
-      const destiStatus = selectedRows[0].goodsStatus
+      const destiStatus = selectedRows[0].proStatus
       const isEquel = selectedRows.every((row: GoodsInTable) => {
         if (destiStatus === 3 || destiStatus === 6) {
-          return row.goodsStatus === 3 || row.goodsStatus === 6
+          return row.proStatus === 3 || row.proStatus === 6
         } else {
-          return row.goodsStatus === destiStatus
+          return row.proStatus === destiStatus
         }
       })
       if (isEquel) {
@@ -141,7 +269,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 width: '4.375rem',
               }}
               onClick={() => {
-                changeGoodsStatus(record.goodsId, 5)
+                changeGoodsStatus(record.id, 5)
               }}
             >
               上线
@@ -150,9 +278,9 @@ const GoodsTable: React.FC<GoodsTableData> = ({
           5: (
             <Popconfirm
               title="下线商品"
-              description={`你确定要下线【${record.goodsName}】吗？`}
+              description={`你确定要下线【${record.proName}】吗？`}
               onConfirm={() => {
-                changeGoodsStatus(record.goodsId, 6) 
+                changeGoodsStatus(record.id, 6) 
               }}
               okText="确定"
               cancelText="取消"
@@ -178,7 +306,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 width: '4.375rem',
               }}
               onClick={() => {
-                changeGoodsStatus(record.goodsId, 5)
+                changeGoodsStatus(record.id, 5)
               }}
             >
               上线
@@ -206,7 +334,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onConfirm={() => {
               changeGoodsStatus(
                 selectedGoods?.map(
-                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.goodsId
+                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
                 ),
                 6
               )
@@ -220,7 +348,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onClick={() => {
               changeGoodsStatus(
                 selectedGoods?.map(
-                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.goodsId
+                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
                 ),
                 5
               )
@@ -234,11 +362,13 @@ const GoodsTable: React.FC<GoodsTableData> = ({
       <div className={styles.main}>
         <Table
           pagination={{
-            current: 1,
-            total: 200,
+            current: pagiNationInfo.page,
+            total: pagiNationInfo.total,
             onChange: (page: number, pageSize: number) => {
               console.log('当前页码：',page)
               console.log('每页数量：',pageSize)
+              setPagiNationInfo({...pagiNationInfo, page})
+              setPagiNationInfo({...pagiNationInfo, pageSize})
             },
             pageSizeOptions: ['10','20','50','100'],
             defaultPageSize: 20
@@ -248,7 +378,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onChange: handlerTableChange,
           }}
           columns={columns}
-          dataSource={data}
+          dataSource={goodsList}
         ></Table>
       </div>
     </>
