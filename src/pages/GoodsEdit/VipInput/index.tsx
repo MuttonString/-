@@ -4,7 +4,7 @@ import { DeleteOutlined } from '@ant-design/icons'
 import styles from './index.module.less'
 
 interface propsType {
-  typeNum: number
+  typeNum: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
   ableGoodsExchangeWays: Function
   delGoodsExchangeWays: Function
   isInitial: boolean
@@ -17,17 +17,17 @@ const VipInput: React.FC<propsType> = React.memo(
     const [score, setScore] = useState<string>()
 
     useEffect(() => {
-      if (typeNum == 0) {
+      if (typeNum == 'INTEGRAL') {
         if (score && +score >= 0) {
           ableGoodsExchangeWays({ typeNum, score, isAble: true })
         } else {
-          ableGoodsExchangeWays({ typeNum, score: 0, isAble: false })
+          ableGoodsExchangeWays({ typeNum, score: '0', isAble: false })
         }
-      } else if (typeNum == 1) {
+      } else if (typeNum == 'INTEGRAL_AND_CASH') {
         if (cash && +cash >= 0 && score && +score >= 0) {
           ableGoodsExchangeWays({ typeNum, score, cash, isAble: true })
         } else {
-          ableGoodsExchangeWays({ typeNum, score: 0, cash: 0, isAble: false})
+          ableGoodsExchangeWays({ typeNum, score: '0', cash: 0, isAble: false})
         }
       } else {
         if (cash && +cash >= 0) {
@@ -40,6 +40,7 @@ const VipInput: React.FC<propsType> = React.memo(
 
     //验证cash字段
     const valiCash = useCallback(() => {
+      if (cash && +cash < 0) return 1
       if (cash === undefined && !isInitial && isValiExchange) return 1
       if (cash === '') return 1
       if (cash && +cash >= 0) return 0
@@ -48,6 +49,7 @@ const VipInput: React.FC<propsType> = React.memo(
 
     //验证score字段
     const valiScore = useCallback(() => {
+      if (score && +score < 0) return 1
       if (score === undefined && !isInitial && isValiExchange) return 1
       if (score === '') return 1
       if (score && +score >= 0) return 0
@@ -56,7 +58,7 @@ const VipInput: React.FC<propsType> = React.memo(
 
     // 方式类别判断映射相应组件
     const waysMap: any = {
-      0: (
+      'INTEGRAL': (
         <section className={styles['main-3']}>
           <div className={styles['main-2']}>
             <span>
@@ -88,7 +90,7 @@ const VipInput: React.FC<propsType> = React.memo(
           />
         </section>
       ),
-      1: (
+      'INTEGRAL_AND_CASH': (
         <>
           <section className={styles['main-2']}>
             <span>
@@ -146,7 +148,7 @@ const VipInput: React.FC<propsType> = React.memo(
           </section>
         </>
       ),
-      2: (
+      'CASH': (
         <section className={styles['main-3']}>
           <div className={styles['main-2']}>
             <span>
@@ -191,12 +193,12 @@ const VipInput: React.FC<propsType> = React.memo(
                 placeholder="请选择"
                 style={{ width: '9.375rem' }}
                 defaultValue={
-                  typeNum == 0 ? '积分' : typeNum == 1 ? '积分+现金' : '现金'
+                  typeNum == 'CASH' ? '积分' : typeNum == 'INTEGRAL_AND_CASH' ? '积分+现金' : '现金'
                 }
                 options={[
-                  { value: 0, label: '积分' },
-                  { value: 1, label: '积分+现金' },
-                  { value: 2, label: '现金' },
+                  { value: 'INTEGRAL', label: '积分' },
+                  { value: 'INTEGRAL_AND_CASH', label: '积分+现金' },
+                  { value: 'CASH', label: '现金' },
                 ]}
                 disabled
               ></Select>

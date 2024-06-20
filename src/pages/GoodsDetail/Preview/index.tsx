@@ -30,8 +30,7 @@ const Preview: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
     return (
         <div className={styles.main}>
             <div className={styles.card}>
-                // TODO
-                <img alt='' src={''} />
+                <img alt='' src={goods.poster} />
                 <div>
                     <p>{goods.proName}</p>
                     <p style={{ color: 'crimson' }}>{price}</p>
@@ -42,8 +41,7 @@ const Preview: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                 <div className={styles.topbar}>
                     07:21<span>100%</span>
                 </div>
-                // TODO
-                <img alt='' src={''} />
+                <img alt='' src={goods.poster} />
                 <div className={styles.detail}>
                     <h3>{goods.proName}</h3>
                     <p>{goods.supplierName}</p>

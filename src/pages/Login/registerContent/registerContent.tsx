@@ -72,65 +72,85 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
         if (isPhoneValid) {
             //发送验证码
 
-            await request.get<ApiResponse, ApiResponse>(`/user/code/${phone}/${1}`).then(res => {
-
-                const success = (data: string | null = localStorage.getItem('verificationCodeRegister')) => {
-                    messageApi.open({
-                        type: 'success',
-                        content:
-                            <div style={{
-                                display: 'flex',
-                                alignContent: 'center',
-                                height: '24px'
-                            }}>
-                                <span style={{ fontSize: '20' }}>
-                                    您的验证码为:
-                                </span>
-                                &nbsp;
-                                <span style={{ fontSize: '20px', fontWeight: '700' }}>
-                                    <Paragraph copyable>{data}</Paragraph>
-                                </span>
-                            </div>,
-                        duration: 5,
-                    });
-                };
-
-                const info = () => {
-                    messageApi.open({
-                        type: 'warning',
-                        content:
-                            <div>
-                                验证码五分钟内有效，请查看
-                                <a onClick={() => success()}>短信</a>
-                            </div>,
-                        duration: 5,
-                    });
-                };
-
-                const warning = () => {
-                    messageApi.info("请重新发送验证码")
-                }
-
-                if (res.code === 200) {
-                    success(res.data);
-                    localStorage.setItem("verificationCodeRegister", res.data)
-                } else if (res.code === 222) {
-                    if (localStorage.getItem('verificationCodeRegister') === null) {
-                        warning()
-                    } else {
-                        info();
-                    }
-                } else {
-                    const error = () => {
+            await request
+                .get<ApiResponse, ApiResponse>(`/api/user/code/${phone}/${1}`)
+                .then(res => {
+                    const success = (
+                        data: string | null = localStorage.getItem(
+                            'verificationCodeRegister'
+                        )
+                    ) => {
                         messageApi.open({
-                            type: 'error',
-                            content: res.msg,
-                            duration: 5,
+                            type: 'success',
+                            content: (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignContent: 'center',
+                                        height: '24px'
+                                    }}
+                                >
+                                    <span style={{ fontSize: '20' }}>
+                                        您的验证码为:
+                                    </span>
+                                    &nbsp;
+                                    <span
+                                        style={{
+                                            fontSize: '20px',
+                                            fontWeight: '700'
+                                        }}
+                                    >
+                                        <Paragraph copyable>{data}</Paragraph>
+                                    </span>
+                                </div>
+                            ),
+                            duration: 5
                         });
+                    };
+
+                    const info = () => {
+                        messageApi.open({
+                            type: 'warning',
+                            content: (
+                                <div>
+                                    验证码五分钟内有效，请查看
+                                    <a onClick={() => success()}>短信</a>
+                                </div>
+                            ),
+                            duration: 5
+                        });
+                    };
+
+                    const warning = () => {
+                        messageApi.info('请重新发送验证码');
+                    };
+
+                    if (res.code === 200) {
+                        success(res.data);
+                        localStorage.setItem(
+                            'verificationCodeRegister',
+                            res.data
+                        );
+                    } else if (res.code === 222) {
+                        if (
+                            localStorage.getItem('verificationCodeRegister') ===
+                            null
+                        ) {
+                            warning();
+                        } else {
+                            info();
+                        }
+                    } else {
+                        const error = () => {
+                            messageApi.open({
+                                type: 'error',
+                                content: res.msg,
+                                duration: 5
+                            });
+                        };
+                        error();
                     }
-                    error();
-                }
-            })
+                });
 
         } else {
             console.log("请输入正确的手机号");
@@ -140,19 +160,21 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     async function onFinish(values: RegisterFormValues) {
 
-        request.post<ApiType, ApiType>(`/user/register`, {
-            code: values.verificationCodeRegister,
-            password: values.password,
-            phone: values.phone,
-            userName: values.userName
-        }).then(res => {
-            if (res.code === 200) {
-                changeStateToLogin()
-                alert("注册成功,欢迎加入");
-            } else {
-                messageApiRegister.info(res.msg)
-            }
-        })
+        request
+            .post<ApiType, ApiType>(`/api/user/register`, {
+                code: values.verificationCodeRegister,
+                password: values.password,
+                phone: values.phone,
+                userName: values.userName
+            })
+            .then(res => {
+                if (res.code === 200) {
+                    changeStateToLogin();
+                    alert('注册成功,欢迎加入');
+                } else {
+                    messageApiRegister.info(res.msg);
+                }
+            });
     }
 
     const validatePhone = (_rule: object, value: string) => {
