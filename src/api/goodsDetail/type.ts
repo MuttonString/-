@@ -52,6 +52,11 @@ export interface ProRule {
     proId: 0;
 }
 
+export interface AuditRequest {
+    desc: string;
+    proId: number;
+}
+
 // 操作记录响应数据
 export interface OperationResponse {
     opId: number; // 操作id
