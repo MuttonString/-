@@ -17,13 +17,16 @@ import {
 } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
+import axios from 'axios'
+import { requestAllCategory, requestAddGoods } from '@/api/goodsEdit'
 import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
 import type { CitiesInTree, AreaData } from './type'
+import type { AllCategoryResponse, SingleCategory } from '@/api/goodsEdit/type'
 import VipInput from './VipInput'
 import convertCities from '@/utils/covertCities'
-import axios from 'axios'
+import getChildCategoryLists from '@/utils/traverseCategoryList'
 
 /* 全局编辑或新增界面 */
 
@@ -51,6 +54,37 @@ const provinceKeys: React.Key[] = Array.from({ length: 35 }, (_, i) =>
   (i + 1).toString()
 )
 
+/* const customRequest = async (options: any) => {
+  const { file, onSuccess, onError } = options
+
+  // 创建FormData对象
+  const formData = new FormData()
+  formData.append('file', file)
+
+  // 配置请求头，添加token或其他信息
+  const headers = {
+    token: `${localStorage.getItem('token')}`,
+    refreshToken: `${localStorage.getItem('refreshToken')}`,
+    TOKEN: `${localStorage.getItem('TOKEN')}`
+  }
+
+  try {
+    const response = await fetch('/api/common/upload', {
+      method: 'POST',
+      body: formData,
+      headers
+    })
+
+    if (response.ok) {
+      onSuccess(response, file)
+    } else {
+      onError(response, file)
+    }
+  } catch (error) {
+    onError(error, file)
+  }
+} */
+
 const GoodsEdit: React.FC = () => {
   const [goodsExchangeWays, setGoodsExchangeWays] = useState<VipInputType[]>([]) //兑换方式状态管理
   const [selectedExchangeWay, setSelectedExchangeWay] = useState<
@@ -64,8 +98,9 @@ const GoodsEdit: React.FC = () => {
   const [goodsAvatar, setGoodsAvatar] = useState<string>('') //商品头图
   const [totalCommit, setTotalCommit] = useState<AppendGoods>() //总提交项，校验通过生成
   const [citiesTree, setCitesTree] = useState<CitiesInTree[]>() //城市在Tree里面的展示
-  const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>()
-  const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>()
+  const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>() //选择的不发货城市
+  const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>() //选择的投放城市
+  const [childCategoryList, setChildCategoryList] = useState<SingleCategory[]>() //节点分类
 
   // 两个form表单数据绑定
   const [form1] = Form.useForm()
@@ -78,11 +113,20 @@ const GoodsEdit: React.FC = () => {
       const formedTreeCities: CitiesInTree[] = convertCities(cities)
       setCitesTree(formedTreeCities)
     })
+    requestAllCategory().then(res => {
+      if(!res) return
+      const childCategoryList: SingleCategory[] = getChildCategoryLists(res)
+      setChildCategoryList(childCategoryList)
+    })
   }, [])
 
   // 完成校验收集到数据之后准备发送请求
   useEffect(() => {
-    console.log(totalCommit)
+    if (totalCommit) {
+      requestAddGoods(totalCommit).then(res => {
+        if (res && res?.length > 0) message.success('新增成功')
+      })
+    }
   }, [totalCommit])
 
   const [messageApi, contextHolder] = message.useMessage() //message消息提示导入
@@ -133,7 +177,6 @@ const GoodsEdit: React.FC = () => {
   //添加新的兑换方式
   const addExchangeWay = () => {
     if (!selectedExchangeWay) {
-      // errorNull()
       error('你还未选择要填加的兑换方式')
       return
     }
@@ -385,10 +428,16 @@ const GoodsEdit: React.FC = () => {
                   listType="picture-card"
                   maxCount={1}
                   action={'/api/common/upload'}
+                  headers={{
+                    token: localStorage.getItem('token') || '',
+                    refreshToken: localStorage.getItem('refreshToken') || '',
+                    TOKEN: localStorage.getItem('TOKEN') || ''
+                  }}
                   beforeUpload={(file: UploadFile) => {
                     valiAvatar(file)
                   }}
                   onChange={(info) => {
+                    console.log(info)
                     if (
                       info.file.status === 'done' &&
                       info.file.response.code === 200
@@ -408,7 +457,7 @@ const GoodsEdit: React.FC = () => {
                     }
                   }}
                 >
-                  {goodsAvatar?.length! >= 1 ? null : uploadButton}
+                    {uploadButton}
                 </Upload>
               </Form.Item>
             </Col>
@@ -425,7 +474,12 @@ const GoodsEdit: React.FC = () => {
                   },
                 ]}
               >
-                <Select options={[{ value: 1, label: '777' }]}></Select>
+                <Select
+                  options={childCategoryList?.map((item: SingleCategory) => {
+                    return { value: item.id, label: item.name }
+                  })}
+                  placeholder="请选择"
+                ></Select>
               </Form.Item>
             </Col>
           </Row>

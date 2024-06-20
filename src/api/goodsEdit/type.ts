@@ -1,3 +1,5 @@
+import type { ResponseObject } from "@/utils/type"
+
 // 单个兑换方式规则
 export interface SingleProRule {
   priceType: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
@@ -87,4 +89,15 @@ export interface QuerySingleGoods {
 // 草稿详情
 export interface QuerySingleDraft {
   id: number
+}
+
+// 获取所有商品分类
+export interface SingleCategory {
+  categoryList: SingleCategory[] | null
+  id: number
+  name: string,
+  pid: number
+}
+export interface AllCategoryResponse extends ResponseObject {
+  data: SingleCategory[]
 }
