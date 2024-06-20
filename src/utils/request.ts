@@ -18,7 +18,7 @@ request.interceptors.response.use(
         if ((response.data as ResponseObject).code === 207) {
             localStorage.removeItem('token');
             const resp = await request.post<string, LoginResponse>(
-                'api/user/refreshToken',
+                '/api/user/refreshToken',
                 null,
                 {
                     headers: {

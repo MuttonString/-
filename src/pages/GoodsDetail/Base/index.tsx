@@ -9,8 +9,7 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
 
     return (
         <div className={styles.main}>
-            // TODO
-            <Image height={100} src={''} />
+            <Image height={100} src={goods.poster} />
             <Divider orientation='left'>基本信息</Divider>
             <Row>
                 <Col span={8}>商品名称：{goods.proName}</Col>
