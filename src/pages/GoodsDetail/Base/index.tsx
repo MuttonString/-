@@ -1,15 +1,13 @@
-import { Button, Col, Divider, Modal, Row, Image } from 'antd';
+import { Col, Divider, Row, Image } from 'antd';
 import styles from './index.module.less';
 import { GoodsDetailData } from '@/api/goodsDetail/type';
-import { useState } from 'react';
 
 const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
-    const [isGoodsDetailOpen, setIsGoodsDetailOpen] = useState(false);
     if (!goods) return null;
 
     return (
         <div className={styles.main}>
-            <Image height={100} src={goods.poster} />
+            {goods.poster && <Image height={100} src={goods.poster} />}
             <Divider orientation='left'>基本信息</Divider>
             <Row>
                 <Col span={8}>商品名称：{goods.proName}</Col>
@@ -17,26 +15,18 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                 <Col span={8}>描述：{goods.proDesc}</Col>
             </Row>
             <Row>
-                // TODO
-                <Col span={8}>类目：{goods.categoryId}</Col>
+                <Col span={8}>类目：{goods.categoryName}</Col>
                 <Col span={8}>
                     兑换限制：
                     {goods.exchageCap === -1
                         ? '无限制'
                         : goods.exchageCap + '件'}
                 </Col>
-                // TODO
-                <Col span={8}>库存：{114514}件</Col>
+                <Col span={8}>库存：{goods.stock}件</Col>
             </Row>
             <Row>
                 <Col span={8}>上线时间：{goods.startTime}</Col>
                 <Col span={8}>下线时间：{goods.endTime}</Col>
-                <Col span={8}>
-                    商品详情：
-                    <Button onClick={() => setIsGoodsDetailOpen(true)}>
-                        查看
-                    </Button>
-                </Col>
             </Row>
             <Row>
                 <Col span={8}>服务保障：{goods.guarantee}</Col>
@@ -53,19 +43,6 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                     )}
                 </Col>
             </Row>
-            <Modal
-                open={isGoodsDetailOpen}
-                title='商品详情'
-                footer={null}
-                onCancel={() => setIsGoodsDetailOpen(false)}
-            >
-                // TODO
-                {/* {goods.goodsDetail.split('\n').map((line, idx) => (
-                    <p key={idx} className={styles.line}>
-                        {line}
-                    </p>
-                ))} */}
-            </Modal>
             <Divider orientation='left'>快递信息</Divider>
             <Row>
                 投放地区：

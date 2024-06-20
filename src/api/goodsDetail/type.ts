@@ -25,7 +25,7 @@ export interface GoodsDetailData {
     endTime: string;
     exchageCap: number;
     guarantee: string;
-    id: number;
+    id: string;
     nonShippingRegion: string;
     poster: string;
     proDesc: string;
@@ -37,29 +37,64 @@ export interface GoodsDetailData {
     startTime: string;
     supplierName: string;
     supplierPhone: string;
+    stock: number;
+    categoryName: string;
+    proStatus: string;
+    admin: string;
+}
+
+export interface OperationResponse extends ResponseObject {
+    data: OperationData;
+}
+
+export interface OperationData {
+    countId: string;
+    current: number;
+    hitCount: boolean;
+    maxLimit: number;
+    optimizeCountSql: boolean;
+    orders: {
+        asc: boolean;
+        column: string;
+    }[];
+    pages: number;
+    records: Operation[];
+    searchCount: boolean;
+    size: number;
+    total: number;
+}
+
+export interface Operation {
+    id: string;
+    remark: string;
+    createTime: string;
+    userId: string;
+    proId: string;
+    operationEnum: string;
+    operationTypeString: string;
 }
 
 export interface Proxy {
-    id: number;
+    id: string;
     userName: string;
 }
 
 export interface ProRule {
     cash: number;
-    id: number;
+    id: string;
     integral: number;
     priceType: string;
     proId: 0;
 }
 
 export interface AuditRequest {
-    desc: string;
-    proId: number;
+    desc?: string;
+    proId: string;
 }
 
 // 操作记录响应数据
 export interface OperationResponse {
-    opId: number; // 操作id
+    opId: string; // 操作id
     opStatus: number; // 操作状态
     opTime: string; // 操作时间字符串
     userName: string; // 操作人名字
@@ -68,9 +103,9 @@ export interface OperationResponse {
 
 // 操作记录请求数据
 export interface OperationRequest {
-    goodsId: number; // 商品id
+    goodsId: string; // 商品id
     opStatus: number; // 操作状态
     opTime: string; // 操作时间字符串
-    userId: number; // 操作人id
+    userId: string; // 操作人id
     opDesc?: string; // 操作备注
 }

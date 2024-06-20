@@ -13,11 +13,11 @@ export interface QueryList {
 
 // 上下线单个商品
 export interface OnlineSingleGoods {
-  id: number
+  id: string
 }
 
 export interface OfflineSingleGoods {
-  id: number
+  id: string
 }
 
 // 批量上下线单个商品

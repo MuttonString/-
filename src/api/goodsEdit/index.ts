@@ -4,8 +4,8 @@ import { ResponseObject } from "@/utils/type"
 import { message } from "antd"
 
 enum API {
-  GET_ALL_CATEGORY='api/category/getAll',
-  APPEND_GOODS='api/product/insertPro'
+  GET_ALL_CATEGORY='/category/getAll',
+  APPEND_GOODS='/product/insertPro'
 }
 
 export const requestAllCategory= async () => {

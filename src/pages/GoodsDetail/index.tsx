@@ -19,6 +19,7 @@ import Preview from './Preview';
 import Operation from './Operation';
 import { LeftOutlined } from '@ant-design/icons';
 import {
+    reqAudit,
     reqAuditDown,
     reqAuditPass,
     reqGoodsDetail,
@@ -30,7 +31,7 @@ import TextArea from 'antd/es/input/TextArea';
 const { Title, Text } = Typography;
 
 const getGoodsDetail = async (
-    id: number,
+    id: string,
     func: React.Dispatch<React.SetStateAction<GoodsDetailData | undefined>>
 ) => {
     func(await reqGoodsDetail(id));
@@ -39,7 +40,7 @@ const getGoodsDetail = async (
 const GoodsDetail: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const id = parseInt(location.pathname.split('/').pop() as string);
+    const id = location.pathname.split('/').pop()!;
     const [open, setOpen] = useState(false);
     const [goods, setGoods] = useState<GoodsDetailData>();
     const [remark, setRemark] = useState('');
@@ -62,6 +63,7 @@ const GoodsDetail: React.FC = () => {
             children: <Operation />
         }
     ];
+    console.log(goods);
 
     return (
         <Row className={styles.main}>
@@ -83,29 +85,49 @@ const GoodsDetail: React.FC = () => {
                             >
                                 编辑
                             </Button>
-                            <Button type='primary'>发起审核</Button>
+
+                            <Popconfirm
+                                title='发起审核'
+                                description='确定发起审核？'
+                                onConfirm={() => {
+                                    reqAudit({ proId: id });
+                                    getGoodsDetail(id, setGoods);
+                                }}
+                                okText='确定'
+                                cancelText='取消'
+                            >
+                                <Button type='primary'>发起审核</Button>
+                            </Popconfirm>
+
                             <Button
                                 type='primary'
                                 onClick={() => {
                                     setOpen(true);
                                     setPass(true);
+                                    getGoodsDetail(id, setGoods);
                                 }}
                             >
                                 审核通过
                             </Button>
+
                             <Button
                                 type='primary'
                                 onClick={() => {
                                     setOpen(true);
                                     setPass(false);
+                                    getGoodsDetail(id, setGoods);
                                 }}
                             >
                                 审批驳回
                             </Button>
+
                             <Popconfirm
                                 title='上线'
                                 description='确定上线该商品？'
-                                onConfirm={() => reqGoodsOnline(id)}
+                                onConfirm={() => {
+                                    reqGoodsOnline(id);
+                                    getGoodsDetail(id, setGoods);
+                                }}
                                 okText='确定'
                                 cancelText='取消'
                             >
@@ -116,7 +138,10 @@ const GoodsDetail: React.FC = () => {
                             <Popconfirm
                                 title='下线'
                                 description='确定下线该商品？'
-                                onConfirm={() => reqGoodsOffline(id)}
+                                onConfirm={() => {
+                                    reqGoodsOffline(id);
+                                    getGoodsDetail(id, setGoods);
+                                }}
                                 okText='确定'
                                 cancelText='取消'
                             >
@@ -130,7 +155,7 @@ const GoodsDetail: React.FC = () => {
                     <Row>
                         <Col span={6}>
                             <Text strong>管理人：</Text>
-                            <Text>{goods?.poster}</Text>
+                            <Text>{goods?.admin}</Text>
                         </Col>
                         <Col span={12}>
                             <Text strong>代理人：</Text>
@@ -158,8 +183,7 @@ const GoodsDetail: React.FC = () => {
                         </Col>
                         <Col span={11}>
                             <Title level={4} style={{ float: 'right' }}>
-                                {/* // TODO */}
-                                {''}
+                                {goods?.proStatus}
                             </Title>
                         </Col>
                         <Col span={1} />
@@ -180,7 +204,7 @@ const GoodsDetail: React.FC = () => {
                         type='primary'
                         onClick={() => {
                             const obj: AuditRequest = {
-                                proId: id,
+                                proId: parseInt(id),
                                 desc: remark
                             };
                             if (pass) reqAuditPass(obj);

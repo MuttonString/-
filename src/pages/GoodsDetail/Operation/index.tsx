@@ -13,7 +13,7 @@ const columns = [
 
 const Operation: React.FC = () => {
     const location = useLocation();
-    const id = parseInt(location.pathname.split('/').pop() as string);
+    const id = location.pathname.split('/').pop();
 
     // TODO
     const operationsData = undefined;
@@ -25,21 +25,32 @@ const Operation: React.FC = () => {
     //     userName: item.userName,
     //     opDesc: item.opDesc
     // }));
-    async function test() {
+    async function test1() {
         const res = await request.post('/product/list', {
             page: 1,
-            pageSize: 10
+            pageSize: 100
         });
         console.log(res);
     }
-    test();
+    test1();
+
+    async function test2() {
+        const res = await request.get('/operation/1/100');
+        console.log(res);
+    }
+    test2();
+
+    // async function test3() {
+    //     const res = await request.get('/product/proDetail/01803710870644338689');
+    //     console.log(res);
+    // }
+    // test3();
 
     return (
         <div>
             <Table
                 columns={columns}
                 dataSource={operationsData}
-                pagination={false}
             />
         </div>
     );

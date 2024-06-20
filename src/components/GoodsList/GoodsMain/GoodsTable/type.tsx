@@ -2,7 +2,7 @@ import { GoodsInTable } from "../../type"
 
 export interface GoodsTableData {
   // data: GoodsInTable[]
-  tabId: number
+  tabId: string
   changeGoodsStatus: Function
   setGoodsList: Function
   goodsList: GoodsInTable[]
