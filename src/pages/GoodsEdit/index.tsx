@@ -23,7 +23,7 @@ import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
 import type { CitiesInTree, AreaData } from './type'
-import type { AllCategoryResponse, SingleCategory } from '@/api/goodsEdit/type'
+import type { SingleCategory } from '@/api/goodsEdit/type'
 import VipInput from './VipInput'
 import convertCities from '@/utils/covertCities'
 import getChildCategoryLists from '@/utils/traverseCategoryList'
@@ -113,8 +113,8 @@ const GoodsEdit: React.FC = () => {
       const formedTreeCities: CitiesInTree[] = convertCities(cities)
       setCitesTree(formedTreeCities)
     })
-    requestAllCategory().then(res => {
-      if(!res) return
+    requestAllCategory().then((res) => {
+      if (!res) return
       const childCategoryList: SingleCategory[] = getChildCategoryLists(res)
       setChildCategoryList(childCategoryList)
     })
@@ -123,8 +123,11 @@ const GoodsEdit: React.FC = () => {
   // 完成校验收集到数据之后准备发送请求
   useEffect(() => {
     if (totalCommit) {
-      requestAddGoods(totalCommit).then(res => {
-        if (res && res?.length > 0) message.success('新增成功')
+      requestAddGoods(totalCommit).then((res) => {
+        if (res && res?.length > 0) {
+          message.success('新增成功')
+          console.log(111)
+        }
       })
     }
   }, [totalCommit])
@@ -318,7 +321,7 @@ const GoodsEdit: React.FC = () => {
       (way: VipInputType) => {
         return {
           priceType: way.typeNum,
-          cash: way.cash,
+          cash: +way.cash,
           integral: way.score,
         }
       }
@@ -328,7 +331,7 @@ const GoodsEdit: React.FC = () => {
       poster: goodsAvatar,
       proDesc: form1.getFieldValue('goodsDesc'),
       proType: form1.getFieldValue('goodsType'),
-      detail: form1.getFieldValue('goodsDetail'),
+      // detail: form1.getFieldValue('goodsDetail'),
       categoryId: form1.getFieldValue('goodsCategory'),
       supplierName: form1.getFieldValue('supplierName'),
       supplierPhone: form1.getFieldValue('supplierPhone'),
@@ -340,8 +343,8 @@ const GoodsEdit: React.FC = () => {
           : '',
       exchangeCap: exchangeLimit || -1,
       stock: stock!,
-      startTime: form2.getFieldValue('startDate').toISOString(),
-      endTime: form2.getFieldValue('endDate').toISOString(),
+      startTime: form2.getFieldValue('startDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
       shippingRegin:
         selectedYesCities && selectedYesCities.length > 0
           ? selectedYesCities.join()
@@ -424,14 +427,13 @@ const GoodsEdit: React.FC = () => {
                 ]}
               >
                 <Upload
-                  name="goodsAvatar"
+                  name="file"
                   listType="picture-card"
                   maxCount={1}
                   action={'/api/common/upload'}
                   headers={{
                     token: localStorage.getItem('token') || '',
                     refreshToken: localStorage.getItem('refreshToken') || '',
-                    TOKEN: localStorage.getItem('TOKEN') || ''
                   }}
                   beforeUpload={(file: UploadFile) => {
                     valiAvatar(file)
@@ -440,10 +442,19 @@ const GoodsEdit: React.FC = () => {
                     console.log(info)
                     if (
                       info.file.status === 'done' &&
+                      info.file.response?.code !== 200
+                    ) {
+                      message.error(
+                        `${info.file.response?.msg}(${info.file.response?.code})`
+                      )
+                      return
+                    }
+                    if (
+                      info.file.status === 'done' &&
                       info.file.response.code === 200
                     ) {
                       // 确保响应中包含预期的URL字段，这里假设服务器返回的结构中有一个名为url的键
-                      const url = info.file.response?.url
+                      const url = info.file.response?.data
                       if (url) {
                         console.log('服务器返回的文件URL:', url)
                         setGoodsAvatar(url)
@@ -457,7 +468,7 @@ const GoodsEdit: React.FC = () => {
                     }
                   }}
                 >
-                    {uploadButton}
+                  {uploadButton}
                 </Upload>
               </Form.Item>
             </Col>
@@ -505,7 +516,7 @@ const GoodsEdit: React.FC = () => {
                 ></TextArea>
               </Form.Item>
             </Col>
-            <Col span={0} xl={2} />
+            {/* <Col span={0} xl={2} />
             <Col span={12} xl={10}>
               <Form.Item
                 label="商品详情"
@@ -525,7 +536,7 @@ const GoodsEdit: React.FC = () => {
                   style={{ height: '10rem', resize: 'none' }}
                 ></TextArea>
               </Form.Item>
-            </Col>
+            </Col> */}
           </Row>
 
           <Divider orientation="left">服务条款</Divider>

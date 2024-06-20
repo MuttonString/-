@@ -5,130 +5,7 @@ import { TableColumnsType, Popconfirm } from 'antd'
 import styles from './index.module.less'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
-
-/* const data: GoodsInTable[] = [
-  {
-    key: '1',
-    goodsId: '1',
-    goodsName: '巧乐兹',
-    goodsStock: 300,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 3,
-    admin: '丁真',
-    option: 3,
-  },
-  {
-    key: '2',
-    goodsId: '2',
-    goodsName: '雨伞',
-    goodsStock: 50,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 4,
-    admin: '马嘉祺',
-    option: 4,
-  },
-  {
-    key: '3',
-    goodsId: '3',
-    goodsName: '杠铃',
-    goodsStock: 3000,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '马保国',
-    option: 5,
-  },
-  {
-    key: '4',
-    goodsId: '4',
-    goodsName: '大米',
-    goodsStock: 3200,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '米老鼠',
-    option: 5,
-  },
-  {
-    key: '5',
-    goodsId: '5',
-    goodsName: '钢筋',
-    goodsStock: 3000,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 6,
-    admin: '小阳哥',
-    option: 6,
-  },
-  {
-    key: '6',
-    goodsId: '6',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 6,
-    admin: '大阳哥',
-    option: 6,
-  },
-  {
-    key: '7',
-    goodsId: '7',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '大阳哥',
-    option: 5,
-  },
-  {
-    key: '8',
-    goodsId: '8',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '9',
-    goodsId: '9',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '10',
-    goodsId: '10',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '11',
-    proId: '11',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-] */
+import { requestQueryList } from '@/api/goodsList'
 
 const GoodsTable: React.FC<GoodsTableData> = ({
   // data,
@@ -142,6 +19,14 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
   const [selectedGoods, setSelectedGoods] = useState<GoodsInTable[]>([])
+  useEffect(() => {
+    if (tabId === 1) {
+      requestQueryList({
+        page: pagiNationInfo.page,
+        pageSize: pagiNationInfo.pageSize
+      }).then()
+    }
+  },[pagiNationInfo])
 
   // 监听data变化，看状态是否发生改变导致批量按钮需要变化,以完成在批量选择时，依旧可以动态单个上下线
   useEffect(() => {
