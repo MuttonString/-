@@ -1,55 +1,55 @@
-export const GOODS_TYPE = ['实物', '券', '虚拟商品'];
+import { ResponseObject } from '@/utils/type';
 
-export const GOODS_STATUS = [
-    '草稿',
+export enum PRICE_TYPE {
+    CASH = '现金',
+    INTEGRAL = '积分',
+    INTEGRAL_AND_CASH = '积分 + 现金'
+}
+
+export const PRO_STATUS = [
     '待提交审核',
-    '待审核',
-    '审核通过',
-    '审核不通过',
+    '待上线',
     '上线',
-    '下线'
+    '下线',
+    '审核驳回',
+    '待审核',
+    '草稿'
 ];
 
-export const BOUGHT_TYPE = ['现金', '积分 + 现金', '积分'];
-
-interface Resopnse {
-    code: number;
-    data: object;
-    msg: string;
+export interface GoodsDetailResponse extends ResponseObject {
+    data: GoodsDetailData;
 }
 
-export interface GoodsDetail {
-    goodsName: string; // 商品名称
-    imgUrl?: string; // 商品图片url
-    goodsDesc: string; // 商品描述
-    goodsType: number; // 商品类型
-    goodsDetail: string; // 商品详情
-    categoryId: number; // 商品分类id
-    categoryName: string; // 商品分类名
-    goodsFactory: string; // 供应商名称
-    goodsPhone: string; // 供应商联系方式
-    goodsPromise: string; // 服务保障
-    goodsLimit: number; // 兑换上限
-    goodsStock: number; // 库存
-    goodsOnline: string; // 上线时间字符串
-    goodsOffline: string; // 下线时间字符串
-    goodsStatus: number; // 商品状态
-    userId: number; // 该商品创建者的用户id
-    userName: string; // 该商品创建者的用户名
-    noShipping?: Place[]; // 不发货地区
-    shipping?: Place[]; // 投放地区
-    boughtTypes: BoughtType[];
+export interface GoodsDetailData {
+    categoryId: string;
+    endTime: string;
+    exchageCap: number;
+    guarantee: string;
+    id: number;
+    nonShippingRegion: string;
+    poster: string;
+    proDesc: string;
+    proName: string;
+    proRules: ProRule[];
+    proType: string;
+    proxys: Proxy[];
+    shippingRegin: string;
+    startTime: string;
+    supplierName: string;
+    supplierPhone: string;
 }
 
-export interface Place {
-    id: number; // 地区id
-    name: string; // 地区名
+export interface Proxy {
+    id: number;
+    userName: string;
 }
 
-export interface BoughtType {
-    boughtType: number; //购买方式
-    score?: number; //所需积分
-    cash?: number; //所需现金
+export interface ProRule {
+    cash: number;
+    id: number;
+    integral: number;
+    priceType: string;
+    proId: 0;
 }
 
 // 操作记录响应数据
