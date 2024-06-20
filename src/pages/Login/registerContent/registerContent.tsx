@@ -1,6 +1,6 @@
 import { UserOutlined, PhoneOutlined, LockOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Modal, Typography, Row, Col } from 'antd';
+import { Button, Form, Input, Modal, Typography, Row, Col, message } from 'antd';
 
 import request from '../../../utils/request'
 
@@ -28,6 +28,10 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
     const [phone, setPhone] = useState('');
 
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const [messageApiRegister, contextHolderRegister] = message.useMessage();
+
     const handleOk = () => {
         setIsModalOpen(false);
     };
@@ -42,13 +46,26 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
         setIsModalOpen(true);
     };
     interface RegisterFormValues {
-        username: string;
+        userName: string;
         phone: string;
         password: string;
+        verificationCodeRegister: string;
     }
 
     function changeStateToLogin() {
         changeState(1);
+    }
+
+    interface ApiResponse {
+        code: number;
+        msg: string;
+        data: string;
+    }
+
+    interface ApiType {
+        code: number;
+        msg: string;
+        data: string;
     }
 
     async function SendVerificationCode() {
@@ -56,11 +73,65 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
             //发送验证码
             console.log("发送验证码");
 
-            await request.post('/user/code', {
-                phone: phone,
-                type: 1
-            }).then(res => {
+            await request.get<ApiResponse, ApiResponse>(`/user/code/${phone}/${1}`).then(res => {
                 console.log(res);
+
+                const success = (data: string | null = localStorage.getItem('verificationCodeRegister')) => {
+                    messageApi.open({
+                        type: 'success',
+                        content:
+                            <div style={{
+                                display: 'flex',
+                                alignContent: 'center',
+                                height: '24px'
+                            }}>
+                                <span style={{ fontSize: '20' }}>
+                                    您的验证码为:
+                                </span>
+                                &nbsp;
+                                <span style={{ fontSize: '20px', fontWeight: '700' }}>
+                                    <Paragraph copyable>{data}</Paragraph>
+                                </span>
+                            </div>,
+                        duration: 5,
+                    });
+                };
+
+                const info = () => {
+                    messageApi.open({
+                        type: 'warning',
+                        content:
+                            <div>
+                                验证码五分钟内有效，请查看
+                                <a onClick={() => success()}>短信</a>
+                            </div>,
+                        duration: 5,
+                    });
+                };
+
+                const warning = () => {
+                    messageApi.info("请重新发送验证码")
+                }
+
+                if (res.code === 200) {
+                    success(res.data);
+                    localStorage.setItem("verificationCodeRegister", res.data)
+                } else if (res.code === 222) {
+                    if (localStorage.getItem('verificationCodeRegister') === null) {
+                        warning()
+                    } else {
+                        info();
+                    }
+                } else {
+                    const error = () => {
+                        messageApi.open({
+                            type: 'error',
+                            content: res.msg,
+                            duration: 5,
+                        });
+                    }
+                    error();
+                }
             })
 
         } else {
@@ -69,9 +140,25 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
     }
 
 
-    const onFinish = (values: RegisterFormValues) => {
+    async function onFinish(values: RegisterFormValues) {
+
         console.log('Received values of form: ', values);
-    };
+
+        request.post<ApiType, ApiType>(`/user/register`, {
+            code: values.verificationCodeRegister,
+            password: values.password,
+            phone: values.phone,
+            userName: values.userName
+        }).then(res => {
+            console.log(res);
+            if (res.code === 200) {
+                changeStateToLogin()
+                alert("注册成功,欢迎加入");
+            } else {
+                messageApiRegister.info(res.msg)
+            }
+        })
+    }
 
     const validatePhone = (_rule: object, value: string) => {
 
@@ -79,14 +166,17 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
         if (value !== undefined) {
 
             if (!isNumeric && value.length !== 0) {
+                setIsPhoneValid(false);
                 return Promise.reject(new Error('请正确输入手机号，只能包含数字!'));
             }
 
             if (value.charAt(0) !== "1" && value.length !== 0) {
+                setIsPhoneValid(false);
                 return Promise.reject(new Error('请输入以1开头的手机号!'))
             }
 
             if (value.length !== 11 && value.length !== 0) {
+                setIsPhoneValid(false);
                 return Promise.reject(new Error('手机号必须是11位!'));
             }
         }
@@ -120,7 +210,12 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                     />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item
+                    name="verificationCodeRegister"
+                    rules={[
+                        { required: true, message: '请输入你的验证码!' },
+                    ]}
+                >
                     <Row gutter={20}>
                         <Col span={17}>
                             <Input
@@ -128,6 +223,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                                 placeholder="请输入验证码" />
                         </Col>
                         <Col span={6}>
+                            {contextHolder}
                             <Button type="primary" onClick={SendVerificationCode}>
                                 发送验证码
                             </Button>
@@ -223,6 +319,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                             返回
                         </Button>
 
+                        {contextHolderRegister}
                         <Button size='large' type="primary" htmlType="submit">
                             注册
                         </Button>
