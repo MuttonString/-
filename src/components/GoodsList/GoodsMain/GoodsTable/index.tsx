@@ -5,130 +5,7 @@ import { TableColumnsType, Popconfirm } from 'antd'
 import styles from './index.module.less'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
-
-/* const data: GoodsInTable[] = [
-  {
-    key: '1',
-    goodsId: '1',
-    goodsName: '巧乐兹',
-    goodsStock: 300,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 3,
-    admin: '丁真',
-    option: 3,
-  },
-  {
-    key: '2',
-    goodsId: '2',
-    goodsName: '雨伞',
-    goodsStock: 50,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 4,
-    admin: '马嘉祺',
-    option: 4,
-  },
-  {
-    key: '3',
-    goodsId: '3',
-    goodsName: '杠铃',
-    goodsStock: 3000,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '马保国',
-    option: 5,
-  },
-  {
-    key: '4',
-    goodsId: '4',
-    goodsName: '大米',
-    goodsStock: 3200,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '米老鼠',
-    option: 5,
-  },
-  {
-    key: '5',
-    goodsId: '5',
-    goodsName: '钢筋',
-    goodsStock: 3000,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 6,
-    admin: '小阳哥',
-    option: 6,
-  },
-  {
-    key: '6',
-    goodsId: '6',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 6,
-    admin: '大阳哥',
-    option: 6,
-  },
-  {
-    key: '7',
-    goodsId: '7',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 5,
-    admin: '大阳哥',
-    option: 5,
-  },
-  {
-    key: '8',
-    goodsId: '8',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '9',
-    goodsId: '9',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '10',
-    goodsId: '10',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-  {
-    key: '11',
-    proId: '11',
-    goodsName: '船桨',
-    goodsStock: 320,
-    startDate: '2024-2-10',
-    endDate: '2024-3-10',
-    goodsStatus: 0,
-    admin: '大阳哥',
-    option: 0,
-  },
-] */
+import { requestQueryList } from '@/api/goodsList'
 
 const GoodsTable: React.FC<GoodsTableData> = ({
   // data,
@@ -137,45 +14,89 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   setGoodsList,
   goodsList,
   pagiNationInfo,
-  setPagiNationInfo
+  setPagiNationInfo,
+  total,
+  setTotal,
 }) => {
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
   const [selectedGoods, setSelectedGoods] = useState<GoodsInTable[]>([])
+  useEffect(() => {
+    requestDiff()
+  }, [pagiNationInfo])
 
   // 监听data变化，看状态是否发生改变导致批量按钮需要变化,以完成在批量选择时，依旧可以动态单个上下线
   useEffect(() => {
-    if(selectedGoods.length > 0) {
-      const filtedData: GoodsInTable[] = goodsList.filter(item => {
-        for(let i = 0; i < selectedGoods.length; i++) {
-          if(selectedGoods[i].id === item.id) {
+    if (selectedGoods.length > 0) {
+      const filtedData: GoodsInTable[] = goodsList.filter((item) => {
+        for (let i = 0; i < selectedGoods.length; i++) {
+          if (selectedGoods[i].id === item.id) {
             return true
           }
         }
         return false
       })
-      handlerTableChange(filtedData.map(item => item.key), filtedData)
+      handlerTableChange(
+        filtedData.map((item) => item.key),
+        filtedData
+      )
     }
-  },[goodsList])
+  }, [goodsList])
+  // 根据不同页面发送不同条件请求
+  const requestDiff = () => {
+    if (tabId === 1) {
+      requestQueryList({
+        page: pagiNationInfo.page,
+        pageSize: pagiNationInfo.pageSize,
+      }).then((res) => {
+        console.log('全部数据:', res)
+        setGoodsList(res?.records)
+        setTotal(res?.total)
+      })
+    }
+    if (tabId === 2) {
+      requestQueryList({
+        page: pagiNationInfo.page,
+        pageSize: pagiNationInfo.pageSize,
+        proStatus: 2,
+      }).then((res) => {
+        console.log('上线数据', res)
+        setGoodsList(res?.records)
+        setTotal(res?.total)
+      })
+    }
+    if (tabId === 3) {
+      requestQueryList({
+        page: pagiNationInfo.page,
+        pageSize: pagiNationInfo.pageSize,
+        proStatus: 3,
+      }).then((res) => {
+        console.log('下线数据', res)
+        setGoodsList(res?.records)
+        setTotal(res?.total)
+      })
+    }
+  }
 
+  // 当批量选择时，浮现按钮的动态变化
   const handlerTableChange = (_: React.Key[], selectedRows: GoodsInTable[]) => {
     setMultiCount(selectedRows.length)
     setSelectedGoods(selectedRows)
     if (tabId === 1 && selectedRows.length > 0) {
       const destiStatus = selectedRows[0].proStatus
       const isEquel = selectedRows.every((row: GoodsInTable) => {
-        if (destiStatus === 3 || destiStatus === 6) {
-          return row.proStatus === 3 || row.proStatus === 6
+        if (destiStatus === 1 || destiStatus === 3) {
+          return row.proStatus === 1 || row.proStatus === 3
         } else {
           return row.proStatus === destiStatus
         }
       })
       if (isEquel) {
-        if (destiStatus === 5) {
+        if (destiStatus === 2) {
           setShowWhich(1)
           return
         }
-        if (destiStatus === 6 || destiStatus === 3) {
+        if (destiStatus === 1 || destiStatus === 3) {
           setShowWhich(2)
           return
         }
@@ -195,57 +116,57 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   const columns: TableColumnsType<GoodsInTable> = [
     {
       title: '权益ID',
-      dataIndex: 'goodsId',
+      dataIndex: 'id',
       render: (id: string) => <NavLink to={`/detail/${id}`}>{id}</NavLink>,
     },
     {
       title: '商品名称',
-      dataIndex: 'goodsName',
+      dataIndex: 'proName',
     },
     {
       title: '库存',
-      dataIndex: 'goodsStock',
+      dataIndex: 'stock',
     },
     {
       title: '开始时间',
-      dataIndex: 'startDate',
+      dataIndex: 'startTime',
     },
     {
       title: '结束时间',
-      dataIndex: 'endDate',
+      dataIndex: 'endTime',
     },
     {
       title: '商品状态',
-      dataIndex: 'goodsStatus',
+      dataIndex: 'proStatus',
       render: (goodsStatus: number) => {
         const statusMap: any = {
-          0: '草稿',
-          1: '待提交',
-          2: '待审核',
-          3: (
+          0: '待提交审核',
+          1: (
             <>
               <span style={{ color: 'green' }}>■&nbsp;</span>
-              <span>审核通过</span>
+              <span>待上线</span>
             </>
           ),
-          4: (
-            <>
-              <span style={{ color: 'red' }}>■&nbsp;</span>
-              <span>审核未通过</span>
-            </>
-          ),
-          5: (
+          2: (
             <>
               <span style={{ color: 'green' }}>●&nbsp;</span>
               <span>运行中</span>
             </>
           ),
-          6: (
+          3: (
             <>
               <span style={{ color: 'red' }}>●&nbsp;</span>
               <span>已下线</span>
             </>
           ),
+          4: (
+            <>
+              <span style={{ color: 'red' }}>■&nbsp;</span>
+              <span>审核驳回</span>
+            </>
+          ),
+          5: '待审核',
+          6: '草稿',
           default: <span style={{ color: 'red' }}>状态信息出错</span>,
         }
         return <>{statusMap[goodsStatus] || statusMap.default}</>
@@ -257,10 +178,10 @@ const GoodsTable: React.FC<GoodsTableData> = ({
     },
     {
       title: '操作',
-      dataIndex: 'option',
-      render: (option: number, record: GoodsInTable) => {
+      dataIndex: 'proStatus',
+      render: (proStatus: number, record: GoodsInTable) => {
         const optionMap: any = {
-          3: (
+          1: (
             <Button
               style={{
                 border: '1px solid skyblue',
@@ -269,18 +190,18 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 width: '4.375rem',
               }}
               onClick={() => {
-                changeGoodsStatus(record.id, 5)
+                changeGoodsStatus(record.id, 2)
               }}
             >
               上线
             </Button>
           ),
-          5: (
+          2: (
             <Popconfirm
               title="下线商品"
               description={`你确定要下线【${record.proName}】吗？`}
               onConfirm={() => {
-                changeGoodsStatus(record.id, 6) 
+                changeGoodsStatus(record.id, 3)
               }}
               okText="确定"
               cancelText="取消"
@@ -297,7 +218,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
               </Button>
             </Popconfirm>
           ),
-          6: (
+          3: (
             <Button
               style={{
                 border: '1px solid skyblue',
@@ -306,7 +227,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 width: '4.375rem',
               }}
               onClick={() => {
-                changeGoodsStatus(record.id, 5)
+                changeGoodsStatus(record.id, 2)
               }}
             >
               上线
@@ -314,7 +235,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
           ),
           default: '',
         }
-        return optionMap[option] || optionMap.default
+        return optionMap[proStatus] || optionMap.default
       },
     },
   ]
@@ -336,7 +257,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 selectedGoods?.map(
                   (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
                 ),
-                6
+                3
               )
               setShowWhich(2)
             }}
@@ -350,7 +271,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 selectedGoods?.map(
                   (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
                 ),
-                5
+                2
               )
               setShowWhich(1)
             }}
@@ -363,26 +284,28 @@ const GoodsTable: React.FC<GoodsTableData> = ({
         <Table
           pagination={{
             current: pagiNationInfo.page,
-            total: pagiNationInfo.total,
+            total: total,
             onChange: (page: number, pageSize: number) => {
-              console.log('当前页码：',page)
-              console.log('每页数量：',pageSize)
+              console.log('当前页码：', page)
+              console.log('每页数量：', pageSize)
               if (page != pagiNationInfo.page) {
-                setPagiNationInfo({...pagiNationInfo, page})
+                setPagiNationInfo({ ...pagiNationInfo, page })
               }
               if (pageSize != pagiNationInfo.pageSize) {
-                setPagiNationInfo({...pagiNationInfo, pageSize})
+                setPagiNationInfo({ ...pagiNationInfo, pageSize })
               }
             },
-            pageSizeOptions: ['10','20','50','100'],
-            defaultPageSize: 20
+            pageSizeOptions: ['10', '20', '50', '100'],
+            defaultPageSize: 20,
           }}
           rowSelection={{
             type: 'checkbox',
             onChange: handlerTableChange,
           }}
           columns={columns}
-          dataSource={goodsList}
+          dataSource={goodsList.map((item, index) => {
+            return { ...item, key: index }
+          })}
         ></Table>
       </div>
     </>

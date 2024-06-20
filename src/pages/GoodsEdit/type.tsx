@@ -15,7 +15,7 @@ export interface GoodsInfo {
   goodsDetail: string
   goodsStatus: number
   goodsType: number
-  goodsCaId: number
+  goodsCaId: string
   supplierName: string
   supplierPhone: string
   serviceGuarantee: string

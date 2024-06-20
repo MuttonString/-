@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 export interface GoodsInTable {
   key: React.Key
-  id: number
+  id: string
   proName: string
   startTime: string
   endTime: string

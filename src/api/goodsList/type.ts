@@ -1,3 +1,5 @@
+import { ResponseObject } from "@/utils/type"
+
 // 查询商品列表类
 export interface QueryList {
   id?: number
@@ -11,13 +13,33 @@ export interface QueryList {
   endTime?: string
 }
 
+// 查询返回商品列表
+export interface QueryRes {
+  id: number,
+  admin: string,
+  proName: string,
+  proStatus: string,
+  stock: number | null,
+  startTime: string,
+  endTime: string
+}
+
+export interface QueryResult {
+  records: QueryList[]
+    total: number
+}
+
+export interface QueryResponse extends ResponseObject {
+  data: QueryResult
+}
+
 // 上下线单个商品
 export interface OnlineSingleGoods {
-  id: number
+  id: string
 }
 
 export interface OfflineSingleGoods {
-  id: number
+  id: string
 }
 
 // 批量上下线单个商品

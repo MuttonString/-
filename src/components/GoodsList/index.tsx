@@ -12,10 +12,10 @@ const GoodsList: React.FC = () => {
   const [pagiNationInfo, setPagiNationInfo] = useState<PageInfo>({
     // 分页信息
     page: 1,
-    pageSize: 20,
-    total: 0,
+    pageSize: 20
   })
   const [queryZero, setQueryZero] = useState<boolean>(false)
+  const [total, setTotal] = useState<number>(0)
 
   const [messageApi, contextHolder] = message.useMessage() //message消息提示导入
 
@@ -77,6 +77,8 @@ const GoodsList: React.FC = () => {
           queryZero={queryZero}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
+          total={total}
+          setTotal={setTotal}
         ></GoodsMain>
       </div>
     </>

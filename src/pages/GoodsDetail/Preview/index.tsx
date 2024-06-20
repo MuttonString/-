@@ -3,8 +3,9 @@ import styles from './index.module.less';
 
 const Preview: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
     if (!goods) return null;
-    const cash = goods.proRules.filter(item => item.priceType === 'CASH');
-    const score = goods.proRules.filter(item => item.priceType === 'INTEGRAL');
+    const cash = goods.proRules?.filter(item => item.priceType === 'CASH');
+    const score = goods.proRules?.filter(item => item.priceType === 'INTEGRAL');
+    if (!goods.proRules?.length) return null;
     let price = '';
     let cnt = 0;
     // 如有，展示纯现金价格

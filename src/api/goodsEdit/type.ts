@@ -9,7 +9,7 @@ export interface SingleProRule {
 
 // 添加商品
 export interface AppendGoods {
-  categoryId: number
+  categoryId: string
   exchangeCap: number
   guarantee: string
   nonShippingRegion: string
@@ -24,7 +24,7 @@ export interface AppendGoods {
   supplierName: string
   supplierPhone: string
   stock: number
-  detail: string
+  // detail: string
 }
 
 // 添加草稿
@@ -47,7 +47,7 @@ export interface AppendDraft {
 
 // 修改商品
 export interface ModifyGoods {
-  categoryId: number
+  categoryId: string
   exchangeCap: number
   guarantee: string
   nonShippingRegion: string
@@ -83,20 +83,20 @@ export interface ModifyDraft {
 
 // 商品详情
 export interface QuerySingleGoods {
-  id: number
+  id: string
 }
 
 // 草稿详情
 export interface QuerySingleDraft {
-  id: number
+  id: string
 }
 
 // 获取所有商品分类
 export interface SingleCategory {
   categoryList: SingleCategory[] | null
-  id: number
+  id: string
   name: string,
-  pid: number
+  pid: string
 }
 export interface AllCategoryResponse extends ResponseObject {
   data: SingleCategory[]

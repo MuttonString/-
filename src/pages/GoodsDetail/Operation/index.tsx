@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 import { Table } from 'antd';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // import { GOODS_STATUS } from '@/api/goodsDetail/type';
 
@@ -13,10 +14,10 @@ const columns = [
 
 const Operation: React.FC = () => {
     const location = useLocation();
-    const id = parseInt(location.pathname.split('/').pop() as string);
+    const id = location.pathname.split('/').pop();
 
     // TODO
-    const operationsData = undefined;
+    const [operationsData, setOperationData] = useState();
     // const operationsData = operations.map(item => ({
     //     key: item.opId,
     //     opId: item.opId,
@@ -25,21 +26,26 @@ const Operation: React.FC = () => {
     //     userName: item.userName,
     //     opDesc: item.opDesc
     // }));
-    async function test() {
+    async function test1() {
         const res = await request.post('/product/list', {
-            page: 1,
-            pageSize: 10
+            // page: 1,
+            // pageSize: 100
         });
         console.log(res);
     }
-    test();
+    test1();
+
+    async function test2() {
+        const res = await request.get('/operation/1/100');
+        console.log(res);
+    }
+    test2();
 
     return (
         <div>
             <Table
                 columns={columns}
                 dataSource={operationsData}
-                pagination={false}
             />
         </div>
     );

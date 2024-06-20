@@ -6,4 +6,6 @@ export interface MainProps {
   queryZero: boolean
   pagiNationInfo: PageInfo
   setPagiNationInfo: Function
+  total: number
+  setTotal: Function
 }
