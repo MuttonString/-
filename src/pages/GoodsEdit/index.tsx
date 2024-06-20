@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Form,
   Input,
@@ -15,7 +16,11 @@ import {
   Row,
   Col,
 } from 'antd'
-import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  QuestionCircleOutlined,
+  LeftOutlined,
+} from '@ant-design/icons'
 import { nanoid } from 'nanoid'
 import axios from 'axios'
 import { requestAllCategory, requestAddGoods } from '@/api/goodsEdit'
@@ -101,6 +106,9 @@ const GoodsEdit: React.FC = () => {
   const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>() //选择的不发货城市
   const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>() //选择的投放城市
   const [childCategoryList, setChildCategoryList] = useState<SingleCategory[]>() //节点分类
+
+  // 返回上一页
+  const navigate = useNavigate()
 
   // 两个form表单数据绑定
   const [form1] = Form.useForm()
@@ -343,7 +351,9 @@ const GoodsEdit: React.FC = () => {
           : '',
       exchangeCap: exchangeLimit || -1,
       stock: stock!,
-      startTime: form2.getFieldValue('startDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      startTime: form2
+        .getFieldValue('startDate')
+        .format('YYYY-MM-DDTHH:mm:ss.SSS'),
       endTime: form2.getFieldValue('endDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
       shippingRegin:
         selectedYesCities && selectedYesCities.length > 0
@@ -365,9 +375,13 @@ const GoodsEdit: React.FC = () => {
     <>
       {contextHolder}
       <div className={styles.main}>
+        <div className={styles.return} onClick={() => navigate(-1)}>
+          <LeftOutlined />
+          &nbsp;<span>返回上一页</span>
+        </div>
         <Form
           // labelCol={{ span: 4 }}
-          style={{ maxWidth: 'none' }}
+          style={{ maxWidth: 'none', marginTop: '1.25rem' }}
           form={form1}
         >
           <Divider orientation="left">基本信息</Divider>

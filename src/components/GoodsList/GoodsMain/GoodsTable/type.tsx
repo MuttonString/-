@@ -8,10 +8,11 @@ export interface GoodsTableData {
   goodsList: GoodsInTable[]
   pagiNationInfo: PageInfo
   setPagiNationInfo: Function
+  total: number
+  setTotal: Function
 }
 
 export interface PageInfo {
   page: number,
-  pageSize: number,
-  total: number
+  pageSize: number
 }
