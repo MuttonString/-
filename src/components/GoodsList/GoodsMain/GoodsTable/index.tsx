@@ -134,7 +134,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   // data,
   tabId,
   changeGoodsStatus,
-  changeGoods,
+  setGoodsList,
   goodsList,
   pagiNationInfo,
   setPagiNationInfo
@@ -367,8 +367,12 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onChange: (page: number, pageSize: number) => {
               console.log('当前页码：',page)
               console.log('每页数量：',pageSize)
-              setPagiNationInfo({...pagiNationInfo, page})
-              setPagiNationInfo({...pagiNationInfo, pageSize})
+              if (page != pagiNationInfo.page) {
+                setPagiNationInfo({...pagiNationInfo, page})
+              }
+              if (pageSize != pagiNationInfo.pageSize) {
+                setPagiNationInfo({...pagiNationInfo, pageSize})
+              }
             },
             pageSizeOptions: ['10','20','50','100'],
             defaultPageSize: 20

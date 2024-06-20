@@ -4,7 +4,7 @@ export interface GoodsTableData {
   // data: GoodsInTable[]
   tabId: number
   changeGoodsStatus: Function
-  changeGoods: Function
+  setGoodsList: Function
   goodsList: GoodsInTable[]
   pagiNationInfo: PageInfo
   setPagiNationInfo: Function

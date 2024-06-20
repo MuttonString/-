@@ -4,7 +4,7 @@ import type { AxiosResponse, AxiosError } from 'axios';
 import { LoginResponse, ResponseObject } from './type';
 
 const request = axios.create({
-    baseURL: 'http://8.138.13.158:9088',
+    baseURL: '/api',
     timeout: 5000
 });
 

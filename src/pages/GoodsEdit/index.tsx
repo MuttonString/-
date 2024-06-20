@@ -17,10 +17,13 @@ import {
 } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
-import styles from './index.module.less' 
+import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
+import type { CitiesInTree, AreaData } from './type'
 import VipInput from './VipInput'
+import convertCities from '@/utils/covertCities'
+import axios from 'axios'
 
 /* 全局编辑或新增界面 */
 
@@ -44,19 +47,38 @@ const uploadButton = (
   </button>
 )
 
+const provinceKeys: React.Key[] = Array.from({ length: 35 }, (_, i) =>
+  (i + 1).toString()
+)
+
 const GoodsEdit: React.FC = () => {
   const [goodsExchangeWays, setGoodsExchangeWays] = useState<VipInputType[]>([]) //兑换方式状态管理
-  const [selectedExchangeWay, setSelectedExchangeWay] = useState<'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'>() //当前选中要添加的兑换方式
+  const [selectedExchangeWay, setSelectedExchangeWay] = useState<
+    'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
+  >() //当前选中要添加的兑换方式
   const [isValiExchange, setIsValiExchange] = useState<boolean>(false) //显示是否提交校验过兑换方式
-  const [open, setOpen] = useState<boolean>(false) //控制抽屉显隐
+  const [open1, setOpen1] = useState<boolean>(false) //控制不发货城市抽屉显隐
+  const [open2, setOpen2] = useState<boolean>(false) //控制投发城市抽屉显隐
   const [stock, setStock] = useState<number>() //库存数量
   const [exchangeLimit, setExchangeLimit] = useState<number>() //兑换限制
   const [goodsAvatar, setGoodsAvatar] = useState<string>('') //商品头图
   const [totalCommit, setTotalCommit] = useState<AppendGoods>() //总提交项，校验通过生成
+  const [citiesTree, setCitesTree] = useState<CitiesInTree[]>() //城市在Tree里面的展示
+  const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>()
+  const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>()
 
   // 两个form表单数据绑定
   const [form1] = Form.useForm()
   const [form2] = Form.useForm()
+
+  // 初始取得要初始化的数据
+  useEffect(() => {
+    axios.get('/src/assets/json/cities.json').then((res) => {
+      const cities: AreaData = res.data
+      const formedTreeCities: CitiesInTree[] = convertCities(cities)
+      setCitesTree(formedTreeCities)
+    })
+  }, [])
 
   // 完成校验收集到数据之后准备发送请求
   useEffect(() => {
@@ -72,12 +94,20 @@ const GoodsEdit: React.FC = () => {
     })
   }
 
-  const showDrawer = () => {
-    setOpen(true)
+  const showDrawer1 = () => {
+    setOpen1(true)
   }
 
-  const onClose = () => {
-    setOpen(false)
+  const onClose1 = () => {
+    setOpen1(false)
+  }
+
+  const showDrawer2 = () => {
+    setOpen2(true)
+  }
+
+  const onClose2 = () => {
+    setOpen2(false)
   }
 
   // 改变子兑换为生效的状态
@@ -92,7 +122,9 @@ const GoodsEdit: React.FC = () => {
     }
   }
   // 让子兑换删除兑换方式
-  const delGoodsExchangeWays = (typeNum: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH') => {
+  const delGoodsExchangeWays = (
+    typeNum: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
+  ) => {
     const newWays = goodsExchangeWays.filter(
       (way: VipInputType) => way.typeNum != typeNum
     )
@@ -220,7 +252,7 @@ const GoodsEdit: React.FC = () => {
     if (goodsAvatar === '') {
       error('商品头图上传出错')
       return
-    } 
+    }
     collectForm()
   }
   //校验图片文件上传是否超过5MB, 是否非图片类型
@@ -253,18 +285,24 @@ const GoodsEdit: React.FC = () => {
       poster: goodsAvatar,
       proDesc: form1.getFieldValue('goodsDesc'),
       proType: form1.getFieldValue('goodsType'),
-      // goodsDetail: form1.getFieldValue('goodsDetail'),
+      detail: form1.getFieldValue('goodsDetail'),
       categoryId: form1.getFieldValue('goodsCategory'),
       supplierName: form1.getFieldValue('supplierName'),
       supplierPhone: form1.getFieldValue('supplierPhone'),
       guarantee: form1.getFieldValue('serviceGuarantee'),
       proRules: resExchangeWays,
-      nonShippingRegion: "1,2",
+      nonShippingRegion:
+        selectedNonCities && selectedNonCities.length > 0
+          ? selectedNonCities.join()
+          : '',
       exchangeCap: exchangeLimit || -1,
       stock: stock!,
       startTime: form2.getFieldValue('startDate').toISOString(),
       endTime: form2.getFieldValue('endDate').toISOString(),
-      shippingRegin: "3,4",
+      shippingRegin:
+        selectedYesCities && selectedYesCities.length > 0
+          ? selectedYesCities.join()
+          : '216',
     }
     setTotalCommit(allData)
   }
@@ -351,19 +389,22 @@ const GoodsEdit: React.FC = () => {
                     valiAvatar(file)
                   }}
                   onChange={(info) => {
-                    if (info.file.status === 'done' && info.file.response.code === 200) {
+                    if (
+                      info.file.status === 'done' &&
+                      info.file.response.code === 200
+                    ) {
                       // 确保响应中包含预期的URL字段，这里假设服务器返回的结构中有一个名为url的键
-                      const url = info.file.response?.url;
+                      const url = info.file.response?.url
                       if (url) {
-                        console.log('服务器返回的文件URL:', url);
+                        console.log('服务器返回的文件URL:', url)
                         setGoodsAvatar(url)
                         // 在这里可以进一步处理URL，例如存储到状态中、显示预览等
                       } else {
-                        console.warn('服务器响应中没有找到URL');
+                        console.warn('服务器响应中没有找到URL')
                       }
                     } else if (info.file.status === 'error') {
                       // 处理上传错误的情况
-                      message.error('文件上传失败');
+                      message.error('文件上传失败')
                     }
                   }}
                 >
@@ -526,10 +567,15 @@ const GoodsEdit: React.FC = () => {
           <Button
             type="primary"
             style={{ marginTop: '1rem' }}
-            onClick={showDrawer}
+            onClick={showDrawer1}
           >
             选择城市
           </Button>
+          <Tooltip title="默认值为空">
+            <QuestionCircleOutlined
+              style={{ marginLeft: '.5rem', fontSize: '1rem' }}
+            />
+          </Tooltip>
         </div>
         <Divider orientation="left">兑换限制</Divider>
         <div style={gapStyle} className={styles['goods-num']}>
@@ -605,13 +651,65 @@ const GoodsEdit: React.FC = () => {
             <DatePicker showTime placeholder="请选择"></DatePicker>
           </Form.Item>
           <Form.Item name="allowCity" label="投放城市" layout="vertical">
-            <Button type="primary" onClick={showDrawer}>
-              选择城市
-            </Button>
+            <div>
+              <Button type="primary" onClick={showDrawer2}>
+                选择城市
+              </Button>
+              <Tooltip title="默认值为长沙">
+                <QuestionCircleOutlined
+                  style={{ marginLeft: '.5rem', fontSize: '1rem' }}
+                />
+              </Tooltip>
+            </div>
           </Form.Item>
         </Form>
-        <Drawer title="选择城市" onClose={onClose} open={open}>
-          <Tree></Tree>
+        <Drawer title="选择城市" onClose={onClose1} open={open1}>
+          <Tree
+            checkable
+            treeData={citiesTree}
+            onCheck={(checkedKeysValue) => {
+              if (Array.isArray(checkedKeysValue)) {
+                const filtered: React.Key[] = checkedKeysValue.filter(
+                  (item) => {
+                    return !provinceKeys.includes(item)
+                  }
+                )
+                setSelectedNonCities(filtered)
+              }
+            }}
+            onSelect={(selectedValue) => {
+              if (Array.isArray(selectedValue)) {
+                const filtered: React.Key[] = selectedValue.filter((item) => {
+                  return !provinceKeys.includes(item)
+                })
+                setSelectedNonCities(filtered)
+              }
+            }}
+          ></Tree>
+        </Drawer>
+        <Drawer title="选择城市" onClose={onClose2} open={open2}>
+          <Tree
+            checkable
+            treeData={citiesTree}
+            onCheck={(checkedKeysValue) => {
+              if (Array.isArray(checkedKeysValue)) {
+                const filtered: React.Key[] = checkedKeysValue.filter(
+                  (item) => {
+                    return !provinceKeys.includes(item)
+                  }
+                )
+                setSelectedYesCities(filtered)
+              }
+            }}
+            onSelect={(selectedValue) => {
+              if (Array.isArray(selectedValue)) {
+                const filtered: React.Key[] = selectedValue.filter((item) => {
+                  return !provinceKeys.includes(item)
+                })
+                setSelectedYesCities(filtered)
+              }
+            }}
+          ></Tree>
         </Drawer>
         <div style={{ marginTop: '3rem', marginLeft: '6rem' }}>
           <Button type="primary" onClick={handlerCommit}>

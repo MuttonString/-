@@ -22,6 +22,7 @@ export interface AppendGoods {
   supplierName: string
   supplierPhone: string
   stock: number
+  detail: string
 }
 
 // 添加草稿
