@@ -36,7 +36,7 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
             value={queryItem.goodsId}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if (e.currentTarget.value && e.currentTarget.value !== '')
-                setQueryItem({ ...queryItem, goodsId: +e.currentTarget.value })
+                setQueryItem({ ...queryItem, goodsId: e.currentTarget.value })
               else {
                 setQueryItem({ ...queryItem, goodsId: undefined })
               }

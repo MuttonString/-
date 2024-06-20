@@ -11,7 +11,7 @@ import styles from './index.module.less'
 const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo, setPagiNationInfo, total, setTotal}) => {
   const navigate = useNavigate()
   // 传递给子组件，让其能改变上线状态
-  const changeGoodsStatus = (ids: number[] | number, status: 2 | 3) => {
+  const changeGoodsStatus = (ids: string[] | string, status: 2 | 3) => {
     if (Array.isArray(ids)) {
       goodsList.forEach((goodsItem: GoodsInTable) => {
         if (ids.indexOf(goodsItem.id) !== -1) {
@@ -23,7 +23,6 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
       for (let i = 0; i < goodsList.length; i++) {
         if (goodsList[i].id === ids) {
           goodsList[i].proStatus = status
-          goodsList[i].option = status
           break
         }
       }
