@@ -19,13 +19,18 @@ export interface QueryRes {
   admin: string,
   proName: string,
   proStatus: string,
-  stock: number,
+  stock: number | null,
   startTime: string,
   endTime: string
 }
 
+export interface QueryResult {
+  records: QueryList[]
+    total: number
+}
+
 export interface QueryResponse extends ResponseObject {
-  data: QueryList[]
+  data: QueryResult
 }
 
 // 上下线单个商品

@@ -8,10 +8,10 @@ import type { GoodsInTable } from '../type'
 import type { MainProps } from './type'
 import styles from './index.module.less'
 
-const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo, setPagiNationInfo}) => {
+const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo, setPagiNationInfo, total, setTotal}) => {
   const navigate = useNavigate()
   // 传递给子组件，让其能改变上线状态
-  const changeGoodsStatus = (ids: number[] | number, status: 5 | 6) => {
+  const changeGoodsStatus = (ids: number[] | number, status: 2 | 3) => {
     if (Array.isArray(ids)) {
       goodsList.forEach((goodsItem: GoodsInTable) => {
         if (ids.indexOf(goodsItem.id) !== -1) {
@@ -43,6 +43,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
+          total={total}
+          setTotal={setTotal}
         ></GoodsTable>
       ),
     },
@@ -57,6 +59,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
+          total={total}
+          setTotal={setTotal}
         ></GoodsTable>
       ),
     },
@@ -71,6 +75,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           goodsList={goodsList}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
+          total={total}
+          setTotal={setTotal}
         ></GoodsTable>
       ),
     },
