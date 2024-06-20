@@ -17,8 +17,8 @@ import {
 } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
-import type { GoodsInfo, ExchangeWay } from './type'
-import styles from './index.module.less'
+import styles from './index.module.less' 
+import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
 import VipInput from './VipInput'
 
@@ -46,13 +46,13 @@ const uploadButton = (
 
 const GoodsEdit: React.FC = () => {
   const [goodsExchangeWays, setGoodsExchangeWays] = useState<VipInputType[]>([]) //兑换方式状态管理
-  const [selectedExchangeWay, setSelectedExchangeWay] = useState<number>() //当前选中要添加的兑换方式
+  const [selectedExchangeWay, setSelectedExchangeWay] = useState<'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'>() //当前选中要添加的兑换方式
   const [isValiExchange, setIsValiExchange] = useState<boolean>(false) //显示是否提交校验过兑换方式
   const [open, setOpen] = useState<boolean>(false) //控制抽屉显隐
   const [stock, setStock] = useState<number>() //库存数量
   const [exchangeLimit, setExchangeLimit] = useState<number>() //兑换限制
-  const [goodsAvatar, setGoodsAvatar] = useState<UploadFile<any>[]>() //商品头图
-  const [totalCommit, setTotalCommit] = useState<GoodsInfo>() //总提交项，校验通过生成
+  const [goodsAvatar, setGoodsAvatar] = useState<string>('') //商品头图
+  const [totalCommit, setTotalCommit] = useState<AppendGoods>() //总提交项，校验通过生成
 
   // 两个form表单数据绑定
   const [form1] = Form.useForm()
@@ -65,45 +65,10 @@ const GoodsEdit: React.FC = () => {
 
   const [messageApi, contextHolder] = message.useMessage() //message消息提示导入
 
-  const errorNull = () => {
+  const error = (msg: string) => {
     messageApi.open({
       type: 'error',
-      content: '你还未选择要填加的兑换方式',
-    })
-  }
-
-  const errorRepeat = () => {
-    messageApi.open({
-      type: 'error',
-      content: '兑换方式已存在',
-    })
-  }
-
-  const errorDateCompare = () => {
-    messageApi.open({
-      type: 'error',
-      content: '上线时间不能大于下线时间',
-    })
-  }
-
-  const errorSizeAvatar = (imgSize: number) => {
-    messageApi.open({
-      type: 'error',
-      content: `图片大小超过5MB(${(imgSize / 1024 / 1024).toFixed(2)}MB)`,
-    })
-  }
-
-  const errorFormatAvatar = () => {
-    messageApi.open({
-      type: 'error',
-      content: '文件格式错误(必须为图片)',
-    })
-  }
-
-  const errorCommon = () => {
-    messageApi.open({
-      type: 'error',
-      content: '存在不合理字段',
+      content: msg,
     })
   }
 
@@ -121,13 +86,13 @@ const GoodsEdit: React.FC = () => {
       if (goodsExchangeWays[i].typeNum == updateWay.typeNum) {
         goodsExchangeWays[i].isAble = updateWay.isAble
         goodsExchangeWays[i].cash = updateWay.cash || 0
-        goodsExchangeWays[i].score = updateWay.score || 0
+        goodsExchangeWays[i].score = updateWay.score || '0'
         break
       }
     }
   }
   // 让子兑换删除兑换方式
-  const delGoodsExchangeWays = (typeNum: number) => {
+  const delGoodsExchangeWays = (typeNum: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH') => {
     const newWays = goodsExchangeWays.filter(
       (way: VipInputType) => way.typeNum != typeNum
     )
@@ -136,7 +101,8 @@ const GoodsEdit: React.FC = () => {
   //添加新的兑换方式
   const addExchangeWay = () => {
     if (!selectedExchangeWay) {
-      errorNull()
+      // errorNull()
+      error('你还未选择要填加的兑换方式')
       return
     }
     if (
@@ -144,13 +110,13 @@ const GoodsEdit: React.FC = () => {
         (way: VipInputType) => way.typeNum == selectedExchangeWay
       )
     ) {
-      errorRepeat()
+      error('兑换方式已存在')
       return
     }
     const newWay: VipInputType = {
       id: nanoid(),
       typeNum: selectedExchangeWay,
-      score: 0,
+      score: '0',
       cash: 0,
       isAble: false,
       isInitial: true,
@@ -216,15 +182,15 @@ const GoodsEdit: React.FC = () => {
     let isThrow = false
     try {
       await form1.validateFields()
-    } catch (error) {
-      errorCommon()
+    } catch (er) {
+      error('存在不合理字段')
       isThrow = true
-      console.log(error)
+      console.log(er)
     } finally {
       try {
         await form2.validateFields()
-      } catch (error) {
-        console.log(error)
+      } catch (er) {
+        console.log(er)
       }
     }
     //更改校验状态，自定义表单将自动校验
@@ -233,37 +199,38 @@ const GoodsEdit: React.FC = () => {
     changeInitialWays()
     // 上线时间不能晚于下线时间
     if (form2.getFieldValue('startDate') > form2.getFieldValue('endDate')) {
-      errorDateCompare()
+      error('上线时间不能大于下线时间')
     }
-    //校验商品头图
-    valiAvatar()
     if (isThrow) return
     if (showZeroWays(true) === 'inline') {
-      errorCommon()
+      error('存在不合理字段')
       return
     }
     if (showStockWarnings(true) === true) {
-      errorCommon()
+      error('存在不合理字段')
       return
     }
     //检验所有兑换方式是否合法
     for (let i = 0; i < goodsExchangeWays.length; i++) {
       if (!goodsExchangeWays[i].isAble) {
-        errorCommon()
+        error('存在不合理字段')
         return
       }
     }
+    if (goodsAvatar === '') {
+      error('商品头图上传出错')
+      return
+    } 
     collectForm()
   }
   //校验图片文件上传是否超过5MB, 是否非图片类型
-  const valiAvatar = () => {
-    const { file } = form1.getFieldValue('goodsAvatar')
+  const valiAvatar = (file: any) => {
     if (!file?.type.includes('image')) {
-      errorFormatAvatar()
+      error('商品头图格式错误')
       return false
     }
     if (file?.size >= 5 * 1024 * 1024) {
-      errorSizeAvatar(file?.size)
+      error(`商品头图大小不能超过5MB【${file?.size}】`)
       return false
     }
     return true
@@ -272,33 +239,32 @@ const GoodsEdit: React.FC = () => {
   // 对整个表单数据进行收集
   const collectForm = () => {
     //收集兑换方式数组
-    const resExchangeWays: ExchangeWay[] = goodsExchangeWays.map(
+    const resExchangeWays: SingleProRule[] = goodsExchangeWays.map(
       (way: VipInputType) => {
         return {
-          exchangeWayType: way.typeNum,
+          priceType: way.typeNum,
           cash: way.cash,
-          score: way.score,
+          integral: way.score,
         }
       }
     )
-    const allData: GoodsInfo = {
-      goodsName: form1.getFieldValue('goodsName'),
-      goodsAvatar: form1.getFieldValue('goodsAvatar'),
-      goodsDesc: form1.getFieldValue('goodsDesc'),
-      goodsType: form1.getFieldValue('goodsType'),
-      goodsDetail: form1.getFieldValue('goodsDetail'),
-      goodsCaId: form1.getFieldValue('goodsCategory'),
-      goodsStatus: 1,
+    const allData: AppendGoods = {
+      proName: form1.getFieldValue('goodsName'),
+      poster: goodsAvatar,
+      proDesc: form1.getFieldValue('goodsDesc'),
+      proType: form1.getFieldValue('goodsType'),
+      // goodsDetail: form1.getFieldValue('goodsDetail'),
+      categoryId: form1.getFieldValue('goodsCategory'),
       supplierName: form1.getFieldValue('supplierName'),
       supplierPhone: form1.getFieldValue('supplierPhone'),
-      serviceGuarantee: form1.getFieldValue('serviceGuarantee'),
-      exchangeWays: resExchangeWays,
-      noCities: ['1', '2'],
-      exchangeLimit: exchangeLimit || -1,
+      guarantee: form1.getFieldValue('serviceGuarantee'),
+      proRules: resExchangeWays,
+      nonShippingRegion: "1,2",
+      exchangeCap: exchangeLimit || -1,
       stock: stock!,
-      startDate: form2.getFieldValue('startDate').toISOString(),
-      endDate: form2.getFieldValue('endDate').toISOString(),
-      yesCities: ['1', '2'],
+      startTime: form2.getFieldValue('startDate').toISOString(),
+      endTime: form2.getFieldValue('endDate').toISOString(),
+      shippingRegin: "3,4",
     }
     setTotalCommit(allData)
   }
@@ -354,9 +320,9 @@ const GoodsEdit: React.FC = () => {
                 <Select
                   placeholder="请选择"
                   options={[
-                    { value: 0, label: '实物' },
-                    { value: 1, label: '券' },
-                    { value: 2, label: '虚拟货物' },
+                    { value: '实物', label: '实物' },
+                    { value: '券', label: '券' },
+                    { value: '虚拟货物', label: '虚拟货物' },
                   ]}
                 ></Select>
               </Form.Item>
@@ -379,13 +345,26 @@ const GoodsEdit: React.FC = () => {
                 <Upload
                   name="goodsAvatar"
                   listType="picture-card"
-                  fileList={goodsAvatar}
                   maxCount={1}
-                  action={'8.138.13.158:9088/api/common/upload'}
-                  beforeUpload={() => false}
+                  action={'/api/common/upload'}
+                  beforeUpload={(file: UploadFile) => {
+                    valiAvatar(file)
+                  }}
                   onChange={(info) => {
-                    console.log(info)
-                    // setGoodsAvatar(fileList)
+                    if (info.file.status === 'done' && info.file.response.code === 200) {
+                      // 确保响应中包含预期的URL字段，这里假设服务器返回的结构中有一个名为url的键
+                      const url = info.file.response?.url;
+                      if (url) {
+                        console.log('服务器返回的文件URL:', url);
+                        setGoodsAvatar(url)
+                        // 在这里可以进一步处理URL，例如存储到状态中、显示预览等
+                      } else {
+                        console.warn('服务器响应中没有找到URL');
+                      }
+                    } else if (info.file.status === 'error') {
+                      // 处理上传错误的情况
+                      message.error('文件上传失败');
+                    }
                   }}
                 >
                   {goodsAvatar?.length! >= 1 ? null : uploadButton}
@@ -517,12 +496,12 @@ const GoodsEdit: React.FC = () => {
               placeholder="请选择"
               style={{ width: '9.375rem' }}
               options={[
-                { value: '0', label: '积分' },
-                { value: '1', label: '积分+现金' },
-                { value: '2', label: '现金' },
+                { value: 'INTEGRAL', label: '积分' },
+                { value: 'INTEGRAL_AND_CASH', label: '积分+现金' },
+                { value: 'CASH', label: '现金' },
               ]}
               value={selectedExchangeWay}
-              onChange={(value: number) => {
+              onChange={(value: 'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH') => {
                 setSelectedExchangeWay(value)
               }}
             ></Select>

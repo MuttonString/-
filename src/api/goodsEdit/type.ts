@@ -21,6 +21,7 @@ export interface AppendGoods {
   shippingRegin: string
   supplierName: string
   supplierPhone: string
+  stock: number
 }
 
 // 添加草稿

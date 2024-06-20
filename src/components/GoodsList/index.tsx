@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { message } from 'antd'
 import GoodsTop from './GoodsTop'
 import GoodsMain from './GoodsMain'
 import styles from './index.module.less'
 import type { GoodsInTable, GoodsQueryItem } from './type'
+import type { QueryList } from '@/api/goodsList/type'
+import type { PageInfo } from './GoodsMain/GoodsTable/type'
 
 const GoodsList: React.FC = () => {
   const [goodsList, setGoodsList] = useState<GoodsInTable[]>([]) // 商品总列表
-  const [queryList, setQueryList] = useState<GoodsInTable[]>([]) // 查询过滤列表
-  const [queryOnlineList, setQueryOnlineList] = useState<GoodsInTable[]>([])
-  const [queryOfflineList, setQueryOfflineList] = useState<GoodsInTable[]>([])
+  const [pagiNationInfo, setPagiNationInfo] = useState<PageInfo>({
+    // 分页信息
+    page: 1,
+    pageSize: 20,
+    total: 0,
+  })
   const [queryZero, setQueryZero] = useState<boolean>(false)
 
   const [messageApi, contextHolder] = message.useMessage() //message消息提示导入
@@ -20,79 +25,58 @@ const GoodsList: React.FC = () => {
       content: '查询条件都为空！',
     })
   }
-
-  //传递给Top部分，提供查询的渲染List
+  //传递给Top,收集查询项并查询渲染
   const changeQueryList = (queryItem: GoodsQueryItem, reset = false) => {
     if (reset) {
-      setQueryList([])
+      //Todo 请求默认数据
       return
     }
     const values = Object.values(queryItem)
     if (values.length === 0 || values.every((value) => value === undefined)) {
+      //Todo 请求默认数据
       errorQueryNull()
-      setQueryList([])
       return
     }
-    const newQueryList: GoodsInTable[] = goodsList.filter(
-      (goodsItem: GoodsInTable) => {
-        return (
-          (queryItem.goodsName === undefined ||
-            queryItem.goodsName === goodsItem.goodsName) &&
-          (queryItem.goodsStatus === undefined ||
-            queryItem.goodsStatus === goodsItem.goodsStatus) &&
-          (queryItem.startDate === undefined ||
-            queryItem.startDate.format('YYYY-MM-DD') === goodsItem.startDate) &&
-          (queryItem.endDate === undefined ||
-            queryItem.endDate.format('YYYY-MM-DD') === goodsItem.endDate) &&
-          (queryItem.goodsId === undefined ||
-            queryItem.goodsId === goodsItem.goodsId) &&
-          (queryItem.admin === undefined ||
-            queryItem.admin === goodsItem.admin) &&
-          (queryItem.agent === undefined ||
-            goodsItem.agents?.includes(queryItem.agent))
-        )
-      }
-    )
-    if(newQueryList.length === 0) setQueryZero(true)
-    else setQueryZero(false)
-    setQueryList([...newQueryList])
-  }
-
-  // 每次查询总数据更改都需要进行online Or offline过滤
-  useEffect(() => {
-    if (queryList.length > 0) {
-      getQueryOnlineList()
-      getQueryOfflineList()
+    const queryParams: QueryList = {}
+    if (queryItem.goodsId) {
+      queryParams.id = queryItem.goodsId
     }
-  }, [queryList])
-
-  // 过滤取得queryOnlineList
-  const getQueryOnlineList = () => {
-    const newQueryOnlineList = queryList.filter(
-      (goodsItem: GoodsInTable) => goodsItem.goodsStatus === 5
-    )
-    setQueryOnlineList([...newQueryOnlineList])
-  }
-
-  // 过滤取得queryOfflineList
-  const getQueryOfflineList = () => {
-    const newQueryOffLineList = queryList.filter(
-      (goodsItem: GoodsInTable) => goodsItem.goodsStatus === 6
-    )
-    setQueryOfflineList([...newQueryOffLineList])
+    if (queryItem.admin) {
+      queryParams.adminName = queryItem.admin
+    }
+    if (queryItem.agent) {
+      queryParams.proxyName = queryItem.agent
+    }
+    if (queryItem.goodsName) {
+      queryParams.proName = queryItem.goodsName
+    }
+    if (queryItem.goodsStatus) {
+      queryParams.proStatus = queryItem.goodsStatus
+    }
+    if (queryItem.startDate) {
+      queryParams.startTime = queryItem.startDate.toISOString()
+    }
+    if (queryItem.endDate) {
+      queryParams.endTime = queryItem.endDate.toISOString()
+    }
+    queryParams.page = pagiNationInfo.page
+    queryParams.pageSize = pagiNationInfo.pageSize
+    // 请求携带queryParams参数的条件商品列表
   }
   return (
     <>
       {contextHolder}
       <div className={styles.main}>
-        <GoodsTop changeQueryList={changeQueryList} setQueryZero={setQueryZero}></GoodsTop>
+        <GoodsTop
+          changeQueryList={changeQueryList}
+          setQueryZero={setQueryZero}
+        ></GoodsTop>
         <GoodsMain
           goodsList={goodsList}
           setGoodsList={setGoodsList}
-          queryList={queryList}
-          queryOnlineList={queryOnlineList}
-          queryOfflineList={queryOfflineList}
           queryZero={queryZero}
+          pagiNationInfo={pagiNationInfo}
+          setPagiNationInfo={setPagiNationInfo}
         ></GoodsMain>
       </div>
     </>

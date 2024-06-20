@@ -3,7 +3,7 @@ import axios from 'axios';
 import type { AxiosResponse, AxiosError } from 'axios';
 
 const request = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://8.138.13.158:9088',
     timeout: 5000
 });
 
