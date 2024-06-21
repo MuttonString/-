@@ -18,7 +18,7 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                 <Col span={8}>类目：{goods.categoryName}</Col>
                 <Col span={8}>
                     兑换限制：
-                    {goods.exchageCap === -1
+                    {goods.exchageCap === -1 || goods.exchageCap === null
                         ? '无限制'
                         : goods.exchageCap + '件'}
                 </Col>

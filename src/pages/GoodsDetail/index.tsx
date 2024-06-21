@@ -63,7 +63,6 @@ const GoodsDetail: React.FC = () => {
             children: <Operation />
         }
     ];
-    console.log(goods);
 
     return (
         <Row className={styles.main}>
@@ -204,7 +203,7 @@ const GoodsDetail: React.FC = () => {
                         type='primary'
                         onClick={() => {
                             const obj: AuditRequest = {
-                                proId: parseInt(id),
+                                proId: id,
                                 desc: remark
                             };
                             if (pass) reqAuditPass(obj);

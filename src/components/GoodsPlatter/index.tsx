@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DatePicker, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import dayjs from 'dayjs';
@@ -8,47 +8,40 @@ import ExchangeAmount from "./ExchangeAmount"
 import Top20Sales from "./Top20Sales"
 import ExchangeMethod from './ExchangeMethod';
 
-
 dayjs.extend(customParseFormat);
-
-const onChange = (key: string) => {
-  console.log(key);
-};
-
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: '兑换量',
-    children: <ExchangeAmount ></ExchangeAmount>,
-  },
-  {
-    key: '2',
-    label: '销售量top20',
-    children: <Top20Sales></Top20Sales>,
-  },
-  {
-    key: '3',
-    label: '兑换方式',
-    children: <ExchangeMethod></ExchangeMethod>,
-  },
-];
 
 const GoodsPlatter: React.FC = () => {
   const [dates, setDates] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null]>([null, null]);
 
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: '兑换量',
+      children: <ExchangeAmount dates={dates}></ExchangeAmount>,
+    },
+    {
+      key: '2',
+      label: '销售量top20',
+      children: <Top20Sales dates={dates}></Top20Sales>,
+    },
+    {
+      key: '3',
+      label: '兑换方式',
+      children: <ExchangeMethod dates={dates}></ExchangeMethod>,
+    },
+  ];
+
+  const yesterdayRef = useRef<dayjs.Dayjs | null>(null);
+  const eighthDayAgoRef = useRef<dayjs.Dayjs | null>(null);
+
   useEffect(() => {
     // 计算昨天和过去第八天的日期
-    const yesterday = dayjs().subtract(1, 'day');
-    const eighthDayAgo = dayjs().subtract(8, 'day');
-    
+    yesterdayRef.current = dayjs().subtract(1, 'day');
+    eighthDayAgoRef.current = dayjs().subtract(8, 'day');
+
     // 设置默认日期范围
-    setDates([eighthDayAgo, yesterday]);
+    setDates([eighthDayAgoRef.current, yesterdayRef.current]);
   }, []); // 注意这里没有依赖项数组，所以此effect只在组件挂载时执行一次
-
-  useEffect(() => {
-    console.log(dates);
-
-  }, [dates])
 
   const { RangePicker } = DatePicker;
 
@@ -66,7 +59,10 @@ const GoodsPlatter: React.FC = () => {
       const duration = end.diff(start, 'day');
 
       if (duration > 59) {
-        setDates([null, null]);
+        alert('日期范围不能超过60天');
+        // 重置选择器
+
+        setDates([eighthDayAgoRef.current, yesterdayRef.current]);
       } else {
         setDates(newDates);
       }
@@ -91,7 +87,6 @@ const GoodsPlatter: React.FC = () => {
         <Tabs
           defaultActiveKey="1"
           items={items}
-          onChange={onChange}
           size='large'
         />
       </div>
