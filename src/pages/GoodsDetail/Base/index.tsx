@@ -46,7 +46,7 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
             <Divider orientation='left'>快递信息</Divider>
             <Row>
                 投放地区：
-                {goods.shippingRegin ? goods.shippingRegin : '无'}
+                {goods.shippingRegion ? goods.shippingRegion : '无'}
             </Row>
             <Row>
                 不发货地区：

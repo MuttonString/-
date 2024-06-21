@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button } from 'antd'
+import { Table, Button, message } from 'antd'
 import { NavLink } from 'react-router-dom'
 import { TableColumnsType, Popconfirm } from 'antd'
+import dayjs from 'dayjs'
 import styles from './index.module.less'
+import { requestGoodsOnline, requestGoodsOffline, requestBatchGoodsOnline, requestBatchGoodsOffline } from '@/api/goodsList'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
 import { requestQueryList } from '@/api/goodsList'
@@ -10,6 +12,7 @@ import { requestQueryList } from '@/api/goodsList'
 const GoodsTable: React.FC<GoodsTableData> = ({
   // data,
   tabId,
+  tabStatus,
   changeGoodsStatus,
   setGoodsList,
   goodsList,
@@ -17,13 +20,14 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   setPagiNationInfo,
   total,
   setTotal,
+  queryParams
 }) => {
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
   const [selectedGoods, setSelectedGoods] = useState<GoodsInTable[]>([])
   useEffect(() => {
     requestDiff()
-  }, [pagiNationInfo])
+  }, [pagiNationInfo, tabStatus, queryParams])
 
   // 监听data变化，看状态是否发生改变导致批量按钮需要变化,以完成在批量选择时，依旧可以动态单个上下线
   useEffect(() => {
@@ -44,37 +48,51 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   }, [goodsList])
   // 根据不同页面发送不同条件请求
   const requestDiff = () => {
-    if (tabId === 1) {
+    if (tabId === tabStatus && tabStatus === 1) {
       requestQueryList({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
+        ...queryParams
       }).then((res) => {
         console.log('全部数据:', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
+      return
     }
-    if (tabId === 2) {
+    if (tabId === tabStatus && tabStatus === 2) {
+      if (queryParams.proStatus !== undefined && queryParams.proStatus !== 2) {
+        setGoodsList({})
+        return
+      }
       requestQueryList({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
         proStatus: 2,
+        ...queryParams
       }).then((res) => {
         console.log('上线数据', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
+      return
     }
-    if (tabId === 3) {
+    if (tabId === tabStatus && tabStatus === 3) {
+      if (queryParams.proStatus !== undefined && queryParams.proStatus !== 3) {
+        setGoodsList({})
+        return
+      }
       requestQueryList({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
         proStatus: 3,
+        ...queryParams
       }).then((res) => {
         console.log('下线数据', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
+      return
     }
   }
 
@@ -202,6 +220,9 @@ const GoodsTable: React.FC<GoodsTableData> = ({
               description={`你确定要下线【${record.proName}】吗？`}
               onConfirm={() => {
                 changeGoodsStatus(record.id, 3)
+                requestGoodsOffline(record.id).then(res => {
+                  message.info(res)
+                })
               }}
               okText="确定"
               cancelText="取消"
@@ -228,6 +249,9 @@ const GoodsTable: React.FC<GoodsTableData> = ({
               }}
               onClick={() => {
                 changeGoodsStatus(record.id, 2)
+                requestGoodsOnline(record.id).then(res => {
+                  message.success(res)
+                })
               }}
             >
               上线
@@ -260,6 +284,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 3
               )
               setShowWhich(2)
+              requestBatchGoodsOffline(selectedGoods.map(item => item.id))
             }}
           >
             <p>批量下线</p>
@@ -274,6 +299,9 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 2
               )
               setShowWhich(1)
+              requestBatchGoodsOnline(selectedGoods.map(item => item.id)).then(res => {
+                message.success(res)
+              })
             }}
           >
             批量上线
@@ -303,8 +331,13 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onChange: handlerTableChange,
           }}
           columns={columns}
-          dataSource={goodsList.map((item, index) => {
-            return { ...item, key: index }
+          dataSource={goodsList.map((item,index) => {
+            return {
+              ...item,
+              key: index,
+              startTime: dayjs(item.startTime).format('YYYY-MM-DD HH:MM:DD'),
+              endTime: dayjs(item.endTime).format('YYYY-MM-DD HH:MM:DD'),
+            }
           })}
         ></Table>
       </div>

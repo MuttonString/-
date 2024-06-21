@@ -2,7 +2,7 @@ import { ResponseObject } from "@/utils/type"
 
 // 查询商品列表类
 export interface QueryList {
-  id?: number
+  id?: string
   adminName?: string
   page?: number
   pageSize?: number
@@ -15,7 +15,7 @@ export interface QueryList {
 
 // 查询返回商品列表
 export interface QueryRes {
-  id: number,
+  id: string,
   admin: string,
   proName: string,
   proStatus: string,

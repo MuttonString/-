@@ -33,7 +33,7 @@ export interface GoodsDetailData {
     proRules: ProRule[];
     proType: string;
     proxys: Proxy[];
-    shippingRegin: string;
+    shippingRegion: string;
     startTime: string;
     supplierName: string;
     supplierPhone: string;
