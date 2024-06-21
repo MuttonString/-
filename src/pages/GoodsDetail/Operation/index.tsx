@@ -1,8 +1,8 @@
-import request from '@/utils/request';
+import { reqOperation } from '@/api/goodsDetail';
+import { OperationRecord } from '@/api/goodsDetail/type';
 import { Table } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-// import { GOODS_STATUS } from '@/api/goodsDetail/type';
 
 const columns = [
     { title: 'ID', dataIndex: 'opId', key: 'opId' },
@@ -12,40 +12,40 @@ const columns = [
     { title: '备注', dataIndex: 'opDesc', key: 'opDesc' }
 ];
 
+const getOperation = async (
+    id: string,
+    setOperationRecords: React.Dispatch<
+        React.SetStateAction<OperationRecord[] | undefined>
+    >
+) => {
+    const operation = await reqOperation(id);
+    setOperationRecords(operation);
+};
+
 const Operation: React.FC = () => {
     const location = useLocation();
     const id = location.pathname.split('/').pop();
+    const [operationRecords, setOperationRecords] =
+        useState<OperationRecord[]>();
+    useEffect(() => {
+        getOperation(id!, setOperationRecords);
+    }, [id]);
 
-    // TODO
-    const [operationsData, setOperationData] = useState();
-    // const operationsData = operations.map(item => ({
-    //     key: item.opId,
-    //     opId: item.opId,
-    //     opStatus: GOODS_STATUS[item.opStatus],
-    //     opTime: item.opTime,
-    //     userName: item.userName,
-    //     opDesc: item.opDesc
-    // }));
-    async function test1() {
-        const res = await request.post('/product/list', {
-            // page: 1,
-            // pageSize: 100
-        });
-        console.log(res);
-    }
-    test1();
-
-    async function test2() {
-        const res = await request.get('/operation/1/100');
-        console.log(res);
-    }
-    test2();
+    const dataSource = operationRecords?.map(item => ({
+        key: item.id,
+        opId: item.id,
+        opStatus: item.operationTypeString,
+        opTime: item.createTime,
+        userName: item.userName,
+        opDesc: item.remark
+    }));
 
     return (
         <div>
             <Table
                 columns={columns}
-                dataSource={operationsData}
+                dataSource={dataSource}
+                pagination={false}
             />
         </div>
     );

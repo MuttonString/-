@@ -2,14 +2,15 @@ import request from '@/utils/request';
 import {
     AuditRequest,
     GoodsDetailResponse,
+    OperationResponse,
     SelectableProxysResponse
 } from './type';
 import { message } from 'antd';
 import { ResponseObject } from '@/utils/type';
 
-export async function reqGoodsDetail(id: string) {
+export async function reqGoodsDetail(id: string, draft = false) {
     const result = await request.get<unknown, GoodsDetailResponse>(
-        `/product/proDetail/${id}`
+        draft ? `/product/draftDetail/${id}` : `/product/proDetail/${id}`
     );
     if (result.code === 200) {
         return result.data;
@@ -76,6 +77,46 @@ export async function reqSelectableProxys(id: string) {
     );
     if (result.code === 200) {
         return result.data;
+    }
+    message.error(`${result.msg}（${result.code}）`);
+}
+
+export async function reqTransfer(proId: string, userId: string) {
+    const result = await request.get<unknown, ResponseObject>(
+        `/product/transfer/${proId}/${userId}`
+    );
+    if (result.code === 200) {
+        return;
+    }
+    message.error(`${result.msg}（${result.code}）`);
+}
+
+export async function reqDelProxy(proId: string, userId: string) {
+    const result = await request.get<unknown, ResponseObject>(
+        `/user/deleteProxy/${userId}/${proId}`
+    );
+    if (result.code === 200) {
+        return;
+    }
+    message.error(`${result.msg}（${result.code}）`);
+}
+
+export async function reqAddProxy(proId: string, userId: string) {
+    const result = await request.get<unknown, ResponseObject>(
+        `/user/addProxy/${proId}?ids=${userId}`
+    );
+    if (result.code === 200) {
+        return;
+    }
+    message.error(`${result.msg}（${result.code}）`);
+}
+
+export async function reqOperation(proId: string) {
+    const result = await request.get<unknown, OperationResponse>(
+        `/operation/${proId}/1/32767`
+    );
+    if (result.code === 200) {
+        return result.data.records;
     }
     message.error(`${result.msg}（${result.code}）`);
 }

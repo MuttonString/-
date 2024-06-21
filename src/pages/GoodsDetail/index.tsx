@@ -11,7 +11,7 @@ import {
     TabsProps,
     Typography
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './index.module.less';
 import type {
@@ -22,15 +22,18 @@ import type {
 import Base from './Base';
 import Preview from './Preview';
 import Operation from './Operation';
-import { LeftOutlined } from '@ant-design/icons';
+import { DeleteOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons';
 import {
+    reqAddProxy,
     reqAudit,
     reqAuditDown,
     reqAuditPass,
+    reqDelProxy,
     reqGoodsDetail,
     reqGoodsOffline,
     reqGoodsOnline,
-    reqSelectableProxys
+    reqSelectableProxys,
+    reqTransfer
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
 
@@ -67,7 +70,11 @@ const GoodsDetail: React.FC = () => {
     const [proxyOpen, setProxyOpen] = useState(false);
     const [selectableProxys, setSelectableProxys] = useState<Proxy[]>();
     const [loading, setLoading] = useState(false);
-    useState(() => getGoodsDetail(id, setGoods));
+    const [transferId, setTransferId] = useState('');
+    const [proxyId, setProxyId] = useState('');
+    useEffect(() => {
+        getGoodsDetail(id, setGoods);
+    }, [id]);
 
     const items: TabsProps['items'] = [
         {
@@ -79,13 +86,17 @@ const GoodsDetail: React.FC = () => {
             key: 'pewview',
             label: '商品预览',
             children: <Preview goods={goods} />
-        },
-        {
+        }
+    ];
+
+    // TODO: Super Admin
+    if (true) {
+        items.push({
             key: 'operation',
             label: '操作记录',
             children: <Operation />
-        }
-    ];
+        });
+    }
 
     return (
         <Row className={styles.main}>
@@ -99,14 +110,17 @@ const GoodsDetail: React.FC = () => {
                         </Button>
                         {goods?.proName}
                         <Flex wrap gap='small' className={styles.buttons}>
-                            <Button
-                                type='primary'
-                                onClick={() => {
-                                    navigate('/edit/' + id);
-                                }}
-                            >
-                                编辑
-                            </Button>
+                            {(goods?.proStatus === '已下线' ||
+                                goods?.proStatus === '草稿') && (
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        navigate('/edit/' + id);
+                                    }}
+                                >
+                                    编辑
+                                </Button>
+                            )}
 
                             {goods?.proStatus === '待审核' && (
                                 <Popconfirm
@@ -114,7 +128,7 @@ const GoodsDetail: React.FC = () => {
                                     description='确定发起审核？'
                                     onConfirm={() => {
                                         reqAudit({ proId: id });
-                                        window.location.reload();
+                                        getGoodsDetail(id, setGoods);
                                     }}
                                     okText='确定'
                                     cancelText='取消'
@@ -130,7 +144,6 @@ const GoodsDetail: React.FC = () => {
                                     onClick={() => {
                                         setAuditOpen(true);
                                         setPass(true);
-                                        window.location.reload();
                                     }}
                                 >
                                     审核通过
@@ -144,38 +157,39 @@ const GoodsDetail: React.FC = () => {
                                     onClick={() => {
                                         setAuditOpen(true);
                                         setPass(false);
-                                        window.location.reload();
                                     }}
                                 >
                                     审批驳回
                                 </Button>
                             )}
 
-                            {goods?.proStatus === '待上线' ||
-                                (goods?.proStatus === '已下线' && (
-                                    <Popconfirm
-                                        title='上线'
-                                        description='确定上线该商品？'
-                                        onConfirm={() => {
-                                            reqGoodsOnline(id);
-                                            window.location.reload();
-                                        }}
-                                        okText='确定'
-                                        cancelText='取消'
-                                    >
-                                        <Button type='primary' danger>
-                                            上线
-                                        </Button>
-                                    </Popconfirm>
-                                ))}
+                            {(goods?.proStatus === '待上线' ||
+                                goods?.proStatus === '已下线') && (
+                                <Popconfirm
+                                    title='上线'
+                                    description='确定上线该商品？'
+                                    onConfirm={() => {
+                                        reqGoodsOnline(id).then(() =>
+                                            getGoodsDetail(id, setGoods)
+                                        );
+                                    }}
+                                    okText='确定'
+                                    cancelText='取消'
+                                >
+                                    <Button type='primary' danger>
+                                        上线
+                                    </Button>
+                                </Popconfirm>
+                            )}
 
                             {goods?.proStatus === '运行中' && (
                                 <Popconfirm
                                     title='下线'
                                     description='确定下线该商品？'
                                     onConfirm={() => {
-                                        reqGoodsOffline(id);
-                                        window.location.reload();
+                                        reqGoodsOffline(id).then(() =>
+                                            getGoodsDetail(id, setGoods)
+                                        );
                                     }}
                                     okText='确定'
                                     cancelText='取消'
@@ -214,13 +228,42 @@ const GoodsDetail: React.FC = () => {
                             <Text strong>代理人：</Text>
                             <Text>
                                 {goods?.proxys?.length
-                                    ? goods.proxys.map(
-                                          (item, idx, arr) =>
-                                              item.userName +
-                                              (idx === arr.length - 1
+                                    ? goods.proxys.map((item, idx, arr) => (
+                                          <span key={item.userId}>
+                                              {item.userName}
+                                              {/* // TODO: Self */}
+                                              {true && (
+                                                  <Popconfirm
+                                                      title='删除代理人'
+                                                      description='确定删除该代理人？'
+                                                      onConfirm={() => {
+                                                          reqDelProxy(
+                                                              id,
+                                                              item.userId
+                                                          ).then(() =>
+                                                              getGoodsDetail(
+                                                                  id,
+                                                                  setGoods
+                                                              )
+                                                          );
+                                                      }}
+                                                      okText='确定'
+                                                      cancelText='取消'
+                                                  >
+                                                      <Button
+                                                          type='link'
+                                                          danger
+                                                          size='small'
+                                                      >
+                                                          <DeleteOutlined />
+                                                      </Button>
+                                                  </Popconfirm>
+                                              )}
+                                              {idx === arr.length - 1
                                                   ? ''
-                                                  : '、')
-                                      )
+                                                  : '、'}
+                                          </span>
+                                      ))
                                     : '无'}
                             </Text>
                             {/* // TODO: Self */}
@@ -236,7 +279,7 @@ const GoodsDetail: React.FC = () => {
                                         );
                                     }}
                                 >
-                                    修改
+                                    <PlusOutlined />
                                 </Button>
                             )}
                         </Col>
@@ -299,7 +342,17 @@ const GoodsDetail: React.FC = () => {
                 open={transferOpen}
                 onClose={() => setTransferOpen(false)}
                 extra={
-                    <Button type='primary' onClick={() => {}}>
+                    <Button
+                        type='primary'
+                        onClick={() => {
+                            reqTransfer(id, transferId).then(() => {
+                                setTransferId('');
+                                setTransferOpen(false);
+                                getGoodsDetail(id, setGoods);
+                            });
+                        }}
+                        disabled={!transferId}
+                    >
                         提交
                     </Button>
                 }
@@ -307,20 +360,31 @@ const GoodsDetail: React.FC = () => {
                 <Select
                     loading={loading}
                     options={selectableProxys?.map(item => ({
-                        value: item.id,
+                        value: item.userId,
                         label: item.userName
                     }))}
                     style={{ width: '100%' }}
+                    onChange={value => setTransferId(value)}
                 />
             </Drawer>
 
             <Drawer
-                title='修改代理人'
+                title='添加代理人'
                 width={300}
                 open={proxyOpen}
                 onClose={() => setProxyOpen(false)}
                 extra={
-                    <Button type='primary' onClick={() => {}}>
+                    <Button
+                        type='primary'
+                        onClick={() => {
+                            reqAddProxy(id, proxyId).then(() => {
+                                setProxyId('');
+                                setProxyOpen(false);
+                                getGoodsDetail(id, setGoods);
+                            });
+                        }}
+                        disabled={!proxyId}
+                    >
                         提交
                     </Button>
                 }
@@ -328,10 +392,11 @@ const GoodsDetail: React.FC = () => {
                 <Select
                     loading={loading}
                     options={selectableProxys?.map(item => ({
-                        value: item.id,
+                        value: item.userId,
                         label: item.userName
                     }))}
                     style={{ width: '100%' }}
+                    onChange={value => setProxyId(value)}
                 />
             </Drawer>
         </Row>
