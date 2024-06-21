@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { LockOutlined, PhoneOutlined, KeyOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Modal, Col, Row, message, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser, UserInfo } from '../../../store/userSlice'
 
 import request from '../../../utils/request'
 import {
@@ -10,13 +12,14 @@ import {
   ApiResponse,
   ForgetPwdFormValues,
   ApiType,
-  ApiResponsE
+  ApiResponsE,
 } from '../../../api/Login/LoginContent/type'
 
 
 const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 
@@ -128,8 +131,19 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
         }
         msg = res.msg;
         if (res.code === 200) {
+          console.log(res.data.roleList);
+
           localStorage.setItem('token', res.data.token);
           navigate('/admin/list');
+          const data: UserInfo = {
+            id: -1,
+            userName: '',
+            roleName: ''
+          }
+          data.id = res.data.roleList.id
+          data.userName = res.data.username
+          data.roleName = res.data.roleList.roleName
+          dispatch(setUser(data));
           if (res.data.refreshToken) {
             localStorage.setItem('refreshToken', res.data.refreshToken);
             navigate('/admin/list');
