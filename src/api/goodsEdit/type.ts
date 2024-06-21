@@ -20,7 +20,7 @@ export interface AppendGoods {
   proType: string
   startTime: string
   endTime: string
-  shippingRegin: string
+  shippingRegion: string
   supplierName: string
   supplierPhone: string
   stock: number
@@ -40,7 +40,7 @@ export interface AppendDraft {
   proType?: string
   startTime?: string
   endTime?: string
-  shippingRegin?: string
+  shippingRegion?: string
   supplierName?: string
   supplierPhone?: string
 }
@@ -58,7 +58,7 @@ export interface ModifyGoods {
   proType: string
   startTime: string
   endTime: string
-  shippingRegin: string
+  shippingRegion: string
   supplierName: string
   supplierPhone: string
 }
@@ -76,7 +76,7 @@ export interface ModifyDraft {
   proType?: string
   startTime?: string
   endTime?: string
-  shippingRegin?: string
+  shippingRegion?: string
   supplierName?: string
   supplierPhone?: string
 }

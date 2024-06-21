@@ -15,7 +15,7 @@ export interface GoodsInTable {
 }
 
 export interface GoodsQueryItem {
-  goodsId?: number
+  goodsId?: string
   goodsName?: string
   startDate?: dayjs.Dayjs
   endDate?: dayjs.Dayjs

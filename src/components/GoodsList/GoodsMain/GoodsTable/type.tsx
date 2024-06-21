@@ -1,8 +1,10 @@
 import { GoodsInTable } from "../../type"
+import type { QueryList } from "@/api/goodsList/type"
 
 export interface GoodsTableData {
   // data: GoodsInTable[]
-  tabId: string
+  tabId: number
+  tabStatus: number
   changeGoodsStatus: Function
   setGoodsList: Function
   goodsList: GoodsInTable[]
@@ -10,6 +12,8 @@ export interface GoodsTableData {
   setPagiNationInfo: Function
   total: number
   setTotal: Function
+  queryParams: QueryList
+  setQueryParams: Function
 }
 
 export interface PageInfo {

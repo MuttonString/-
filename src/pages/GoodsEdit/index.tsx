@@ -134,7 +134,7 @@ const GoodsEdit: React.FC = () => {
       requestAddGoods(totalCommit).then((res) => {
         if (res && res?.length > 0) {
           message.success('新增成功')
-          console.log(111)
+          navigate(-1)
         }
       })
     }
@@ -355,7 +355,7 @@ const GoodsEdit: React.FC = () => {
         .getFieldValue('startDate')
         .format('YYYY-MM-DDTHH:mm:ss.SSS'),
       endTime: form2.getFieldValue('endDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      shippingRegin:
+      shippingRegion:
         selectedYesCities && selectedYesCities.length > 0
           ? selectedYesCities.join()
           : '216',
