@@ -48,7 +48,7 @@ export interface ProRule {
     cash: number;
     id: string;
     integral: string;
-    priceType: string;
+    priceType: "CASH" | "INTEGRAL" | "INTEGRAL_AND_CASH";
     proId: 0;
 }
 

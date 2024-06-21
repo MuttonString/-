@@ -1,5 +1,9 @@
 import { ResponseObject } from "@/utils/type"
 
+export  interface UserInfoResponse extends ResponseObject {
+  
+}
+
 // 查询商品列表类
 export interface QueryList {
   id?: string
