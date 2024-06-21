@@ -9,12 +9,23 @@ interface propsType {
   delGoodsExchangeWays: Function
   isInitial: boolean
   isValiExchange: boolean
+  propCash: number
+  propScore: string
 }
 
 const VipInput: React.FC<propsType> = React.memo(
-  ({ typeNum, ableGoodsExchangeWays, delGoodsExchangeWays, isInitial, isValiExchange }) => {
+  ({ typeNum, ableGoodsExchangeWays, delGoodsExchangeWays, isInitial, isValiExchange, propCash, propScore }) => {
     const [cash, setCash] = useState<string>()
     const [score, setScore] = useState<string>()
+
+    useEffect(() => {
+      if (propCash >= 0) {
+        setCash(String(propCash))
+      }
+      if (+propScore >= 0) {
+        setScore(propScore)
+      }
+    },[])
 
     useEffect(() => {
       if (typeNum == 'INTEGRAL') {
@@ -193,7 +204,7 @@ const VipInput: React.FC<propsType> = React.memo(
                 placeholder="请选择"
                 style={{ width: '9.375rem' }}
                 defaultValue={
-                  typeNum == 'CASH' ? '积分' : typeNum == 'INTEGRAL_AND_CASH' ? '积分+现金' : '现金'
+                  typeNum == 'CASH' ? '现金' : typeNum == 'INTEGRAL_AND_CASH' ? '积分+现金' : '积分'
                 }
                 options={[
                   { value: 'INTEGRAL', label: '积分' },

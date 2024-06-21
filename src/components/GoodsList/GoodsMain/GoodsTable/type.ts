@@ -2,7 +2,6 @@ import { GoodsInTable } from "../../type"
 import type { QueryList } from "@/api/goodsList/type"
 
 export interface GoodsTableData {
-  // data: GoodsInTable[]
   tabId: number
   tabStatus: number
   changeGoodsStatus: Function

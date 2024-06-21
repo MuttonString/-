@@ -82,8 +82,8 @@ export interface Proxy {
 export interface ProRule {
     cash: number;
     id: string;
-    integral: number;
-    priceType: string;
+    integral: string;
+    priceType: "CASH" | "INTEGRAL" | "INTEGRAL_AND_CASH";
     proId: 0;
 }
 

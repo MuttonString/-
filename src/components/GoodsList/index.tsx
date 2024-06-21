@@ -50,7 +50,7 @@ const GoodsList: React.FC = () => {
       queryParams.adminName = undefined
      }
     if (queryItem.agent) {
-      queryParams.proxyName = queryParams.proxyName
+      queryParams.proxyName = queryItem.agent
     } else {
       queryParams.proxyName = undefined
     }
@@ -65,12 +65,12 @@ const GoodsList: React.FC = () => {
       queryParams.proStatus = undefined
     }
     if (queryItem.startDate) {
-      queryParams.startTime = queryItem.startDate.format('YYYY-MM-DDTHH:mm:ss.SSS')
+      queryParams.startTime = queryItem.startDate.format('YYYY-MM-DD HH:mm:ss')
     } else {
       queryParams.startTime = undefined
     }
     if (queryItem.endDate) {
-      queryParams.endTime = queryItem.endDate.format('YYYY-MM-DDTHH:mm:ss.SSS')
+      queryParams.endTime = queryItem.endDate.format('YYYY-MM-DD HH:mm:ss')
     } else {
       queryParams.endTime = undefined
     }

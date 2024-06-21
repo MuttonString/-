@@ -9,6 +9,7 @@ export interface SingleProRule {
 
 // 添加商品
 export interface AppendGoods {
+  id?: string 
   categoryId: string
   exchangeCap: number
   guarantee: string
@@ -29,7 +30,8 @@ export interface AppendGoods {
 
 // 添加草稿
 export interface AppendDraft {
-  categoryId?: number
+  id?: string 
+  categoryId?: string
   exchangeCap?: number
   guarantee?: string
   nonShippingRegion?: string
@@ -43,9 +45,11 @@ export interface AppendDraft {
   shippingRegion?: string
   supplierName?: string
   supplierPhone?: string
+  stock?: number
+  // detail: string
 }
 
-// 修改商品
+/* // 修改商品
 export interface ModifyGoods {
   categoryId: string
   exchangeCap: number
@@ -61,7 +65,7 @@ export interface ModifyGoods {
   shippingRegion: string
   supplierName: string
   supplierPhone: string
-}
+} */
 
 // 修改草稿
 export interface ModifyDraft {
