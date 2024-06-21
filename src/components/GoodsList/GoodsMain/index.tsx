@@ -1,22 +1,32 @@
-import React from 'react'
-import { Button, Tabs } from 'antd'
+import React, { useState } from 'react'
+import { Button, Tabs, Tooltip } from 'antd'
 import type { TabsProps } from 'antd'
-import { ReloadOutlined, ColumnHeightOutlined } from '@ant-design/icons'
+import { ReloadOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import GoodsTable from './GoodsTable'
 import type { GoodsInTable } from '../type'
 import type { MainProps } from './type'
 import styles from './index.module.less'
 
-const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo, setPagiNationInfo, total, setTotal}) => {
+const GoodsMain: React.FC<MainProps> = ({
+  goodsList,
+  setGoodsList,
+  pagiNationInfo,
+  setPagiNationInfo,
+  total,
+  setTotal,
+  queryParams,
+  setQueryParams,
+  setQueryItem,
+}) => {
   const navigate = useNavigate()
+  const [status, setStatus] = useState<number>(1)
   // 传递给子组件，让其能改变上线状态
   const changeGoodsStatus = (ids: string[] | string, status: 2 | 3) => {
     if (Array.isArray(ids)) {
       goodsList.forEach((goodsItem: GoodsInTable) => {
         if (ids.indexOf(goodsItem.id) !== -1) {
           goodsItem.proStatus = status
-          goodsItem.option = status
         }
       })
     } else {
@@ -37,6 +47,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
       children: (
         <GoodsTable
           tabId={1}
+          tabStatus={status}
           changeGoodsStatus={changeGoodsStatus}
           setGoodsList={setGoodsList}
           goodsList={goodsList}
@@ -44,6 +55,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           setPagiNationInfo={setPagiNationInfo}
           total={total}
           setTotal={setTotal}
+          queryParams={queryParams}
+          setQueryParams={setQueryParams}
         ></GoodsTable>
       ),
     },
@@ -53,6 +66,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
       children: (
         <GoodsTable
           tabId={2}
+          tabStatus={status}
           changeGoodsStatus={changeGoodsStatus}
           setGoodsList={setGoodsList}
           goodsList={goodsList}
@@ -60,6 +74,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           setPagiNationInfo={setPagiNationInfo}
           total={total}
           setTotal={setTotal}
+          queryParams={queryParams}
+          setQueryParams={setQueryParams}
         ></GoodsTable>
       ),
     },
@@ -69,6 +85,7 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
       children: (
         <GoodsTable
           tabId={3}
+          tabStatus={status}
           changeGoodsStatus={changeGoodsStatus}
           setGoodsList={setGoodsList}
           goodsList={goodsList}
@@ -76,6 +93,8 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
           setPagiNationInfo={setPagiNationInfo}
           total={total}
           setTotal={setTotal}
+          queryParams={queryParams}
+          setQueryParams={setQueryParams}
         ></GoodsTable>
       ),
     },
@@ -91,12 +110,25 @@ const GoodsMain: React.FC<MainProps> = ({goodsList, setGoodsList, pagiNationInfo
             <Button type="primary" onClick={() => navigate('/edit')}>
               新建商品
             </Button>
-            <ReloadOutlined />
-            <ColumnHeightOutlined />
+            <Tooltip title="刷新表格">
+              <ReloadOutlined
+                className={styles.refresh}
+                onClick={() => {
+                  setQueryParams({})
+                  setQueryItem({})
+                }}
+              />
+            </Tooltip>
           </div>
         </header>
         <main>
-          <Tabs defaultActiveKey="1" items={items}></Tabs>
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            onChange={(value) => {
+              setStatus(+value)
+            }}
+          ></Tabs>
         </main>
       </div>
     </>
