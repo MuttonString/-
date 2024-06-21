@@ -1,27 +1,13 @@
-import "./type";
-
 import * as echarts from "echarts";
 import request from "@/utils/request";
 import { ResponseTypE, ExchangeData } from "./type";
+import { sumObjValues } from '../index'
 
 enum API {
-  GET_Amount_of_exchange = "/order/querySales",
+  GET_AMOUNT_OF_EXCHANGE = "/order/querySales",
 }
 
-const sumObjValues = (obj: {
-  [key: string]: number[];
-}): { [key: string]: number } => {
-  const result: { [key: string]: number } = {};
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const array = obj[key];
-      result[key] = array.reduce((acc, curr) => acc + curr, 0);
-    }
-  }
-  return result;
-};
-
-export const option = {
+const option = {
   // 配置项
   title: {
     text: "兑换量",
@@ -78,15 +64,15 @@ export const option = {
   },
 };
 
-export let Data: { [key: string]: number[] } = {};
+let Data: { [key: string]: number[] } = {};
 
-export let resultData: { [key: string]: number } = {};
+let resultData: { [key: string]: number } = {};
 
 export const RequsetAmountOfExchange = async (
   dates: [number | null, number | null]
 ) => {
   const res: ResponseTypE = await request.post<unknown, ResponseTypE>(
-    API.GET_Amount_of_exchange,
+    API.GET_AMOUNT_OF_EXCHANGE,
     {
       startTime: dates[0],
       endTime: dates[1],
