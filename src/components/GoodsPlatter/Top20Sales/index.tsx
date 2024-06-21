@@ -37,6 +37,9 @@ const option = {
         data: [] as string[],
         axisLine: {
             lineStyle: { color: 'royalblue' }
+        },
+        axisLabel: {
+            interval: 0
         }
     },
     yAxis: {

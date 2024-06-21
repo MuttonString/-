@@ -6,15 +6,11 @@ import RegisterContent from "./registerContent/registerContent";
 import TextContent from "./textContent/textContent";
 
 import { Card } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 function Login() {
     const [state, setState] = useState(1)
-
-    useEffect(() => {
-        // console.log(state)
-    }, [state])
 
     function changeState(stateValue: number) {
         setState(stateValue)
