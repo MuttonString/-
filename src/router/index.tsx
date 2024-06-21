@@ -8,6 +8,8 @@ import GoodsList from '@/components/GoodsList';
 import GoodsPlatter from '@/components/GoodsPlatter';
 import GoodsEdit from '@/pages/GoodsEdit';
 
+import RouteGuard from './routeGuard'
+
 //路由配置
 const routes: RouteObject[] = [
     {
@@ -20,7 +22,7 @@ const routes: RouteObject[] = [
     },
     {
         path: '/admin',
-        element: <LayoutPage />,
+        element: <RouteGuard><LayoutPage /></RouteGuard>,
         children: [
             {
                 index: true,
@@ -35,15 +37,15 @@ const routes: RouteObject[] = [
     },
     {
         path: '/detail/:id',
-        element: <GoodsDetail />
+        element: <RouteGuard><GoodsDetail /></RouteGuard>
     },
     {
         path: '/edit/:id/:status',
-        element: <GoodsEdit />
+        element: <RouteGuard><GoodsEdit /></RouteGuard>
     },
     {
         path: '/edit',
-        element: <GoodsEdit />
+        element: <RouteGuard><GoodsEdit /></RouteGuard>
     },
     {
         path: '*',

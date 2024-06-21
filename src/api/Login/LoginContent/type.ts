@@ -32,7 +32,7 @@ export interface ApiResponsE {
   data: {
     refreshToken: string;
     token: string;
-    roleList: roleListType
+    roleList: roleListType[]
     username: string;
   };
 }
