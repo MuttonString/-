@@ -1,5 +1,7 @@
 import { SingleCategory } from "@/api/goodsEdit/type"
 
+// 通过遍历获取所以商品类的最低级分类（叶子节点）
+
 function getChildCategoryLists(data: SingleCategory[]): SingleCategory[] {
   let result: SingleCategory[] = [];
 

@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, message } from 'antd'
+import { Table, Button, message, Typography } from 'antd'
 import { NavLink } from 'react-router-dom'
 import { TableColumnsType, Popconfirm } from 'antd'
 import dayjs from 'dayjs'
 import styles from './index.module.less'
-import { requestGoodsOnline, requestGoodsOffline, requestBatchGoodsOnline, requestBatchGoodsOffline } from '@/api/goodsList'
+import {
+  requestGoodsOnline,
+  requestGoodsOffline,
+  requestBatchGoodsOnline,
+  requestBatchGoodsOffline,
+} from '@/api/goodsList'
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
 import { requestQueryList } from '@/api/goodsList'
+
+const { Paragraph } = Typography
 
 const GoodsTable: React.FC<GoodsTableData> = ({
   // data,
@@ -20,7 +27,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   setPagiNationInfo,
   total,
   setTotal,
-  queryParams
+  queryParams,
 }) => {
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
@@ -52,9 +59,8 @@ const GoodsTable: React.FC<GoodsTableData> = ({
       requestQueryList({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
-        ...queryParams
+        ...queryParams,
       }).then((res) => {
-        console.log('全部数据:', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
@@ -69,9 +75,8 @@ const GoodsTable: React.FC<GoodsTableData> = ({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
         proStatus: 2,
-        ...queryParams
+        ...queryParams,
       }).then((res) => {
-        console.log('上线数据', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
@@ -86,9 +91,8 @@ const GoodsTable: React.FC<GoodsTableData> = ({
         page: pagiNationInfo.page,
         pageSize: pagiNationInfo.pageSize,
         proStatus: 3,
-        ...queryParams
+        ...queryParams,
       }).then((res) => {
-        console.log('下线数据', res)
         setGoodsList(res?.records)
         setTotal(res?.total)
       })
@@ -135,7 +139,13 @@ const GoodsTable: React.FC<GoodsTableData> = ({
     {
       title: '权益ID',
       dataIndex: 'id',
-      render: (id: string) => <NavLink to={`/detail/${id}`}>{id}</NavLink>,
+      render: (id: string, record) => {
+        return (
+          <Paragraph copyable={{ text: id }}>
+            <NavLink to={`/detail/${id}`}>{id}</NavLink>
+          </Paragraph>
+        )
+      },
     },
     {
       title: '商品名称',
@@ -219,9 +229,11 @@ const GoodsTable: React.FC<GoodsTableData> = ({
               title="下线商品"
               description={`你确定要下线【${record.proName}】吗？`}
               onConfirm={() => {
-                changeGoodsStatus(record.id, 3)
-                requestGoodsOffline(record.id).then(res => {
-                  message.info(res)
+                requestGoodsOffline(record.id).then((res) => {
+                  if (res) {
+                    changeGoodsStatus(record.id, 3)
+                    message.info(res)
+                  }
                 })
               }}
               okText="确定"
@@ -248,9 +260,11 @@ const GoodsTable: React.FC<GoodsTableData> = ({
                 width: '4.375rem',
               }}
               onClick={() => {
-                changeGoodsStatus(record.id, 2)
-                requestGoodsOnline(record.id).then(res => {
-                  message.success(res)
+                requestGoodsOnline(record.id).then((res) => {
+                  if (res) {
+                    changeGoodsStatus(record.id, 2)
+                    message.success(res)
+                  }
                 })
               }}
             >
@@ -277,14 +291,20 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             okText="确定"
             cancelText="取消"
             onConfirm={() => {
-              changeGoodsStatus(
-                selectedGoods?.map(
-                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
-                ),
-                3
-              )
-              setShowWhich(2)
-              requestBatchGoodsOffline(selectedGoods.map(item => item.id))
+              requestBatchGoodsOffline(
+                selectedGoods.map((item) => item.id)
+              ).then((res) => {
+                if (res) {
+                  changeGoodsStatus(
+                    selectedGoods?.map(
+                      (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
+                    ),
+                    3
+                  )
+                  setShowWhich(2)
+                  message.success(res)
+                }
+              })
             }}
           >
             <p>批量下线</p>
@@ -292,15 +312,19 @@ const GoodsTable: React.FC<GoodsTableData> = ({
         ) : (
           <p
             onClick={() => {
-              changeGoodsStatus(
-                selectedGoods?.map(
-                  (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
-                ),
-                2
-              )
-              setShowWhich(1)
-              requestBatchGoodsOnline(selectedGoods.map(item => item.id)).then(res => {
-                message.success(res)
+              requestBatchGoodsOnline(
+                selectedGoods.map((item) => item.id)
+              ).then((res) => {
+                if (res) {
+                  changeGoodsStatus(
+                    selectedGoods?.map(
+                      (selectedGoodsItem: GoodsInTable) => selectedGoodsItem.id
+                    ),
+                    2
+                  )
+                  setShowWhich(1)
+                  message.success(res)
+                }
               })
             }}
           >
@@ -314,8 +338,6 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             current: pagiNationInfo.page,
             total: total,
             onChange: (page: number, pageSize: number) => {
-              console.log('当前页码：', page)
-              console.log('每页数量：', pageSize)
               if (page != pagiNationInfo.page) {
                 setPagiNationInfo({ ...pagiNationInfo, page })
               }
@@ -331,7 +353,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onChange: handlerTableChange,
           }}
           columns={columns}
-          dataSource={goodsList.map((item,index) => {
+          dataSource={goodsList.map((item, index) => {
             return {
               ...item,
               key: index,
