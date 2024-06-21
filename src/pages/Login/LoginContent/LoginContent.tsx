@@ -67,7 +67,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
   async function onResetPassword(values: ForgetPwdFormValues) {
 
-    await request.put<ApiType, ApiType>('/user/forgetPwd', {
+    await request.put<unknown, ApiType>('/user/forgetPwd', {
       code: values.verificationCodeForgetPassword,
       phone: values.phone,
       password: values.password
@@ -131,8 +131,6 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
         }
         msg = res.msg;
         if (res.code === 200) {
-          console.log(res.data.roleList);
-
           localStorage.setItem('token', res.data.token);
           navigate('/admin/list');
           const data: UserInfo = {
@@ -140,9 +138,10 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
             userName: '',
             roleName: ''
           }
-          data.id = res.data.roleList.id
+          data.id = res.data.roleList[0].id
           data.userName = res.data.username
-          data.roleName = res.data.roleList.roleName
+          data.roleName = res.data.roleList[0].roleName
+          
           dispatch(setUser(data));
           if (res.data.refreshToken) {
             localStorage.setItem('refreshToken', res.data.refreshToken);
