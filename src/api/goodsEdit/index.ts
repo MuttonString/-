@@ -1,11 +1,14 @@
 import request from "@/utils/request"
-import { AllCategoryResponse, AppendGoods } from "./type"
+import { AllCategoryResponse, AppendDraft, AppendGoods } from "./type"
 import { ResponseObject } from "@/utils/type"
 import { message } from "antd"
 
 enum API {
-  GET_ALL_CATEGORY='api/category/getAll',
-  APPEND_GOODS='api/product/insertPro'
+  GET_ALL_CATEGORY='/category/getAll',
+  APPEND_GOODS='/product/insertPro',
+  MODIFY_GOODS='/product/updatePro',
+  Append_DRAFT='/product/insertDraft',
+  MODIFY_DRAFT='/product/updateDraft'
 }
 
 export const requestAllCategory= async () => {
@@ -15,6 +18,7 @@ export const requestAllCategory= async () => {
   }
   message.error(`${result.msg}(${result.code})`)
 }
+
 export const requestAddGoods = async (goodsInfo: AppendGoods) => {
   const result = await request.post<unknown, ResponseObject>(API.APPEND_GOODS, goodsInfo)
   if (result.code == 200) {
@@ -23,3 +27,26 @@ export const requestAddGoods = async (goodsInfo: AppendGoods) => {
   message.error(`${result.msg}(${result.code})`)
 }
 
+export const requestUpdateGoods = async (goodsInfo: AppendGoods) => {
+  const result = await request.post<unknown, ResponseObject>(API.MODIFY_GOODS, goodsInfo)
+  if (result.code == 200) {
+    return "修改成功"
+  }
+  message.error(`${result.msg}(${result.code})`)
+}
+
+export const requestAppendDraft = async (goodInfo: AppendDraft) => {
+  const result = await request.post<unknown, ResponseObject>(API.Append_DRAFT, goodInfo)
+  if (result.code == 200) {
+    return "新增成功"
+  }
+  message.error(`${result.msg}(${result.code})`)
+}
+
+export const requestModifyDraft = async (goodInfo: AppendDraft) => {
+  const result = await request.post<unknown, ResponseObject>(API.MODIFY_DRAFT)
+  if (result.code == 200) {
+    return "修改成功"
+  }
+  message.error(`${result.msg}(${result.code})`)
+}

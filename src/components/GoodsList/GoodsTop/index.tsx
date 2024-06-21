@@ -3,7 +3,6 @@ import { Row, Col, Input, Select, Button, DatePicker } from 'antd'
 import { UpOutlined, DownOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import type { TopProps } from './type'
-import type { GoodsQueryItem } from '../type'
 import styles from './index.module.less'
         
 const textStyle: React.CSSProperties = {
@@ -11,9 +10,10 @@ const textStyle: React.CSSProperties = {
   whiteSpace: 'nowrap',
 }
 
-const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
+const GoodsTop: React.FC<TopProps> = ({ changeQueryList, queryItem, setQueryItem }) => {
   const [isRetract, setIsRetract] = useState<boolean>(false) //是否收缩
-  const [queryItem, setQueryItem] = useState<GoodsQueryItem>({}) //收集查询项
+
+  
   const mainRef = useRef<HTMLDivElement>(null) // 动态添加类名
 
   const changeRetract = () => {
@@ -36,7 +36,7 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
             value={queryItem.goodsId}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if (e.currentTarget.value && e.currentTarget.value !== '')
-                setQueryItem({ ...queryItem, goodsId: +e.currentTarget.value })
+                setQueryItem({ ...queryItem, goodsId: e.currentTarget.value })
               else {
                 setQueryItem({ ...queryItem, goodsId: undefined })
               }
@@ -50,8 +50,9 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
             placeholder="请输入"
             value={queryItem.goodsName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.currentTarget.value && e.currentTarget.value !== '')
+              if (e.currentTarget.value && e.currentTarget.value !== ''){
                 setQueryItem({ ...queryItem, goodsName: e.currentTarget.value })
+              }
               else {
                 setQueryItem({ ...queryItem, goodsName: undefined })
               }
@@ -83,6 +84,7 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
           <p style={textStyle}>结束时间：</p>
           <DatePicker
             className={styles['top-input']}
+            showTime
             placeholder="请输入"
             onChange={(value: dayjs.Dayjs) => {
               if (value)
@@ -104,17 +106,17 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
             className={styles['top-input']}
             placeholder="请输入"
             options={[
-              { value: 0, label: '草稿' },
-              { value: 1, label: '待提交' },
-              { value: 2, label: '待审核' },
-              { value: 3, label: '审核通过' },
-              { value: 4, label: '审核未通过' },
-              { value: 5, label: '运行中' },
-              { value: 6, label: '已下线' },
+              { value: 0, label: '待提交审核' },
+              { value: 1, label: '待上线' },
+              { value: 2, label: '上线' },
+              { value: 3, label: '下线' },
+              { value: 4, label: '审核驳回' },
+              { value: 5, label: '待审核' },
+              { value: 6, label: '草稿' },
             ]}
             value={queryItem.goodsStatus}
             onChange={(value: number) => {
-              if (value) {
+              if (value !== undefined) {
                 setQueryItem({
                   ...queryItem,
                   goodsStatus: value,
@@ -174,7 +176,6 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, setQueryZero }) => {
             onClick={() => {
               setQueryItem({})
               changeQueryList({}, true)
-              setQueryZero(false)
             }}
           >
             重置

@@ -9,13 +9,14 @@ import type { PageInfo } from './GoodsMain/GoodsTable/type'
 
 const GoodsList: React.FC = () => {
   const [goodsList, setGoodsList] = useState<GoodsInTable[]>([]) // 商品总列表
+  const [queryItem, setQueryItem] = useState<GoodsQueryItem>({}) //收集查询项
   const [pagiNationInfo, setPagiNationInfo] = useState<PageInfo>({
     // 分页信息
     page: 1,
-    pageSize: 20,
-    total: 0,
+    pageSize: 20
   })
-  const [queryZero, setQueryZero] = useState<boolean>(false)
+  const [queryParams, setQueryParams] = useState<QueryList>({})
+  const [total, setTotal] = useState<number>(0) 
 
   const [messageApi, contextHolder] = message.useMessage() //message消息提示导入
 
@@ -28,40 +29,52 @@ const GoodsList: React.FC = () => {
   //传递给Top,收集查询项并查询渲染
   const changeQueryList = (queryItem: GoodsQueryItem, reset = false) => {
     if (reset) {
-      //Todo 请求默认数据
+      setQueryParams({})
       return
     }
     const values = Object.values(queryItem)
     if (values.length === 0 || values.every((value) => value === undefined)) {
       //Todo 请求默认数据
+      setQueryParams({})
       errorQueryNull()
       return
     }
-    const queryParams: QueryList = {}
     if (queryItem.goodsId) {
       queryParams.id = queryItem.goodsId
+    } else {
+      queryParams.id = undefined
     }
     if (queryItem.admin) {
       queryParams.adminName = queryItem.admin
-    }
+    } else {
+      queryParams.adminName = undefined
+     }
     if (queryItem.agent) {
       queryParams.proxyName = queryItem.agent
+    } else {
+      queryParams.proxyName = undefined
     }
     if (queryItem.goodsName) {
       queryParams.proName = queryItem.goodsName
+    } else {
+      queryParams.proName = undefined
     }
-    if (queryItem.goodsStatus) {
+    if (Number(queryItem.goodsStatus) >= 0) {
       queryParams.proStatus = queryItem.goodsStatus
+    } else {
+      queryParams.proStatus = undefined
     }
     if (queryItem.startDate) {
-      queryParams.startTime = queryItem.startDate.toISOString()
+      queryParams.startTime = queryItem.startDate.format('YYYY-MM-DD HH:mm:ss')
+    } else {
+      queryParams.startTime = undefined
     }
     if (queryItem.endDate) {
-      queryParams.endTime = queryItem.endDate.toISOString()
+      queryParams.endTime = queryItem.endDate.format('YYYY-MM-DD HH:mm:ss')
+    } else {
+      queryParams.endTime = undefined
     }
-    queryParams.page = pagiNationInfo.page
-    queryParams.pageSize = pagiNationInfo.pageSize
-    // 请求携带queryParams参数的条件商品列表
+    setQueryParams({...queryParams})
   }
   return (
     <>
@@ -69,14 +82,19 @@ const GoodsList: React.FC = () => {
       <div className={styles.main}>
         <GoodsTop
           changeQueryList={changeQueryList}
-          setQueryZero={setQueryZero}
+          queryItem={queryItem}
+          setQueryItem={setQueryItem}
         ></GoodsTop>
         <GoodsMain
           goodsList={goodsList}
           setGoodsList={setGoodsList}
-          queryZero={queryZero}
           pagiNationInfo={pagiNationInfo}
           setPagiNationInfo={setPagiNationInfo}
+          total={total}
+          setTotal={setTotal}
+          queryParams={queryParams}
+          setQueryParams={setQueryParams}
+          setQueryItem={setQueryItem}
         ></GoodsMain>
       </div>
     </>
