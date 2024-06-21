@@ -32,5 +32,12 @@ export interface ApiResponsE {
   data: {
     refreshToken: string;
     token: string;
+    roleList: roleListType
+    username: string;
   };
+}
+
+export interface roleListType {
+  id: number;
+  roleName: string;
 }
