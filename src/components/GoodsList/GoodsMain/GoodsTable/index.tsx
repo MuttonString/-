@@ -139,7 +139,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
     {
       title: '权益ID',
       dataIndex: 'id',
-      render: (id: string, record) => {
+      render: (id: string) => {
         return (
           <Paragraph copyable={{ text: id }}>
             <NavLink to={`/detail/${id}`}>{id}</NavLink>
