@@ -3,11 +3,18 @@ import { useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Modal, Typography, Row, Col, message } from 'antd';
 
 import request from '../../../utils/request'
-import { LoginContentProps, ApiResponse, ApiType, RegisterFormValues } from '../../../api/Login/registerContent/type'
+
+import {
+    LoginContentProps,
+    RegisterFormValues,
+    ApiResponse,
+    ApiType
+} from '../../../api/Login/registerContent/type'
+// import { } from '../../../api/Login/registerContent/index'
+
 
 
 const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
-
 
     const { Title, Paragraph } = Typography;
 
@@ -45,7 +52,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
         setIsModalOpen(true);
     };
 
-    function changeStateToLogin() {
+    const changeStateToLogin = () => {
         changeState(1);
     }
 
