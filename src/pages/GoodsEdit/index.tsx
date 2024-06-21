@@ -356,8 +356,8 @@ const GoodsEdit: React.FC = () => {
       stock: stock!,
       startTime: form2
         .getFieldValue('startDate')
-        .format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        .format('YYYY-MM-DD HH:mm:ss'),
+      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DD HH:mm:ss'),
       shippingRegion:
         selectedYesCities && selectedYesCities.length > 0
           ? selectedYesCities.join()
