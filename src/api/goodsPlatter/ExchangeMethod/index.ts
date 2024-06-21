@@ -49,7 +49,7 @@ let resultData: { [key: string]: number } = {};
 
 let result: resultType[] = [];
 
-export const RequsetMethodOfExchange = async (
+export const requestMethodOfExchange = async (
   dates: [number | null, number | null]
 ) => {
   const res: ResponseTypE = await request.post<unknown, ResponseTypE>(
@@ -69,7 +69,7 @@ export const getData = async (dates: [number | null, number | null]) => {
 
   result = [];
 
-  const res = await RequsetMethodOfExchange(dates);
+  const res = await requestMethodOfExchange(dates);
 
   if (res.code === 200) {
     if (res.data !== null && res.data.length !== 0) {

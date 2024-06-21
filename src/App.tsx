@@ -1,5 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
 import router from './router';
+// import RouteGuard from './router/routeGuard'
 import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider, theme } from 'antd';
 import { useState } from 'react';
@@ -16,6 +17,9 @@ function App() {
             }}
         >
             <RouterProvider router={router}></RouterProvider>
+            {/* <RouteGuard>
+                <RouterProvider router={router}></RouterProvider>
+            </RouteGuard> */}
         </ConfigProvider>
     );
 }

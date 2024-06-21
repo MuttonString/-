@@ -4,43 +4,17 @@ import { Button, Checkbox, Form, Input, Modal, Col, Row, message, Typography } f
 import { useNavigate } from 'react-router-dom';
 
 import request from '../../../utils/request'
+import {
+  LoginFormValues,
+  LoginContentProps,
+  ApiResponse,
+  ForgetPwdFormValues,
+  ApiType,
+  ApiResponsE
+} from '../../../api/Login/LoginContent/type'
 
-interface LoginFormValues {
-  phone: string;
-  password: string;
-  remember: boolean;
-}
-
-interface LoginContentProps {
-  changeState: (stateValue: number) => void;
-}
-
-interface ApiResponse {
-  code: number;
-  msg: string;
-  data: string;
-}
-
-interface ForgetPwdFormValues {
-  phone: string;
-  password: string;
-  verificationCodeForgetPassword: string;
-}
-
-interface ApiType {
-  code: number;
-  msg: string;
-  data: string;
-}
 
 const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
-  useEffect(() => {
-    setTimeout(() => {
-      if (animation.current !== null) {
-        animation.current.style.opacity = '1';
-      }
-    });
-  }, [])
 
   const navigate = useNavigate();
 
@@ -59,6 +33,14 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [messageApiResetPassword, contextHolderResetPassword] = message.useMessage();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (animation.current !== null) {
+        animation.current.style.opacity = '1';
+      }
+    });
+  }, [])
 
   const showModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,17 +114,8 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
 
   async function login(values: LoginFormValues) {
 
-    interface ApiResponse {
-      code: number;
-      msg: string;
-      data: {
-        refreshToken: string;
-        token: string;
-      };
-    }
-
     await request
-      .post<ApiResponse, ApiResponse>(
+      .post<unknown, ApiResponsE>(
         values.remember ? '/user/autoLogin' : '/user/login',
         {
           password: values.password,
@@ -171,7 +144,7 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
       //发送验证码
 
       await request
-        .get<ApiResponse, ApiResponse>(`/user/code/${phone}/${2}`)
+        .get<unknown, ApiResponse>(`/user/code/${phone}/${2}`)
         .then(res => {
           const success = (
             data: string | null = localStorage.getItem(

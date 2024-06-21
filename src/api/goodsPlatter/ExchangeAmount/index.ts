@@ -68,7 +68,7 @@ let Data: { [key: string]: number[] } = {};
 
 let resultData: { [key: string]: number } = {};
 
-export const RequsetAmountOfExchange = async (
+export const requestAmountOfExchange = async (
   dates: [number | null, number | null]
 ) => {
   const res: ResponseTypE = await request.post<unknown, ResponseTypE>(
@@ -85,7 +85,7 @@ export const getData = async (dates: [number | null, number | null]) => {
   Data = {};
   resultData = {};
 
-  const res = await RequsetAmountOfExchange(dates);
+  const res = await requestAmountOfExchange(dates);
 
   if (res.code === 200) {
     if (res.data !== null && res.data.length !== 0) {

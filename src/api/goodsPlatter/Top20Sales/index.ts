@@ -52,7 +52,7 @@ const option = {
 
 let Data: { [key: string]: number } = {};
 
-export const requsetTop20Sales = async (
+export const requestTop20Sales = async (
   dates: [number | null, number | null]
 ) => {
   const res: responseTypE = await request.post<unknown, responseTypE>(
@@ -68,7 +68,7 @@ export const requsetTop20Sales = async (
 export const getData = async (dates: [number | null, number | null]) => {
   Data = {};
 
-  const res = await requsetTop20Sales(dates);
+  const res = await requestTop20Sales(dates);
 
   if (res.code === 200) {
     if (res.data !== null && res.data.length !== 0) {
