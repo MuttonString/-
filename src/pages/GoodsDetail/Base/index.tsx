@@ -1,10 +1,10 @@
 import { Col, Divider, Row, Image } from 'antd';
 import styles from './index.module.less';
 import { GoodsDetailData } from '@/api/goodsDetail/type';
+import dayjs from 'dayjs';
 
 const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
     if (!goods) return null;
-    console.log(goods);
 
     return (
         <div className={styles.main}>
@@ -26,8 +26,14 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                 <Col span={8}>库存：{goods.stock}件</Col>
             </Row>
             <Row>
-                <Col span={8}>上线时间：{goods.startTime}</Col>
-                <Col span={8}>下线时间：{goods.endTime}</Col>
+                <Col span={8}>
+                    上线时间：
+                    {dayjs(goods.startTime).format('YYYY-MM-DD HH:mm:ss')}
+                </Col>
+                <Col span={8}>
+                    下线时间：
+                    {dayjs(goods.endTime).format('YYYY-MM-DD HH:mm:ss')}
+                </Col>
             </Row>
             <Row>
                 <Col span={8}>服务保障：{goods.guarantee}</Col>

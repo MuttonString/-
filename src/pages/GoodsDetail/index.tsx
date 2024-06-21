@@ -38,12 +38,10 @@ const { Title, Text } = Typography;
 
 const getGoodsDetail = async (
     id: string,
-    setGoods: React.Dispatch<React.SetStateAction<GoodsDetailData | undefined>>,
-    setStatus: React.Dispatch<React.SetStateAction<string | undefined>>
+    setGoods: React.Dispatch<React.SetStateAction<GoodsDetailData | undefined>>
 ) => {
     const goods = await reqGoodsDetail(id);
     setGoods(goods);
-    setStatus(goods?.proStatus);
 };
 
 const getSelectableProxys = async (
@@ -65,12 +63,12 @@ const GoodsDetail: React.FC = () => {
     const [goods, setGoods] = useState<GoodsDetailData>();
     const [remark, setRemark] = useState('');
     const [pass, setPass] = useState(true);
-    const [status, setStatus] = useState(goods?.proStatus);
     const [transferOpen, setTransferOpen] = useState(false);
     const [proxyOpen, setProxyOpen] = useState(false);
     const [selectableProxys, setSelectableProxys] = useState<Proxy[]>();
     const [loading, setLoading] = useState(false);
-    useState(() => getGoodsDetail(id, setGoods, setStatus));
+    useState(() => getGoodsDetail(id, setGoods));
+
     const items: TabsProps['items'] = [
         {
             key: 'base',
@@ -110,13 +108,13 @@ const GoodsDetail: React.FC = () => {
                                 编辑
                             </Button>
 
-                            {status === '待审核' && (
+                            {goods?.proStatus === '待审核' && (
                                 <Popconfirm
                                     title='发起审核'
                                     description='确定发起审核？'
                                     onConfirm={() => {
                                         reqAudit({ proId: id });
-                                        getGoodsDetail(id, setGoods, setStatus);
+                                        window.location.reload();
                                     }}
                                     okText='确定'
                                     cancelText='取消'
@@ -126,13 +124,13 @@ const GoodsDetail: React.FC = () => {
                             )}
 
                             {/* // TODO: Super Admin */}
-                            {status === '审核中' && (
+                            {goods?.proStatus === '审核中' && (
                                 <Button
                                     type='primary'
                                     onClick={() => {
                                         setAuditOpen(true);
                                         setPass(true);
-                                        getGoodsDetail(id, setGoods, setStatus);
+                                        window.location.reload();
                                     }}
                                 >
                                     审核通过
@@ -140,43 +138,44 @@ const GoodsDetail: React.FC = () => {
                             )}
 
                             {/* // TODO: Super Admin */}
-                            {status === '审核中' && (
+                            {goods?.proStatus === '审核中' && (
                                 <Button
                                     type='primary'
                                     onClick={() => {
                                         setAuditOpen(true);
                                         setPass(false);
-                                        getGoodsDetail(id, setGoods, setStatus);
+                                        window.location.reload();
                                     }}
                                 >
                                     审批驳回
                                 </Button>
                             )}
 
-                            {status === '待上线' && (
-                                <Popconfirm
-                                    title='上线'
-                                    description='确定上线该商品？'
-                                    onConfirm={() => {
-                                        reqGoodsOnline(id);
-                                        getGoodsDetail(id, setGoods, setStatus);
-                                    }}
-                                    okText='确定'
-                                    cancelText='取消'
-                                >
-                                    <Button type='primary' danger>
-                                        上线
-                                    </Button>
-                                </Popconfirm>
-                            )}
+                            {goods?.proStatus === '待上线' ||
+                                (goods?.proStatus === '已下线' && (
+                                    <Popconfirm
+                                        title='上线'
+                                        description='确定上线该商品？'
+                                        onConfirm={() => {
+                                            reqGoodsOnline(id);
+                                            window.location.reload();
+                                        }}
+                                        okText='确定'
+                                        cancelText='取消'
+                                    >
+                                        <Button type='primary' danger>
+                                            上线
+                                        </Button>
+                                    </Popconfirm>
+                                ))}
 
-                            {status === '运行中' && (
+                            {goods?.proStatus === '运行中' && (
                                 <Popconfirm
                                     title='下线'
                                     description='确定下线该商品？'
                                     onConfirm={() => {
                                         reqGoodsOffline(id);
-                                        getGoodsDetail(id, setGoods, setStatus);
+                                        window.location.reload();
                                     }}
                                     okText='确定'
                                     cancelText='取消'
@@ -254,7 +253,7 @@ const GoodsDetail: React.FC = () => {
                         </Col>
                         <Col span={11}>
                             <Title level={4} style={{ float: 'right' }}>
-                                {status}
+                                {goods?.proStatus}
                             </Title>
                         </Col>
                         <Col span={1} />
