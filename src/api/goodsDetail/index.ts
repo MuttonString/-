@@ -1,5 +1,9 @@
 import request from '@/utils/request';
-import { AuditRequest, GoodsDetailResponse } from './type';
+import {
+    AuditRequest,
+    GoodsDetailResponse,
+    SelectableProxysResponse
+} from './type';
 import { message } from 'antd';
 import { ResponseObject } from '@/utils/type';
 
@@ -62,6 +66,16 @@ export async function reqGoodsOffline(id: string) {
     );
     if (result.code === 200) {
         return;
+    }
+    message.error(`${result.msg}（${result.code}）`);
+}
+
+export async function reqSelectableProxys(id: string) {
+    const result = await request.get<unknown, SelectableProxysResponse>(
+        `/user/proxyOptional/${id}`
+    );
+    if (result.code === 200) {
+        return result.data;
     }
     message.error(`${result.msg}（${result.code}）`);
 }
