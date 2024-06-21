@@ -36,6 +36,7 @@ import {
     reqTransfer
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
+import { useSelector } from 'react-redux';
 
 const { Title, Text } = Typography;
 
@@ -205,7 +206,7 @@ const GoodsDetail: React.FC = () => {
                     <Row>
                         <Col span={8}>
                             <Text strong>管理人：</Text>
-                            <Text>{goods?.admin}</Text>
+                            <Text>{goods?.admin.userName}</Text>
                             {/* // TODO: Self */}
                             {true && (
                                 <Button

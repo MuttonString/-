@@ -37,7 +37,10 @@ export interface GoodsDetailData {
         | '审核驳回'
         | '审核中'
         | '草稿';
-    admin: string;
+    admin: {
+        userId: string;
+        userName: string;
+    }
 }
 export interface Proxy {
     userId: string;
