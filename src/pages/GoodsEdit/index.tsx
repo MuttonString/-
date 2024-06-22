@@ -78,7 +78,7 @@ const GoodsEdit: React.FC = () => {
   const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>() //选择的不发货城市
   const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>() //选择的投放城市
   const [childCategoryList, setChildCategoryList] = useState<SingleCategory[]>() //节点分类
-  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新
+  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新 3.草稿
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
   // 返回上一页
@@ -356,8 +356,8 @@ const GoodsEdit: React.FC = () => {
       stock: stock!,
       startTime: form2
         .getFieldValue('startDate')
-        .format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        .format('YYYY-MM-DD HH:mm:ss'),
+      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DD HH:mm:ss'),
       shippingRegion:
         selectedYesCities && selectedYesCities.length > 0
           ? selectedYesCities.join()
@@ -840,7 +840,7 @@ const GoodsEdit: React.FC = () => {
           <Button style={{ marginLeft: '1.25rem' }} onClick={resetAllForm}>
             重置
           </Button>
-          <Button style={{ marginLeft: '12rem', display: status === 1 ? 'none' : 'inline' }}>暂存</Button>
+          <Button style={{ marginLeft: '12rem', display: status === 1 ? 'inline' : 'none' }}>暂存</Button>
         </div>
       </div>
     </>
