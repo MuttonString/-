@@ -27,7 +27,7 @@ const RouteGuard = ({ children }: { children: JSX.Element }) => {
     }
 
     // 检查用户是否已登录以及是否有访问权限
-    if (!userInfo) {
+    if (!userInfo || userInfo.id < 0) {
         return <Navigate to="/login" />;
     }
 
