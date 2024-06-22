@@ -42,7 +42,6 @@ import convertCities from '@/utils/covertCities'
 import getChildCategoryLists from '@/utils/traverseCategoryList'
 import { GoodsDetailData } from '@/api/goodsDetail/type'
 import { reqGoodsDetail } from '@/api/goodsDetail'
-import { stat } from 'fs'
 
 /* 全局编辑或新增界面 */
 interface EditPros {
@@ -168,7 +167,7 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
           })
         return
       } else if (status === 4) {
-        requestUpdateGoods({ ...totalCommit, id: params.id })
+        requestModifyDraft({ ...totalCommit, id: params.id })
           .then((res) => {
             if (res) {
               navigate(-1)
@@ -179,8 +178,7 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
             console.error(e + '失败')
             setStatus(4)
           })
-      }
-      if (status === 5) {
+      } else if (status === 5) {
         requestAddGoods({ ...totalCommit, id: params.id })
           .then((res) => {
             if (res) {
@@ -437,7 +435,6 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
       setTotalCommit({ ...allData, id: params.id })
       return
     }
-    console.log(111)
     setTotalCommit(allData)
   }
 
