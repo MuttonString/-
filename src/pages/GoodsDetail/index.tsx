@@ -36,6 +36,7 @@ import {
     reqTransfer
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
+
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/store/userSlice';
@@ -80,7 +81,6 @@ const GoodsDetail: React.FC = () => {
     }, [id]);
 
     const dispatch = useDispatch();
-    console.log(useSelector(select => select.user));
 
     const items: TabsProps['items'] = [
         {

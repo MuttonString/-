@@ -40,12 +40,16 @@ const routes: RouteObject[] = [
         element: <RouteGuard><GoodsDetail /></RouteGuard>
     },
     {
-        path: '/edit/:id/:status',
-        element: <RouteGuard><GoodsEdit /></RouteGuard>
+        path: '/edit/:id',
+        element: <RouteGuard><GoodsEdit isEditDraft={false}/></RouteGuard>
     },
     {
         path: '/edit',
-        element: <RouteGuard><GoodsEdit /></RouteGuard>
+        element: <RouteGuard><GoodsEdit isEditDraft={false}/></RouteGuard>
+    },
+    {
+        path: '/editDraft',
+        element: <RouteGuard><GoodsEdit isEditDraft={true}/></RouteGuard>
     },
     {
         path: '*',
