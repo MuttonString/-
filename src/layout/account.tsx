@@ -15,7 +15,12 @@ const Account: React.FC<{ style: React.CSSProperties }> = ({ style }) => {
         <div style={style}>
             {userInfo && userInfo.id >= 0 ? (
                 <>
-                    <span style={{ marginRight: '24px' }}>
+                    <span
+                        style={{
+                            marginRight: '24px',
+                            color: 'var(--main-fg-color)'
+                        }}
+                    >
                         {userInfo.userName}（{userInfo.roleName}）
                     </span>
                     <Button
