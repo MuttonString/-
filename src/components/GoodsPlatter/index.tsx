@@ -54,17 +54,22 @@ const GoodsPlatter: React.FC = () => {
   const onCalendarChange = (newDates: [dayjs.Dayjs | null, dayjs.Dayjs | null]) => {
     // 当选择的日期范围超过60天时,重置选择器
     if (newDates[0] && newDates[1]) {
-      const start = newDates[0];
-      const end = newDates[1];
+      let start = newDates[0];
+      let end = newDates[1];
+
+      // 检查开始日期是否大于结束日期，并进行交换
+      if (start.isAfter(end)) {
+        [start, end] = [end, start]; // 交换 start 和 end
+      }
+
       const duration = end.diff(start, 'day');
 
       if (duration > 59) {
         alert('日期范围不能超过60天');
         // 重置选择器
-
         setDates([eighthDayAgoRef.current, yesterdayRef.current]);
       } else {
-        setDates(newDates);
+        setDates([start, end]);
       }
     }
   };
