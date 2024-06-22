@@ -42,6 +42,17 @@ import { UserInfo } from '@/store/userSlice';
 
 const { Title, Text } = Typography;
 
+const change = {
+    待审核: '待提交审核',
+    待上线: '待上线',
+    运行中: '运行中',
+    已下线: '已下线',
+    审核驳回: '审核驳回',
+    审核中: '待审核',
+    草稿: '草稿',
+    未知: '未知'
+};
+
 const getGoodsDetail = async (
     id: string,
     setGoods: React.Dispatch<React.SetStateAction<GoodsDetailData | undefined>>
@@ -322,7 +333,13 @@ const GoodsDetail: React.FC = () => {
                         </Col>
                         <Col span={11}>
                             <Title level={4} style={{ float: 'right' }}>
-                                {goods?.proStatus}
+                                {
+                                    change[
+                                        goods?.proStatus
+                                            ? goods.proStatus
+                                            : '未知'
+                                    ]
+                                }
                             </Title>
                         </Col>
                         <Col span={1} />
@@ -346,8 +363,14 @@ const GoodsDetail: React.FC = () => {
                                 proId: id,
                                 desc: remark
                             };
-                            if (pass) reqAuditPass(obj);
-                            else reqAuditDown(obj);
+                            if (pass)
+                                reqAuditPass(obj).then(() =>
+                                    getGoodsDetail(id, setGoods)
+                                );
+                            else
+                                reqAuditDown(obj).then(() =>
+                                    getGoodsDetail(id, setGoods)
+                                );
                             setRemark('');
                             setAuditOpen(false);
                         }}
