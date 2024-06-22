@@ -353,7 +353,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
             onChange: handlerTableChange,
           }}
           columns={columns}
-          dataSource={goodsList.map((item, index) => {
+          dataSource={goodsList?.map((item, index) => {
             return {
               ...item,
               key: index,
