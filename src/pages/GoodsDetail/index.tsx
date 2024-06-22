@@ -37,8 +37,7 @@ import {
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/userSlice';
+import { UserInfo } from '@/store/userSlice';
 
 const { Title, Text } = Typography;
 
@@ -79,8 +78,9 @@ const GoodsDetail: React.FC = () => {
         getGoodsDetail(id, setGoods);
     }, [id]);
 
-    const dispatch = useDispatch();
-    console.log(useSelector(select => select.user));
+    const userInfo = useSelector(
+        state => (state as { user: { userInfo: UserInfo } }).user.userInfo
+    );
 
     const items: TabsProps['items'] = [
         {
@@ -95,8 +95,7 @@ const GoodsDetail: React.FC = () => {
         }
     ];
 
-    // TODO: Super Admin
-    if (true) {
+    if (userInfo?.roleName === '超级管理员') {
         items.push({
             key: 'operation',
             label: '操作记录',
@@ -106,11 +105,6 @@ const GoodsDetail: React.FC = () => {
 
     return (
         <Row className={styles.main}>
-            <button
-                onClick={() => {
-                    dispatch(setUser(12345 as any));
-                }}
-            >1111</button>
             <Col sm={0} md={2} xxl={6} />
             <Col sm={24} md={20} xxl={12}>
                 <Typography className={styles.typography}>
@@ -148,31 +142,31 @@ const GoodsDetail: React.FC = () => {
                                 </Popconfirm>
                             )}
 
-                            {/* // TODO: Super Admin */}
-                            {goods?.proStatus === '审核中' && (
-                                <Button
-                                    type='primary'
-                                    onClick={() => {
-                                        setAuditOpen(true);
-                                        setPass(true);
-                                    }}
-                                >
-                                    审核通过
-                                </Button>
-                            )}
+                            {userInfo?.roleName === '超级管理员' &&
+                                goods?.proStatus === '审核中' && (
+                                    <Button
+                                        type='primary'
+                                        onClick={() => {
+                                            setAuditOpen(true);
+                                            setPass(true);
+                                        }}
+                                    >
+                                        审核通过
+                                    </Button>
+                                )}
 
-                            {/* // TODO: Super Admin */}
-                            {goods?.proStatus === '审核中' && (
-                                <Button
-                                    type='primary'
-                                    onClick={() => {
-                                        setAuditOpen(true);
-                                        setPass(false);
-                                    }}
-                                >
-                                    审批驳回
-                                </Button>
-                            )}
+                            {userInfo?.roleName === '超级管理员' &&
+                                goods?.proStatus === '审核中' && (
+                                    <Button
+                                        type='primary'
+                                        onClick={() => {
+                                            setAuditOpen(true);
+                                            setPass(false);
+                                        }}
+                                    >
+                                        审批驳回
+                                    </Button>
+                                )}
 
                             {(goods?.proStatus === '待上线' ||
                                 goods?.proStatus === '已下线') && (
@@ -217,8 +211,7 @@ const GoodsDetail: React.FC = () => {
                         <Col span={8}>
                             <Text strong>管理人：</Text>
                             <Text>{goods?.admin.userName}</Text>
-                            {/* // TODO: Self */}
-                            {true && (
+                            {(goods?.admin.userId === userInfo?.userId || goods?.proxys) && (
                                 <Button
                                     type='link'
                                     onClick={() => {
@@ -242,8 +235,8 @@ const GoodsDetail: React.FC = () => {
                                     ? goods.proxys.map((item, idx, arr) => (
                                           <span key={item.userId}>
                                               {item.userName}
-                                              {/* // TODO: Self */}
-                                              {true && (
+                                              {goods.admin.userId ===
+                                                  userInfo?.userId && (
                                                   <Popconfirm
                                                       title='删除代理人'
                                                       description='确定删除该代理人？'
@@ -277,8 +270,7 @@ const GoodsDetail: React.FC = () => {
                                       ))
                                     : '无'}
                             </Text>
-                            {/* // TODO: Self */}
-                            {true && (
+                            {goods?.admin.userId === userInfo?.userId && (
                                 <Button
                                     type='link'
                                     onClick={() => {

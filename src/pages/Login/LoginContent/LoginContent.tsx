@@ -136,11 +136,13 @@ const LoginContent: React.FC<LoginContentProps> = ({ changeState }) => {
           const data: UserInfo = {
             id: -1,
             userName: '',
-            roleName: ''
+            roleName: '',
+            userId: ''
           }
           data.id = res.data.roleList[0].id
           data.userName = res.data.username
           data.roleName = res.data.roleList[0].roleName
+          data.userId = res.data.userId
           
           dispatch(setUser(data));
           if (res.data.refreshToken) {

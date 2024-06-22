@@ -23,7 +23,7 @@ const RouteGuard = (props: { children: JSX.Element }) => {
                 return <Navigate to="/" />;
             }
         } else {
-            return <Navigate to="/" />;
+            return <Navigate to="/login" />;
         }
 
     }
