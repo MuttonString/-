@@ -30,6 +30,7 @@ import {
   requestAddGoods,
   requestUpdateGoods,
   requestAppendDraft,
+  requestModifyDraft,
 } from '@/api/goodsEdit'
 import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
@@ -71,7 +72,7 @@ const provinceKeys: React.Key[] = Array.from({ length: 35 }, (_, i) =>
   (i + 1).toString()
 )
 
-const GoodsEdit: React.FC<EditPros> = () => {
+const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
   const [goodsExchangeWays, setGoodsExchangeWays] = useState<VipInputType[]>([]) //兑换方式状态管理
   const [selectedExchangeWay, setSelectedExchangeWay] = useState<
     'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
@@ -87,7 +88,7 @@ const GoodsEdit: React.FC<EditPros> = () => {
   const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>() //选择的不发货城市
   const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>() //选择的投放城市
   const [childCategoryList, setChildCategoryList] = useState<SingleCategory[]>() //节点分类
-  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新 3.暂存
+  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新 3.暂存 4.编辑暂存 5.提交暂存
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
   // 返回上一页
@@ -107,7 +108,14 @@ const GoodsEdit: React.FC<EditPros> = () => {
 
   // 初始取得要初始化的数据
   useEffect(() => {
-    if (params.id) {
+    if (isEditDraft && params.id) {
+      setStatus(4)
+      reqGoodsDetail(params.id).then((res) => {
+        if (res) {
+          setBackShow(res)
+        }
+      })
+    } else if (params.id) {
       setStatus(2)
       reqGoodsDetail(params.id).then((res) => {
         if (res) {
@@ -133,37 +141,67 @@ const GoodsEdit: React.FC<EditPros> = () => {
   useEffect(() => {
     if (totalCommit) {
       if (status === 2) {
-        requestUpdateGoods(totalCommit).then((res) => {
-          if (res) {
-            message.success('修改成功')
-            navigate(-1)
-          }
-        }).catch(e => {
-          console.error(e+'失败')
-          setStatus(2)
-        })
+        requestUpdateGoods(totalCommit)
+          .then((res) => {
+            if (res) {
+              message.success('修改成功')
+              navigate(-1)
+            }
+          })
+          .catch((e) => {
+            console.error(e + '失败')
+            setStatus(2)
+          })
         return
       } else if (status === 3) {
-        requestAppendDraft(totalCommit).then((res) => {
-          if (res) {
-            navigate(-1)
-            message.success('暂存成功')
-          }
-        }).catch(e => {
-          console.error(e+'失败')
-          setStatus(3)
-        })
+        requestAppendDraft(totalCommit)
+          .then((res) => {
+            if (res) {
+              navigate(-1)
+              message.success('暂存成功')
+            }
+          })
+          .catch((e) => {
+            console.error(e + '失败')
+            setStatus(3)
+          })
         return
+      } else if (status === 4) {
+        requestModifyDraft({ ...totalCommit, id: params.id })
+          .then((res) => {
+            if (res) {
+              navigate(-1)
+              message.success('更新草稿成功')
+            }
+          })
+          .catch((e) => {
+            console.error(e + '失败')
+            setStatus(4)
+          })
+      } else if (status === 5) {
+        requestAddGoods({ ...totalCommit, id: params.id })
+          .then((res) => {
+            if (res) {
+              navigate(-1)
+              message.success('提交草稿成功')
+            }
+          })
+          .catch((e) => {
+            console.error(e + '失败')
+            setStatus(4)
+          })
       } else
-        requestAddGoods(totalCommit).then((res) => {
-          if (res && res?.length > 0) {
-            message.success('新增成功')
-            navigate(-1)
-          }
-        }).catch(e => {
-          console.error(e+'失败')
-          setStatus(1)
-        })
+        requestAddGoods(totalCommit)
+          .then((res) => {
+            if (res && res?.length > 0) {
+              message.success('新增成功')
+              navigate(-1)
+            }
+          })
+          .catch((e) => {
+            console.error(e + '失败')
+            setStatus(1)
+          })
     }
   }, [totalCommit])
 
@@ -294,6 +332,9 @@ const GoodsEdit: React.FC<EditPros> = () => {
 
   const handlerCommit = async () => {
     //校验两个antd表单，通过try-catch-finally确保实现双表都能校验，以及后续自定义表单项校验
+    if (status === 4) {
+      setStatus(5)
+    }
     let isThrow = false
     try {
       await form1.validateFields()
@@ -394,7 +435,6 @@ const GoodsEdit: React.FC<EditPros> = () => {
       setTotalCommit({ ...allData, id: params.id })
       return
     }
-    console.log(111)
     setTotalCommit(allData)
   }
 
@@ -442,8 +482,12 @@ const GoodsEdit: React.FC<EditPros> = () => {
     setSelectedNonCities(backData.nonShippingRegion.split(','))
     setExchangeLimit(backData.exchageCap)
     setStock(backData.stock)
-    form2.setFieldValue('startDate', dayjs(backData.startTime))
-    form2.setFieldValue('endDate', dayjs(backData.endTime))
+    if (backData.startTime) {
+      form2.setFieldValue('startDate', dayjs(backData.startTime))
+    }
+    if (backData.endTime) {
+      form2.setFieldValue('endDate', dayjs(backData.endTime))
+    }
     setSelectedYesCities(backData.shippingRegion?.split(','))
   }
 
@@ -451,6 +495,12 @@ const GoodsEdit: React.FC<EditPros> = () => {
   const handlerWhileSave = () => {
     collectForm()
     setStatus(3)
+  }
+
+  //处理修改暂存
+  const handlerWhileEditSave = () => {
+    collectForm()
+    setStatus(4)
   }
 
   return (
@@ -885,9 +935,16 @@ const GoodsEdit: React.FC<EditPros> = () => {
           <Button
             style={{
               marginLeft: '12rem',
-              display: status === 1 ? 'inline' : 'none',
+              display:
+                status === 1 || status === 3 || status === 4
+                  ? 'inline'
+                  : 'none',
             }}
-            onClick={handlerWhileSave}
+            onClick={
+              status === 1 || status === 3
+                ? handlerWhileSave
+                : handlerWhileEditSave
+            }
           >
             暂存
           </Button>
