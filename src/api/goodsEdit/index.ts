@@ -44,7 +44,7 @@ export const requestAppendDraft = async (goodInfo: AppendDraft) => {
 }
 
 export const requestModifyDraft = async (goodInfo: AppendDraft) => {
-  const result = await request.post<unknown, ResponseObject>(API.MODIFY_DRAFT)
+  const result = await request.post<unknown, ResponseObject>(API.MODIFY_DRAFT, goodInfo)
   if (result.code == 200) {
     return "修改成功"
   }
