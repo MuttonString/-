@@ -34,6 +34,7 @@ export interface ApiResponsE {
     token: string;
     roleList: roleListType[]
     username: string;
+    userId: string;
   };
 }
 

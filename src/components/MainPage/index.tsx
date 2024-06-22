@@ -1,3 +1,6 @@
+import mainPageImg from '@/assets/images/homepage.png';
+import logoImg from '@/assets/images/logoImage.png';
+
 const divStyle: React.CSSProperties = {
     height: 'calc(100vh - 64px)',
     width: '100%',
@@ -5,7 +8,7 @@ const divStyle: React.CSSProperties = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     margin: 0,
-    backgroundImage: 'url("/src/assets/images/homepage.png")',
+    backgroundImage: `url("${mainPageImg}")`,
     color: 'white',
     textAlign: 'center'
 };
@@ -25,11 +28,7 @@ const h1Style: React.CSSProperties = {
 const MainPage: React.FC = () => {
     return (
         <div style={divStyle}>
-            <img
-                alt=''
-                src='/src/assets/images/logoImage.png'
-                style={imgStyle}
-            />
+            <img alt='' src={logoImg} style={imgStyle} />
             <h1 style={h1Style}>欢迎来到数字马力商品管理系统</h1>
         </div>
     );

@@ -4,6 +4,7 @@ export interface UserInfo {
   id: number;
   userName: string
   roleName: string
+  userId: string
 }
 
 interface UserState {
