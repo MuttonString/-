@@ -75,7 +75,7 @@ const GoodsPlatter: React.FC = () => {
       }
 
       if (start >= today || end >= today) {
-        alert('日期范围不能超过60天');
+        alert('时间超过');
         console.log("时间超过");
         // 重置选择器
         setDates([eighthDayAgoRef.current, yesterdayRef.current]);
