@@ -18,9 +18,12 @@ const GoodsMain: React.FC<MainProps> = ({
   queryParams,
   setQueryParams,
   setQueryItem,
+  statusIsAble,
+  setStatusIsAble
 }) => {
   const navigate = useNavigate()
   const [status, setStatus] = useState<number>(1)
+  
   // 传递给子组件，让其能改变上线状态
   const changeGoodsStatus = (ids: string[] | string, status: 2 | 3) => {
     if (Array.isArray(ids)) {
@@ -57,6 +60,8 @@ const GoodsMain: React.FC<MainProps> = ({
           setTotal={setTotal}
           queryParams={queryParams}
           setQueryParams={setQueryParams}
+          statusIsAble={statusIsAble}
+          setStatusIsAble={setStatusIsAble}
         ></GoodsTable>
       ),
     },
@@ -76,6 +81,8 @@ const GoodsMain: React.FC<MainProps> = ({
           setTotal={setTotal}
           queryParams={queryParams}
           setQueryParams={setQueryParams}
+          statusIsAble={statusIsAble}
+          setStatusIsAble={setStatusIsAble}
         ></GoodsTable>
       ),
     },
@@ -95,6 +102,8 @@ const GoodsMain: React.FC<MainProps> = ({
           setTotal={setTotal}
           queryParams={queryParams}
           setQueryParams={setQueryParams}
+          statusIsAble={statusIsAble}
+          setStatusIsAble={setStatusIsAble}
         ></GoodsTable>
       ),
     },
@@ -130,6 +139,11 @@ const GoodsMain: React.FC<MainProps> = ({
               setStatus(+value)
               setQueryParams({})
               setQueryItem({})
+              if (value === "2" || value === "3"){
+                setStatusIsAble(false)
+              } else {
+                setStatusIsAble(true)
+              }
             }}
           ></Tabs>
         </main>

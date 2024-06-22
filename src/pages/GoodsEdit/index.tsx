@@ -435,7 +435,6 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
           : '216',
     }
     if (status === 2) {
-      console.log(params.id)
       setTotalCommit({ ...allData, id: params.id })
       return
     }
@@ -455,14 +454,16 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
   const setBackShow = (backData: GoodsDetailData) => {
     form1.setFieldValue('goodsName', backData.proName)
     setGoodsAvatar(backData.poster)
-    setFileList([
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: backData.poster,
-      },
-    ])
+    if (backData.poster){
+      setFileList([
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: backData.poster,
+        },
+      ])
+    }
     form1.setFieldValue('goodsDesc', backData.proDesc)
     form1.setFieldValue('goodsType', backData.proType)
     form1.setFieldValue('goodsCategory', backData.categoryId)
@@ -940,7 +941,7 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
             style={{
               marginLeft: '12rem',
               display:
-                status === 1 || status === 3 || status === 4
+                status === 1 || status === 3 || status === 4 || status === 5
                   ? 'inline'
                   : 'none',
             }}

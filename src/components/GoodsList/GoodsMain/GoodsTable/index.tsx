@@ -29,7 +29,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   setPagiNationInfo,
   total,
   setTotal,
-  queryParams,
+  queryParams
 }) => {
   const [showWhich, setShowWhich] = useState<number>(0) // 控制批量按钮显示， 0不显示，1显示批量下线，2显示批量上线
   const [mutiCount, setMultiCount] = useState<number>(0) // 记录批量数量

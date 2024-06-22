@@ -10,7 +10,7 @@ const textStyle: React.CSSProperties = {
   whiteSpace: 'nowrap',
 }
 
-const GoodsTop: React.FC<TopProps> = ({ changeQueryList, queryItem, setQueryItem }) => {
+const GoodsTop: React.FC<TopProps> = ({ changeQueryList, queryItem, setQueryItem, statusIsAble }) => {
   const [isRetract, setIsRetract] = useState<boolean>(false) //是否收缩
 
   
@@ -105,6 +105,7 @@ const GoodsTop: React.FC<TopProps> = ({ changeQueryList, queryItem, setQueryItem
           <Select
             className={styles['top-input']}
             placeholder="请输入"
+            disabled={!statusIsAble}
             options={[
               { value: 0, label: '待提交审核' },
               { value: 1, label: '待上线' },
