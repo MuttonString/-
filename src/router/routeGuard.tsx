@@ -1,5 +1,4 @@
-// import { Navigate,useLocation } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { UserInfo } from '../store/userSlice'
 
@@ -17,19 +16,17 @@ const RouteGuard = (props: { children: JSX.Element }) => {
     if (WhiteList.indexOf((pathname ? pathname : "/")) === -1) {
         console.log(pathname);
         console.log(userInfo);
-        
-    }
+        if (userInfo.user.userInfo === null) {
+            return <Navigate to="/login" />;
+        } else if (userInfo.user.userInfo.roleName === "运营小二" || userInfo.user.userInfo.roleName === "超级管理员") {
+            if (userInfo.user.userInfo.roleName !== "超级管理员" && pathname === "/admin/platter") {
+                return <Navigate to="/" />;
+            }
+        } else {
+            return <Navigate to="/" />;
+        }
 
-    // if(WhiteList.indexOf((pathname?pathname:"/")) === -1){
-    //     let token = localStorage.getItem("token","rem432412341324");
-    //     if(token){
-    //         return props.children;
-    //     }else{
-    //         return <Navigate to = "/login" />;
-    //     }
-    // }else{
-    //     return props.children;
-    // }
+    }
     return props.children
 }
 
