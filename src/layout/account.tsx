@@ -22,8 +22,15 @@ const Account: React.FC<{ style: React.CSSProperties }> = ({ style }) => {
                         danger
                         onClick={() => {
                             dispatch(
-                                setUser({ id: -1, userName: '', roleName: '' })
+                                setUser({
+                                    id: -1,
+                                    userName: '',
+                                    roleName: '',
+                                    userId: ''
+                                })
                             );
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('refreshToken');
                             navigate('/login');
                         }}
                     >

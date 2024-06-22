@@ -116,32 +116,44 @@ const GoodsDetail: React.FC = () => {
                         </Button>
                         {goods?.proName}
                         <Flex wrap gap='small' className={styles.buttons}>
-                            {(goods?.proStatus === '已下线' ||
-                                goods?.proStatus === '草稿') && (
-                                <Button
-                                    type='primary'
-                                    onClick={() => {
-                                        navigate('/edit/' + id);
-                                    }}
-                                >
-                                    编辑
-                                </Button>
-                            )}
+                            {(goods?.admin.userId === userInfo?.userId ||
+                                goods?.proxys
+                                    .map(item => item.userId)
+                                    .includes(goods?.admin.userId)) &&
+                                (goods?.proStatus === '已下线' ||
+                                    goods?.proStatus === '草稿') && (
+                                    <Button
+                                        type='primary'
+                                        onClick={() => {
+                                            navigate(
+                                                goods.proStatus === '草稿'
+                                                    ? `/edit/${id}/6`
+                                                    : `/edit/${id}/6`
+                                            );
+                                        }}
+                                    >
+                                        编辑
+                                    </Button>
+                                )}
 
-                            {goods?.proStatus === '待审核' && (
-                                <Popconfirm
-                                    title='发起审核'
-                                    description='确定发起审核？'
-                                    onConfirm={() => {
-                                        reqAudit({ proId: id });
-                                        getGoodsDetail(id, setGoods);
-                                    }}
-                                    okText='确定'
-                                    cancelText='取消'
-                                >
-                                    <Button type='primary'>发起审核</Button>
-                                </Popconfirm>
-                            )}
+                            {(goods?.admin.userId === userInfo?.userId ||
+                                goods?.proxys
+                                    .map(item => item.userId)
+                                    .includes(goods?.admin.userId)) &&
+                                goods?.proStatus === '待审核' && (
+                                    <Popconfirm
+                                        title='发起审核'
+                                        description='确定发起审核？'
+                                        onConfirm={() => {
+                                            reqAudit({ proId: id });
+                                            getGoodsDetail(id, setGoods);
+                                        }}
+                                        okText='确定'
+                                        cancelText='取消'
+                                    >
+                                        <Button type='primary'>发起审核</Button>
+                                    </Popconfirm>
+                                )}
 
                             {userInfo?.roleName === '超级管理员' &&
                                 goods?.proStatus === '审核中' && (
@@ -169,42 +181,52 @@ const GoodsDetail: React.FC = () => {
                                     </Button>
                                 )}
 
-                            {(goods?.proStatus === '待上线' ||
-                                goods?.proStatus === '已下线') && (
-                                <Popconfirm
-                                    title='上线'
-                                    description='确定上线该商品？'
-                                    onConfirm={() => {
-                                        reqGoodsOnline(id).then(() =>
-                                            getGoodsDetail(id, setGoods)
-                                        );
-                                    }}
-                                    okText='确定'
-                                    cancelText='取消'
-                                >
-                                    <Button type='primary' danger>
-                                        上线
-                                    </Button>
-                                </Popconfirm>
-                            )}
+                            {(goods?.admin.userId === userInfo?.userId ||
+                                goods?.proxys
+                                    .map(item => item.userId)
+                                    .includes(goods?.admin.userId) ||
+                                userInfo?.roleName === '超级管理员') &&
+                                (goods?.proStatus === '待上线' ||
+                                    goods?.proStatus === '已下线') && (
+                                    <Popconfirm
+                                        title='上线'
+                                        description='确定上线该商品？'
+                                        onConfirm={() => {
+                                            reqGoodsOnline(id).then(() =>
+                                                getGoodsDetail(id, setGoods)
+                                            );
+                                        }}
+                                        okText='确定'
+                                        cancelText='取消'
+                                    >
+                                        <Button type='primary' danger>
+                                            上线
+                                        </Button>
+                                    </Popconfirm>
+                                )}
 
-                            {goods?.proStatus === '运行中' && (
-                                <Popconfirm
-                                    title='下线'
-                                    description='确定下线该商品？'
-                                    onConfirm={() => {
-                                        reqGoodsOffline(id).then(() =>
-                                            getGoodsDetail(id, setGoods)
-                                        );
-                                    }}
-                                    okText='确定'
-                                    cancelText='取消'
-                                >
-                                    <Button type='primary' danger>
-                                        下线
-                                    </Button>
-                                </Popconfirm>
-                            )}
+                            {(goods?.admin.userId === userInfo?.userId ||
+                                goods?.proxys
+                                    .map(item => item.userId)
+                                    .includes(goods?.admin.userId) ||
+                                userInfo?.roleName === '超级管理员') &&
+                                goods?.proStatus === '运行中' && (
+                                    <Popconfirm
+                                        title='下线'
+                                        description='确定下线该商品？'
+                                        onConfirm={() => {
+                                            reqGoodsOffline(id).then(() =>
+                                                getGoodsDetail(id, setGoods)
+                                            );
+                                        }}
+                                        okText='确定'
+                                        cancelText='取消'
+                                    >
+                                        <Button type='primary' danger>
+                                            下线
+                                        </Button>
+                                    </Popconfirm>
+                                )}
                         </Flex>
                     </Title>
                     <Divider />
@@ -212,7 +234,7 @@ const GoodsDetail: React.FC = () => {
                         <Col span={8}>
                             <Text strong>管理人：</Text>
                             <Text>{goods?.admin.userName}</Text>
-                            {(goods?.admin.userId === userInfo?.userId || goods?.proxys) && (
+                            {goods?.admin.userId === userInfo?.userId && (
                                 <Button
                                     type='link'
                                     onClick={() => {
@@ -236,7 +258,7 @@ const GoodsDetail: React.FC = () => {
                                     ? goods.proxys.map((item, idx, arr) => (
                                           <span key={item.userId}>
                                               {item.userName}
-                                              {goods.admin.userId ===
+                                              {goods?.admin.userId ===
                                                   userInfo?.userId && (
                                                   <Popconfirm
                                                       title='删除代理人'
