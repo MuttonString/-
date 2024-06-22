@@ -13,6 +13,8 @@ import {
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
 import { requestQueryList } from '@/api/goodsList'
+import { useSelector } from 'react-redux'
+import { UserInfo } from '@/store/userSlice'
 
 const { Paragraph } = Typography
 
@@ -32,6 +34,10 @@ const GoodsTable: React.FC<GoodsTableData> = ({
   const [showWhich, setShowWhich] = useState<number>(0)
   const [mutiCount, setMultiCount] = useState<number>(0)
   const [selectedGoods, setSelectedGoods] = useState<GoodsInTable[]>([])
+
+  const userInfo = useSelector(
+    state => (state as { user: { userInfo: UserInfo } }).user.userInfo
+);
   useEffect(() => {
     requestDiff()
   }, [pagiNationInfo, tabStatus, queryParams])
@@ -158,10 +164,18 @@ const GoodsTable: React.FC<GoodsTableData> = ({
     {
       title: '开始时间',
       dataIndex: 'startTime',
+      render: (startTime: string) => {
+        if (startTime === null) return "null"
+        else return dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
+      }
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
+      render: (endTime: string) => {
+        if (endTime === null) return "null"
+        else return dayjs(endTime).format('YYYY-MM-DD HH:mm:ss')
+      }
     },
     {
       title: '商品状态',
@@ -202,7 +216,7 @@ const GoodsTable: React.FC<GoodsTableData> = ({
     },
     {
       title: '管理人',
-      dataIndex: 'admin',
+      dataIndex: 'adminName',
     },
     {
       title: '操作',
