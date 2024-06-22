@@ -13,8 +13,8 @@ import {
 import type { GoodsInTable } from '../../type'
 import type { GoodsTableData } from './type'
 import { requestQueryList } from '@/api/goodsList'
-// import { useSelector } from 'react-redux'
-// import { UserInfo } from '@/store/userSlice'
+import { useSelector } from 'react-redux'
+import { UserInfo } from '@/store/userSlice'
 
 const { Paragraph } = Typography
 
