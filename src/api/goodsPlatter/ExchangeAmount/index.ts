@@ -52,6 +52,7 @@ const option = {
     {
       type: "line",
       data: [] as number[],
+      smooth: 0.5, // 设置折线弧度
     },
   ],
   label: {

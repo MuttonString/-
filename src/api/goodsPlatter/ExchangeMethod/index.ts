@@ -20,7 +20,7 @@ const option = {
   tooltip: {
     trigger: "item",
     //控制提示格式
-    formatter: "{b}:{c}占比({d}%)",
+    formatter: "{b}: {c}单  时间段占比({d}%)",
   },
   legend: {
     orient: "vertical", //图例的布局，水平布局、垂直布局
