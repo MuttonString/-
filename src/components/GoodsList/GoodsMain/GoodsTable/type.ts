@@ -13,6 +13,8 @@ export interface GoodsTableData {
   setTotal: Function
   queryParams: QueryList
   setQueryParams: Function
+  statusIsAble: boolean
+  setStatusIsAble: Function
 }
 
 export interface PageInfo {

@@ -10,6 +10,7 @@ import type { PageInfo } from './GoodsMain/GoodsTable/type'
 const GoodsList: React.FC = () => {
   const [goodsList, setGoodsList] = useState<GoodsInTable[]>([]) // 商品总列表
   const [queryItem, setQueryItem] = useState<GoodsQueryItem>({}) //收集查询项
+  const [statusIsAble, setStatusIsAble] = useState<boolean>(true) // 状态是否可选择
   const [pagiNationInfo, setPagiNationInfo] = useState<PageInfo>({
     // 分页信息
     page: 1,
@@ -28,6 +29,7 @@ const GoodsList: React.FC = () => {
   }
   //传递给Top,收集查询项并查询渲染
   const changeQueryList = (queryItem: GoodsQueryItem, reset = false) => {
+    setPagiNationInfo({...pagiNationInfo, page: 1})
     if (reset) {
       setQueryParams({})
       return
@@ -84,6 +86,7 @@ const GoodsList: React.FC = () => {
           changeQueryList={changeQueryList}
           queryItem={queryItem}
           setQueryItem={setQueryItem}
+          statusIsAble={statusIsAble}
         ></GoodsTop>
         <GoodsMain
           goodsList={goodsList}
@@ -95,6 +98,8 @@ const GoodsList: React.FC = () => {
           queryParams={queryParams}
           setQueryParams={setQueryParams}
           setQueryItem={setQueryItem}
+          statusIsAble={statusIsAble}
+          setStatusIsAble={setStatusIsAble}
         ></GoodsMain>
       </div>
     </>

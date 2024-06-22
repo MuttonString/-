@@ -11,4 +11,6 @@ export interface MainProps {
   queryParams: QueryList
   setQueryParams: Function
   setQueryItem: Function
+  statusIsAble: boolean
+  setStatusIsAble: Function
 }
