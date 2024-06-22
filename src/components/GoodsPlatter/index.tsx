@@ -41,7 +41,7 @@ const GoodsPlatter: React.FC = () => {
 
     // 设置默认日期范围
     setDates([eighthDayAgoRef.current, yesterdayRef.current]);
-  }, []); // 注意这里没有依赖项数组，所以此effect只在组件挂载时执行一次
+  }, []);
 
   const { RangePicker } = DatePicker;
 
@@ -57,6 +57,8 @@ const GoodsPlatter: React.FC = () => {
       let start = newDates[0];
       let end = newDates[1];
 
+      const today = dayjs();
+
       // 检查开始日期是否大于结束日期，并进行交换
       if (start.isAfter(end)) {
         [start, end] = [end, start]; // 交换 start 和 end
@@ -70,6 +72,13 @@ const GoodsPlatter: React.FC = () => {
         setDates([eighthDayAgoRef.current, yesterdayRef.current]);
       } else {
         setDates([start, end]);
+      }
+
+      if (start >= today || end >= today) {
+        alert('日期范围不能超过60天');
+        console.log("时间超过");
+        // 重置选择器
+        setDates([eighthDayAgoRef.current, yesterdayRef.current]);
       }
     }
   };
