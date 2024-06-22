@@ -36,8 +36,6 @@ import {
     reqTransfer
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
-import { useSelector } from 'react-redux';
-
 const { Title, Text } = Typography;
 
 const getGoodsDetail = async (

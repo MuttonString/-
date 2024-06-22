@@ -25,7 +25,7 @@ import {
 import { nanoid } from 'nanoid'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { requestAllCategory, requestAddGoods, requestUpdateGoods } from '@/api/goodsEdit'
+import { requestAllCategory, requestAddGoods, requestUpdateGoods, requestAppendDraft } from '@/api/goodsEdit'
 import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
@@ -38,6 +38,10 @@ import { GoodsDetailData } from '@/api/goodsDetail/type'
 import { reqGoodsDetail } from '@/api/goodsDetail'
 
 /* 全局编辑或新增界面 */
+interface EditPros {
+  isEditDraft: boolean
+}
+
 const TextArea = Input.TextArea
 
 const textStyle: React.CSSProperties = {
@@ -62,7 +66,7 @@ const provinceKeys: React.Key[] = Array.from({ length: 35 }, (_, i) =>
   (i + 1).toString()
 )
 
-const GoodsEdit: React.FC = () => {
+const GoodsEdit: React.FC<EditPros> = () => {
   const [goodsExchangeWays, setGoodsExchangeWays] = useState<VipInputType[]>([]) //兑换方式状态管理
   const [selectedExchangeWay, setSelectedExchangeWay] = useState<
     'CASH' | 'INTEGRAL' | 'INTEGRAL_AND_CASH'
@@ -78,7 +82,7 @@ const GoodsEdit: React.FC = () => {
   const [selectedNonCities, setSelectedNonCities] = useState<React.Key[]>() //选择的不发货城市
   const [selectedYesCities, setSelectedYesCities] = useState<React.Key[]>() //选择的投放城市
   const [childCategoryList, setChildCategoryList] = useState<SingleCategory[]>() //节点分类
-  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新 3.草稿
+  const [status, setStatus] = useState<number>() //设置当前页状态 1.新增 2.更新 3.暂存
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
   // 返回上一页
@@ -128,6 +132,14 @@ const GoodsEdit: React.FC = () => {
           if(res) {
             message.success('修改成功')
             navigate(-1)
+          }
+        })
+        return
+      } else if (status === 3) {
+        requestAppendDraft(totalCommit).then(res => {
+          if (res) {
+            navigate(-1)
+            message.success('暂存成功')
           }
         })
         return
@@ -356,8 +368,8 @@ const GoodsEdit: React.FC = () => {
       stock: stock!,
       startTime: form2
         .getFieldValue('startDate')
-        .format('YYYY-MM-DD HH:mm:ss'),
-      endTime: form2.getFieldValue('endDate').format('YYYY-MM-DD HH:mm:ss'),
+        ?.format('YYYY-MM-DD HH:mm:ss'),
+      endTime: form2.getFieldValue('endDate')?.format('YYYY-MM-DD HH:mm:ss'),
       shippingRegion:
         selectedYesCities && selectedYesCities.length > 0
           ? selectedYesCities.join()
@@ -368,6 +380,7 @@ const GoodsEdit: React.FC = () => {
       setTotalCommit({...allData, id: params.id})
       return
     }
+    console.log(111)
     setTotalCommit(allData)
   }
 
@@ -407,6 +420,12 @@ const GoodsEdit: React.FC = () => {
     form2.setFieldValue('startDate', dayjs(backData.startTime))
     form2.setFieldValue('endDate', dayjs(backData.endTime))
     setSelectedYesCities(backData.shippingRegion?.split(','))
+  }
+
+  //处理暂存
+  const handlerWhileSave = () => {
+    collectForm()
+    setStatus(3)
   }
 
   return (
@@ -840,7 +859,7 @@ const GoodsEdit: React.FC = () => {
           <Button style={{ marginLeft: '1.25rem' }} onClick={resetAllForm}>
             重置
           </Button>
-          <Button style={{ marginLeft: '12rem', display: status === 1 ? 'inline' : 'none' }}>暂存</Button>
+          <Button style={{ marginLeft: '12rem', display: status === 1 ? 'inline' : 'none' }} onClick={handlerWhileSave}>暂存</Button>
         </div>
       </div>
     </>
