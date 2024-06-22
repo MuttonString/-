@@ -204,6 +204,7 @@ const RegisterContent: React.FC<LoginContentProps> = ({ changeState }) => {
                     ]}
                 >
                     <Input
+                        autoFocus
                         prefix={<PhoneOutlined className="site-form-item-icon" />}
                         placeholder="手机号"
                     />
