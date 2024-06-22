@@ -56,7 +56,7 @@ const routes: RouteObject[] = [
         element: <NotFoundPage />
     }
 ];
-
+    
 const router = createBrowserRouter(routes);
 
 export default router;

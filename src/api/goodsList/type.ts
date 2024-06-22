@@ -1,9 +1,5 @@
 import { ResponseObject } from "@/utils/type"
 
-export  interface UserInfoResponse extends ResponseObject {
-  
-}
-
 // 查询商品列表类
 export interface QueryList {
   id?: string
@@ -15,6 +11,7 @@ export interface QueryList {
   proxyName?: string
   startTime?: string
   endTime?: string
+  proxyIds?: string
 }
 
 // 查询返回商品列表
