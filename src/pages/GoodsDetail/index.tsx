@@ -127,8 +127,8 @@ const GoodsDetail: React.FC = () => {
                                         onClick={() => {
                                             navigate(
                                                 goods.proStatus === '草稿'
-                                                    ? `/edit/${id}/6`
-                                                    : `/edit/${id}/6`
+                                                    ? `/editDraft/${id}`
+                                                    : `/edit/${id}`
                                             );
                                         }}
                                     >
