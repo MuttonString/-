@@ -20,12 +20,13 @@ const RouteGuard = (props: { children: JSX.Element }) => {
             return <Navigate to="/login" />;
         } else if (userInfo.user.userInfo.roleName === "运营小二" || userInfo.user.userInfo.roleName === "超级管理员") {
             if (userInfo.user.userInfo.roleName !== "超级管理员" && pathname === "/admin/platter") {
+                alert("您没有权限访问该页面")
                 return <Navigate to="/" />;
             }
         } else {
-            return <Navigate to="/" />;
+            alert("请登录!")
+            return <Navigate to="/login" />;
         }
-
     }
     return props.children
 }
