@@ -23,7 +23,7 @@ import {
   LeftOutlined,
 } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
-import axios from 'axios'
+// import axios from 'axios'
 import dayjs from 'dayjs'
 import {
   requestAllCategory,
@@ -35,13 +35,14 @@ import {
 import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
-import type { CitiesInTree, AreaData } from './type'
+import type { CitiesInTree } from './type'
 import type { SingleCategory } from '@/api/goodsEdit/type'
 import VipInput from './VipInput'
 import convertCities from '@/utils/covertCities'
 import getChildCategoryLists from '@/utils/traverseCategoryList'
 import { GoodsDetailData } from '@/api/goodsDetail/type'
 import { reqGoodsDetail } from '@/api/goodsDetail'
+import cities from '@/assets/json/cities.json'
 
 /* 全局编辑或新增界面 */
 interface EditPros {
@@ -125,11 +126,14 @@ const GoodsEdit: React.FC<EditPros> = ({ isEditDraft }) => {
     } else {
       setStatus(1)
     }
-    axios.get('/src/assets/json/cities.json').then((res) => {
-      const cities: AreaData = res.data
-      const formedTreeCities: CitiesInTree[] = convertCities(cities)
-      setCitesTree(formedTreeCities)
-    })
+    // axios.get('/src/assets/json/cities.json').then((res) => {
+    //   const cities: AreaData = res.data
+    //   const formedTreeCities: CitiesInTree[] = convertCities(cities)
+    //   setCitesTree(formedTreeCities)
+    // })
+    const formedTreeCities: CitiesInTree[] = convertCities(cities)
+    setCitesTree(formedTreeCities)
+
     requestAllCategory().then((res) => {
       if (!res) return
       const childCategoryList: SingleCategory[] = getChildCategoryLists(res)

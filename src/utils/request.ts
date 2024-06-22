@@ -16,7 +16,7 @@ request.interceptors.request.use(config => {
 
 request.interceptors.response.use(
     async (response: AxiosResponse) => {
-        if ((response.data as ResponseObject).code === 207) {
+        if ((response.data as ResponseObject).code === 207  || (response.data as ResponseObject).code === 202) {
             localStorage.removeItem('token');
             const resp = await request.post<string, LoginResponse>(
                 '/user/refreshToken',
