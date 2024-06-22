@@ -3,8 +3,7 @@ import { PersistConfig } from "redux-persist"
 
 const persistConfig: PersistConfig<any> =  {
   key: 'root',
-  storage,
-  whitelist: ['user']
+  storage
 }
 
 export default persistConfig

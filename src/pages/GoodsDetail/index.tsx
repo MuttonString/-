@@ -37,6 +37,8 @@ import {
 } from '@/api/goodsDetail';
 import TextArea from 'antd/es/input/TextArea';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/userSlice';
 
 const { Title, Text } = Typography;
 
@@ -77,6 +79,9 @@ const GoodsDetail: React.FC = () => {
         getGoodsDetail(id, setGoods);
     }, [id]);
 
+    const dispatch = useDispatch();
+    console.log(useSelector(select => select.user));
+
     const items: TabsProps['items'] = [
         {
             key: 'base',
@@ -101,6 +106,11 @@ const GoodsDetail: React.FC = () => {
 
     return (
         <Row className={styles.main}>
+            <button
+                onClick={() => {
+                    dispatch(setUser(12345 as any));
+                }}
+            >1111</button>
             <Col sm={0} md={2} xxl={6} />
             <Col sm={24} md={20} xxl={12}>
                 <Typography className={styles.typography}>

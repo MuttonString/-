@@ -30,6 +30,11 @@ request.interceptors.response.use(
             if (resp.code === 200) {
                 localStorage.setItem('token', resp.data.token);
                 return Promise.resolve(request.request(response.config));
+            } else {
+                message.error(
+                    `登录已过期，3秒后跳转到登录页。错误信息：${resp.msg}（${resp.code}）`
+                );
+                setTimeout(() => (location.href = '/login'), 3000);
             }
         }
         return Promise.resolve(response.data);
