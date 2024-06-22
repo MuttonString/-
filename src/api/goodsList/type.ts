@@ -26,6 +26,7 @@ export interface QueryRes {
   stock: number | null,
   startTime: string,
   endTime: string
+  adminId: string
 }
 
 export interface QueryResult {

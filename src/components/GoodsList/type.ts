@@ -8,6 +8,7 @@ export interface GoodsInTable {
   endTime: string
   proStatus: number
   adminName: string
+  adminId: string
   page: number
   pageSize: number
   option?: number

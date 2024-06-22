@@ -25,7 +25,12 @@ import {
 import { nanoid } from 'nanoid'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { requestAllCategory, requestAddGoods, requestUpdateGoods, requestAppendDraft } from '@/api/goodsEdit'
+import {
+  requestAllCategory,
+  requestAddGoods,
+  requestUpdateGoods,
+  requestAppendDraft,
+} from '@/api/goodsEdit'
 import styles from './index.module.less'
 import type { AppendGoods, SingleProRule } from '@/api/goodsEdit/type'
 import type { VipInputType } from './VipInput/type'
@@ -129,27 +134,36 @@ const GoodsEdit: React.FC<EditPros> = () => {
     if (totalCommit) {
       if (status === 2) {
         requestUpdateGoods(totalCommit).then((res) => {
-          if(res) {
+          if (res) {
             message.success('修改成功')
             navigate(-1)
           }
+        }).catch(e => {
+          console.error(e+'失败')
+          setStatus(2)
         })
         return
       } else if (status === 3) {
-        requestAppendDraft(totalCommit).then(res => {
+        requestAppendDraft(totalCommit).then((res) => {
           if (res) {
             navigate(-1)
             message.success('暂存成功')
           }
+        }).catch(e => {
+          console.error(e+'失败')
+          setStatus(3)
         })
         return
-      }
-      requestAddGoods(totalCommit).then((res) => {
-        if (res && res?.length > 0) {
-          message.success('新增成功')
-          navigate(-1)
-        }
-      })
+      } else
+        requestAddGoods(totalCommit).then((res) => {
+          if (res && res?.length > 0) {
+            message.success('新增成功')
+            navigate(-1)
+          }
+        }).catch(e => {
+          console.error(e+'失败')
+          setStatus(1)
+        })
     }
   }, [totalCommit])
 
@@ -375,9 +389,9 @@ const GoodsEdit: React.FC<EditPros> = () => {
           ? selectedYesCities.join()
           : '216',
     }
-    if(status === 2) {
+    if (status === 2) {
       console.log(params.id)
-      setTotalCommit({...allData, id: params.id})
+      setTotalCommit({ ...allData, id: params.id })
       return
     }
     console.log(111)
@@ -402,8 +416,8 @@ const GoodsEdit: React.FC<EditPros> = () => {
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: backData.poster
-      }
+        url: backData.poster,
+      },
     ])
     form1.setFieldValue('goodsDesc', backData.proDesc)
     form1.setFieldValue('goodsType', backData.proType)
@@ -411,9 +425,20 @@ const GoodsEdit: React.FC<EditPros> = () => {
     form1.setFieldValue('supplierName', backData.supplierName)
     form1.setFieldValue('supplierPhone', backData.supplierPhone)
     form1.setFieldValue('serviceGuarantee', backData.guarantee)
-    setGoodsExchangeWays(backData.proRules.map((rule): VipInputType => {
-      return {id: nanoid(), typeNum: rule.priceType, score: rule.integral, cash: rule.cash / 100, isAble: true, isInitial: false}
-    }))
+    setGoodsExchangeWays(
+      backData.proRules.map(
+        (rule): VipInputType => {
+          return {
+            id: nanoid(),
+            typeNum: rule.priceType,
+            score: rule.integral,
+            cash: rule.cash / 100,
+            isAble: true,
+            isInitial: false,
+          }
+        }
+      )
+    )
     setSelectedNonCities(backData.nonShippingRegion.split(','))
     setExchangeLimit(backData.exchageCap)
     setStock(backData.stock)
@@ -852,14 +877,20 @@ const GoodsEdit: React.FC<EditPros> = () => {
         </Drawer>
         <div style={{ marginTop: '3rem', marginLeft: '6rem' }}>
           <Popconfirm title="你确定要提交吗？" onConfirm={handlerCommit}>
-            <Button type="primary">
-              提交
-            </Button>
+            <Button type="primary">提交</Button>
           </Popconfirm>
           <Button style={{ marginLeft: '1.25rem' }} onClick={resetAllForm}>
             重置
           </Button>
-          <Button style={{ marginLeft: '12rem', display: status === 1 ? 'inline' : 'none' }} onClick={handlerWhileSave}>暂存</Button>
+          <Button
+            style={{
+              marginLeft: '12rem',
+              display: status === 1 ? 'inline' : 'none',
+            }}
+            onClick={handlerWhileSave}
+          >
+            暂存
+          </Button>
         </div>
       </div>
     </>

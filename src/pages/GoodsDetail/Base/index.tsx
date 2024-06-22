@@ -2,6 +2,7 @@ import { Col, Divider, Row, Image } from 'antd';
 import styles from './index.module.less';
 import { GoodsDetailData } from '@/api/goodsDetail/type';
 import dayjs from 'dayjs';
+import cities from '@/assets/json/flatCities.json';
 
 const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
     if (!goods) return null;
@@ -21,18 +22,22 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
                     兑换限制：
                     {goods.exchageCap === -1 || goods.exchageCap === null
                         ? '无限制'
-                        : goods.exchageCap + '件'}
+                        : goods.exchageCap}
                 </Col>
-                <Col span={8}>库存：{goods.stock}件</Col>
+                <Col span={8}>库存：{goods.stock}</Col>
             </Row>
             <Row>
                 <Col span={8}>
                     上线时间：
-                    {dayjs(goods.startTime).format('YYYY-MM-DD HH:mm:ss')}
+                    {goods.startTime
+                        ? dayjs(goods.startTime).format('YYYY-MM-DD HH:mm:ss')
+                        : ''}
                 </Col>
                 <Col span={8}>
                     下线时间：
-                    {dayjs(goods.endTime).format('YYYY-MM-DD HH:mm:ss')}
+                    {goods.endTime
+                        ? dayjs(goods.endTime).format('YYYY-MM-DD HH:mm:ss')
+                        : ''}
                 </Col>
             </Row>
             <Row>
@@ -53,11 +58,23 @@ const Base: React.FC<{ goods?: GoodsDetailData }> = ({ goods }) => {
             <Divider orientation='left'>快递信息</Divider>
             <Row>
                 投放地区：
-                {goods.shippingRegion ? goods.shippingRegion : '无'}
+                {goods.shippingRegion
+                    ? goods.shippingRegion
+                          .split(',')
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          .map(id => (cities as any)[id])
+                          .join(',')
+                    : '无'}
             </Row>
             <Row>
                 不发货地区：
-                {goods.nonShippingRegion ? goods.nonShippingRegion : '无'}
+                {goods.nonShippingRegion
+                    ? goods.nonShippingRegion
+                          .split(',')
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          .map(id => (cities as any)[id])
+                          .join(',')
+                    : '无'}
             </Row>
             <Divider orientation='left'>供应商信息</Divider>
             <Row>
