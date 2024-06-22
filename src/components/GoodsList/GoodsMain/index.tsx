@@ -126,7 +126,10 @@ const GoodsMain: React.FC<MainProps> = ({
             defaultActiveKey="1"
             items={items}
             onChange={(value) => {
+              setPagiNationInfo({...pagiNationInfo, page: 1})
               setStatus(+value)
+              setQueryParams({})
+              setQueryItem({})
             }}
           ></Tabs>
         </main>

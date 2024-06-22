@@ -13,6 +13,7 @@ export interface GoodsInTable {
   pageSize: number
   option?: number
   agents?: string[]
+  proxyIds: string
 }
 
 export interface GoodsQueryItem {

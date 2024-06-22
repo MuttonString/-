@@ -36,7 +36,7 @@ export const requestGoodsOffline = async (id: string) => {
 }
 
 export const requestBatchGoodsOnline = async (ids: string[]) => {
-  const result = await request.post<unknown, ResponseObject>(API.BATCH_GOODS_ONLINE, ids)
+  const result = await request.get<unknown, ResponseObject>(API.BATCH_GOODS_ONLINE + `?ids=${ids.join(',')}`)
   if (result.code == 200) {
     return "批量上线成功"
   }
@@ -44,7 +44,7 @@ export const requestBatchGoodsOnline = async (ids: string[]) => {
 }
 
 export const requestBatchGoodsOffline = async (ids: string[]) => {
-  const result = await request.post<unknown, ResponseObject>(API.BATCH_GOODS_OFFLINE, ids)
+  const result = await request.get<unknown, ResponseObject>(API.BATCH_GOODS_OFFLINE + `?ids=${ids.join(',')}`)
   if (result.code == 200) {
     return "批量下线成功"
   }
