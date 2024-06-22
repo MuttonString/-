@@ -156,8 +156,9 @@ const GoodsDetail: React.FC = () => {
                                         title='发起审核'
                                         description='确定发起审核？'
                                         onConfirm={() => {
-                                            reqAudit({ proId: id });
-                                            getGoodsDetail(id, setGoods);
+                                            reqAudit({ proId: id }).then(() =>
+                                                getGoodsDetail(id, setGoods)
+                                            );
                                         }}
                                         okText='确定'
                                         cancelText='取消'
